@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using Telegram.Bot.Requests;
 
 namespace VorishkaBot
 {
@@ -9,16 +9,17 @@ namespace VorishkaBot
     {
         private SqliteConnection sqlite;
 
-        public DbHandler(string dbPath = "VorishkaBotDB")
+        public DbHandler(string dbName)
         {
+            dbName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Data", dbName);
+
             bool newFile = false;
-            if (!File.Exists(dbPath))
+            if (!File.Exists(dbName + ".sqlite"))
             {
-                File.Create(dbPath);
                 newFile = true;
             }
 
-            string connectionString = "Data Source=VorishkaBotDB.sqlite";
+            string connectionString = $"Data Source={dbName}.sqlite";
             sqlite = new SqliteConnection(connectionString);
             sqlite.Open();
             var query = sqlite.CreateCommand();
@@ -26,9 +27,9 @@ namespace VorishkaBot
             if (newFile)
             {
                 query.CommandText = @"CREATE TABLE users(
-                                    id INTEGER PRIMARY KEY,
-                                    user_id INT, 
-                                    set_name TEXT
+                                        id INTEGER PRIMARY KEY,
+                                        user_id INT, 
+                                        set_name TEXT
                                     )";
                 query.ExecuteNonQuery();
             }
@@ -49,11 +50,18 @@ namespace VorishkaBot
             return mapping;
         }
 
-        public void InsertUsers(int user_id, string set_name)
+        public void NewUser(int user_id, string set_name)
         {
             var query = sqlite.CreateCommand();
             query.CommandText = $"INSERT INTO users ('user_id', 'set_name') VALUES ({user_id}, '{set_name}')";
-            query.ExecuteNonQuery();
+            try
+            {
+                query.ExecuteNonQuery();
+            } catch (SqliteException ex)
+            {
+                // TODO: error logging
+                Console.WriteLine($"{ex.Message} (sqlite code: {ex.SqliteErrorCode})\n" + ex.StackTrace);
+            }
         }
     }
 }

@@ -8,3 +8,4 @@ Properties
 *.user
 
 .env
+.env.debug

@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <None Remove=".env" />
+    <None Remove=".env.debug" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,11 +27,14 @@
     <Resource Include=".env">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include=".env.debug">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
     <None Update=".env.example">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

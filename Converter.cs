@@ -1,5 +1,8 @@
-﻿using System;
+﻿using nQuant;
+using System;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 
@@ -9,6 +12,7 @@ namespace VorishkaBot
     {
         public static string WebpToPng(string inputPath)
         {
+            // Convert WEBP to PNG
             string outputPath = GetRandomName() + ".png";
             ProcessStartInfo processInfo;
             Process process;
@@ -46,6 +50,21 @@ namespace VorishkaBot
                 Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
                 Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, 0, ex.StackTrace);
             }
+
+            // Reduce quality
+            var quantizer = new WuQuantizer();
+            var resizedPng = GetRandomName() + ".png";
+            using (var bitmap = new Bitmap(Path.Combine(Path.GetTempPath(), outputPath)))
+            {
+                using (var quantized = quantizer.QuantizeImage(bitmap))
+                {
+                    quantized.Save(Path.Combine(Path.GetTempPath(), resizedPng), ImageFormat.Png);
+                    Db.NewMsg(Db.MsgTypes.INFO, $"Reduced quality of {outputPath} to {resizedPng}", 0);
+                }
+            }
+
+            File.Delete(Path.Combine(Path.GetTempPath(), outputPath));
+            outputPath = resizedPng;
 
             return outputPath;
         }

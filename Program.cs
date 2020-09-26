@@ -22,7 +22,7 @@ namespace VorishkaBot
 #if DEBUG
             using (var stream = File.OpenRead(".env.debug"))
 #else
-            using (var stream = File.OpenRead(".env"))
+            using (var stream = File.OpenRead(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".env")))
 #endif
             {
                 Env.Load(stream);
@@ -42,17 +42,17 @@ namespace VorishkaBot
 
         private static async void Bot_OnMessage(object sender, MessageEventArgs e)
         {
-            int user_id = e.Message.From.Id;
+            int userId = e.Message.From.Id;
 
             // New user
             if (!UserMapping.ContainsKey(e.Message.From.Id))
             {
                 if (e.Message.Text == "/start")
                 {
-                    await Bot.SendTextMessageAsync(user_id, "Пришли мне свой первый стикер");
+                    await Bot.SendTextMessageAsync(userId, "Пришли мне свой первый стикер");
                 }
-                UserMapping.Add(user_id, null);
-                Db.NewMsg(Db.MsgTypes.INFO, $"New user: {user_id}", user_id);
+                UserMapping.Add(userId, null);
+                Db.NewMsg(Db.MsgTypes.INFO, $"New user: {userId}", userId);
             }
 
             // Receive sticker
@@ -60,41 +60,41 @@ namespace VorishkaBot
             {
                 if (e.Message.Sticker.IsAnimated)
                 {
-                    await Bot.SendTextMessageAsync(user_id, "Я пока не умею сохранять анимированные стикеры :c", ParseMode.Default, false, false, e.Message.MessageId);
+                    await Bot.SendTextMessageAsync(userId, "Я пока не умею сохранять анимированные стикеры :c", ParseMode.Default, false, false, e.Message.MessageId);
                     return;
                 }
 
                 string emoji = e.Message.Sticker.Emoji;
 
                 // Download WEBP sticker
-                var savePath = Converter.GetRandomName() + ".webp";
-                Converter.DowndloadSticker(savePath, e.Message.Sticker.FileId, user_id);
+                var webpFilename = Converter.GetRandomName() + ".webp";
+                Converter.DowndloadSticker(webpFilename, e.Message.Sticker.FileId, userId);
                 
                 // Convert sticker to PNG
-                var convertPath = Converter.WebpToPng(savePath);
+                var pngFilename = Converter.WebpToPng(webpFilename);
 
                 try
                 {
-                    InputOnlineFile newSticker = new InputOnlineFile(new FileStream(Path.Combine(Path.GetTempPath(), convertPath), FileMode.Open));
+                    InputOnlineFile newSticker = new InputOnlineFile(new FileStream(Path.Combine(Path.GetTempPath(), pngFilename), FileMode.Open));
 
                     // Create new sticker set
-                    if (UserMapping[user_id] == null)
+                    if (UserMapping[userId] == null)
                     {
-                        UserMapping[user_id] = "sohranenki_" + DateTime.Now.Ticks.ToString().Substring(8, 7) + "_by_" + BotName;
-                        Db.NewUser(user_id, UserMapping[user_id]);
+                        UserMapping[userId] = "sohranenki_" + DateTime.Now.Ticks.ToString().Substring(8, 7) + "_by_" + BotName;
+                        Db.NewUser(userId, UserMapping[userId]);
                         try
                         {
-                            await Bot.CreateNewStickerSetAsync(user_id, UserMapping[user_id], "Сохраненки", newSticker, emoji);
+                            await Bot.CreateNewStickerSetAsync(userId, UserMapping[userId], "Сохраненки", newSticker, emoji);                            
                         }
                         catch (Exception ex)
                         {
                             Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
-                            Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, user_id, ex.StackTrace);
+                            Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, userId, ex.StackTrace);
                             return;
                         }
                         await Bot.SendTextMessageAsync(
-                                chatId: user_id,
-                                text: $"Твои стикеры будут появляться здесь \ud83d\udc47\ud83c\udffb \n[\ud83d\uddbc Твои сохраненки](t.me/addstickers/{UserMapping[user_id]})",
+                                chatId: userId,
+                                text: $"Твои стикеры будут появляться здесь \ud83d\udc47\ud83c\udffb \n[\ud83d\uddbc Твои сохраненки](t.me/addstickers/{UserMapping[userId]})",
                                 parseMode: ParseMode.MarkdownV2
                                 );
                     }
@@ -104,25 +104,22 @@ namespace VorishkaBot
                     {
                         try
                         {
-                            await Bot.AddStickerToSetAsync(user_id, UserMapping[user_id], newSticker, emoji);
+                            await Bot.AddStickerToSetAsync(userId, UserMapping[userId], newSticker, emoji);                            
                         }
                         catch (Exception ex)
                         {
                             Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
-                            Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, user_id, ex.StackTrace);
-                            await Bot.SendTextMessageAsync(user_id, "Я не смог сохранить стикер, попробуй еще раз", ParseMode.Default, false, false, e.Message.MessageId);
+                            Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, userId, ex.StackTrace);
+                            await Bot.SendTextMessageAsync(userId, "Я не смог сохранить стикер, попробуй еще раз", ParseMode.Default, false, false, e.Message.MessageId);
                         }
                     }
                 } 
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
-                    await Bot.SendTextMessageAsync(user_id, "Я не смог сохранить стикер, попробуй еще раз", ParseMode.Default, false, false, e.Message.MessageId);
+                    await Bot.SendTextMessageAsync(userId, "Я не смог сохранить стикер, попробуй еще раз", ParseMode.Default, false, false, e.Message.MessageId);
                     return;
                 }
-
-                // Clean up
-                //File.Delete(Path.Combine(Path.GetTempPath(), convertPath));
             }
         }
 

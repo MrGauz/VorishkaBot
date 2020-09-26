@@ -31,13 +31,9 @@ namespace VorishkaBot
                 process = Process.Start(processInfo);
 
 #if DEBUG
-                var stdout = process.StandardOutput.ReadToEnd();                
-                Console.WriteLine(stdout);
-                Db.NewMsg(Db.MsgTypes.DEBUG, stdout, 0);
-#endif
                 var stderr = process.StandardError.ReadToEnd();
-                Console.WriteLine(stderr);
-                Db.NewMsg(Db.MsgTypes.ERROR, stdout, 0);
+                Db.NewMsg(Db.MsgTypes.DEBUG, stderr, 0);
+#endif
 
                 process.WaitForExit();
                 process.Close();

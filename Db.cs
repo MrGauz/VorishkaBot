@@ -111,11 +111,11 @@ namespace VorishkaBot
         {
             var query = sqlite.CreateCommand();
             query.CommandText = $"INSERT INTO logs ('msg_type', 'timestamp', 'user', 'msg', 'stacktrace') VALUES (" +
-                $"{msgType}, " +
+                $"'{msgType}', " +
                 $"'{DateTime.Now:yyyy-MM-dd HH:mm:ss}', " +
-                $"'{userId}'," +
-                $"'{msg}'," +
-                $"'{stacktrace}'" +
+                $"{userId}, " +
+                $"'{msg.Replace("'", "''")}', " +
+                $"'{stacktrace.Replace("'", "''")}'" +
                 $")";
             try
             {
@@ -123,8 +123,7 @@ namespace VorishkaBot
             }
             catch (SqliteException ex)
             {
-                Console.WriteLine($"{ex.Message} (sqlite code: {ex.SqliteErrorCode})\n" + ex.StackTrace);
-                NewMsg(MsgTypes.ERROR, $"{ex.Message} (sqlite code: {ex.SqliteErrorCode})", 0, ex.StackTrace);
+                Console.WriteLine($"{ex.Message} (sqlite code: {ex.SqliteErrorCode})\n" + ex.StackTrace);                
             }
         }
     }

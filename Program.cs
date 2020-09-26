@@ -52,7 +52,6 @@ namespace VorishkaBot
                     await Bot.SendTextMessageAsync(user_id, "Пришли мне свой первый стикер");
                 }
                 UserMapping.Add(user_id, null);
-                Console.WriteLine($"[INFO] {DateTime.Now:yyyy-MM-dd HH:mm:ss} - New user: {user_id}");
                 Db.NewMsg(Db.MsgTypes.INFO, $"New user: {user_id}", user_id);
             }
 
@@ -73,7 +72,6 @@ namespace VorishkaBot
                 
                 // Convert sticker to PNG
                 var convertPath = Converter.WebpToPng(savePath);
-                Console.WriteLine($"[INFO] {DateTime.Now:yyyy-MM-dd HH:mm:ss} - Downloaded and converted sticker: {e.Message.Sticker.FileId} (for {user_id})");
 
                 try
                 {
@@ -94,7 +92,6 @@ namespace VorishkaBot
                             Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, user_id, ex.StackTrace);
                             return;
                         }
-                        Console.WriteLine($"[INFO] {DateTime.Now:yyyy-MM-dd HH:mm:ss} - New set: {UserMapping[user_id]} ({user_id})");
                         await Bot.SendTextMessageAsync(
                                 chatId: user_id,
                                 text: $"Твои стикеры будут появляться здесь \ud83d\udc47\ud83c\udffb \n[\ud83d\uddbc Твои сохраненки](t.me/addstickers/{UserMapping[user_id]})",

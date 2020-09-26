@@ -15,7 +15,6 @@ namespace VorishkaBot
         public static ITelegramBotClient Bot;
         private static String BotName;
         private static Dictionary<int, string> UserMapping;
-        private static DbHandler db;
 
         public static void Main(string[] args)
         {
@@ -28,19 +27,15 @@ namespace VorishkaBot
             {
                 Env.Load(stream);
                 Bot = new TelegramBotClient(Env.GetString("TOKEN"));
-
                 BotName = Env.GetString("BOT_NAME");
             }
             
-            UserMapping = new Dictionary<int, string>();
-
-            db = new DbHandler(BotName);
-            UserMapping = db.GetUsers();
+            Db.Initialize(BotName);
+            UserMapping = Db.GetUsers();
 
             // Fire up
             Bot.OnMessage += Bot_OnMessage;
             Bot.StartReceiving();
-
             WaitForKey();
             Bot.StopReceiving();
         }
@@ -57,8 +52,8 @@ namespace VorishkaBot
                     await Bot.SendTextMessageAsync(user_id, "Пришли мне свой первый стикер");
                 }
                 UserMapping.Add(user_id, null);
-                // TODO: write logs to sqlite
                 Console.WriteLine($"[INFO] {DateTime.Now:yyyy-MM-dd HH:mm:ss} - New user: {user_id}");
+                Db.NewMsg(Db.MsgTypes.INFO, $"New user: {user_id}", user_id);
             }
 
             // Receive sticker
@@ -74,7 +69,7 @@ namespace VorishkaBot
 
                 // Download WEBP sticker
                 var savePath = Converter.GetRandomName() + ".webp";
-                Converter.DowndloadSticker(savePath, e.Message.Sticker.FileId);
+                Converter.DowndloadSticker(savePath, e.Message.Sticker.FileId, user_id);
                 
                 // Convert sticker to PNG
                 var convertPath = Converter.WebpToPng(savePath);
@@ -88,7 +83,7 @@ namespace VorishkaBot
                     if (UserMapping[user_id] == null)
                     {
                         UserMapping[user_id] = "sohranenki_" + DateTime.Now.Ticks.ToString().Substring(8, 7) + "_by_" + BotName;
-                        db.NewUser(user_id, UserMapping[user_id]);
+                        Db.NewUser(user_id, UserMapping[user_id]);
                         try
                         {
                             await Bot.CreateNewStickerSetAsync(user_id, UserMapping[user_id], "Сохраненки", newSticker, emoji);
@@ -96,6 +91,7 @@ namespace VorishkaBot
                         catch (Exception ex)
                         {
                             Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
+                            Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, user_id, ex.StackTrace);
                             return;
                         }
                         Console.WriteLine($"[INFO] {DateTime.Now:yyyy-MM-dd HH:mm:ss} - New set: {UserMapping[user_id]} ({user_id})");
@@ -105,6 +101,7 @@ namespace VorishkaBot
                                 parseMode: ParseMode.MarkdownV2
                                 );
                     }
+
                     // Add to existing sticker set
                     else
                     {
@@ -114,10 +111,9 @@ namespace VorishkaBot
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"[ERROR] {DateTime.Now:yyyy-MM-dd HH:mm:ss} - Could not add sticker to set ({user_id})");
-                            Console.WriteLine(ex.Message);
-                            Console.WriteLine(ex.StackTrace);
-                            await Bot.ForwardMessageAsync(user_id, user_id, e.Message.MessageId);
+                            Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
+                            Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, user_id, ex.StackTrace);
+                            await Bot.SendTextMessageAsync(user_id, "Я не смог сохранить стикер, попробуй еще раз", ParseMode.Default, false, false, e.Message.MessageId);
                         }
                     }
                 } 

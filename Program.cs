@@ -17,6 +17,7 @@ namespace VorishkaBot
         public static ITelegramBotClient Bot;
         private static String BotName;
         private static Dictionary<int, string> UserMapping;
+        private static Dictionary<int, string> UserMappingAnimated;
 
         public static void Main(string[] args)
         {
@@ -34,6 +35,7 @@ namespace VorishkaBot
 
             Db.Initialize(BotName);
             UserMapping = Db.GetUsers();
+            UserMappingAnimated = Db.GetUsersAnimated();
 
             // Fire up
             Bot.OnMessage += Bot_OnMessage;
@@ -103,7 +105,15 @@ namespace VorishkaBot
 
         private static async void OnAnimatedSticker(Message message, int userId)
         {
-            await Bot.SendTextMessageAsync(userId, "Я пока не умею сохранять анимированные стикеры :c", ParseMode.Default, false, false, message.MessageId);
+            string saveFilename = Converter.GetRandomName() + ".tgs";
+            await Converter.DownloadTgFile(saveFilename, message.Sticker.FileId, userId);
+            Console.WriteLine(saveFilename);
+            InputFileStream fs = new InputFileStream(new FileStream(Path.Combine(Path.GetTempPath(), saveFilename), FileMode.Open));
+            string set_name = "sohranenki_" + DateTime.Now.Ticks.ToString().Substring(8, 7) + "_by_" + BotName;
+            await Bot.CreateNewAnimatedStickerSetAsync(userId, set_name, "Анимированные сохраненки", fs, message.Sticker.Emoji);
+            Console.WriteLine(set_name);
+            //await Bot.AddAnimatedStickerToSetAsync(userId, UserMapping[userId], fs, message.Sticker.Emoji);
+            //await Bot.SendTextMessageAsync(userId, "Я пока не умею сохранять анимированные стикеры :c", ParseMode.Default, false, false, message.MessageId);
         }
 
         private static async void OnPhoto(Message message, int userId)
@@ -117,6 +127,7 @@ namespace VorishkaBot
             // TODO: ask for emoji
             AddSticker(userId, saveFilename, "\ud83d\ude02", message.MessageId);
         }
+
         private static async void AddSticker(int userId, string pngFilename, string emoji, int messageId)
         {
             try
@@ -165,6 +176,57 @@ namespace VorishkaBot
                 Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
                 Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, userId, ex.StackTrace);
                 await Bot.SendTextMessageAsync(userId, "Я не смог сохранить стикер, попробуй еще раз", ParseMode.Default, false, false, messageId);                
+            }
+        }
+
+        private static async void AddAnimatedSticker(int userId, string tgsFilename, string emoji, int messageId)
+        {
+            try
+            {
+                InputOnlineFile newSticker = new InputOnlineFile(new FileStream(Path.Combine(Path.GetTempPath(), tgsFilename), FileMode.Open));
+
+                // Create new sticker set
+                if (UserMapping[userId] == null)
+                {
+                    UserMapping[userId] = "sohranenki_" + DateTime.Now.Ticks.ToString().Substring(8, 7) + "_by_" + BotName;
+                    Db.NewUser(userId, UserMapping[userId]);
+                    try
+                    {
+                        await Bot.CreateNewStickerSetAsync(userId, UserMapping[userId], "Сохраненки", newSticker, emoji);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
+                        Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, userId, ex.StackTrace);
+                        return;
+                    }
+                    await Bot.SendTextMessageAsync(
+                            chatId: userId,
+                            text: $"Твои стикеры будут появляться здесь \ud83d\udc47\ud83c\udffb \n[\ud83d\uddbc Твои сохраненки](t.me/addstickers/{UserMapping[userId]})",
+                            parseMode: ParseMode.MarkdownV2
+                            );
+                }
+
+                // Add to existing sticker set
+                else
+                {
+                    try
+                    {
+                        await Bot.AddStickerToSetAsync(userId, UserMapping[userId], newSticker, emoji);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
+                        Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, userId, ex.StackTrace);
+                        await Bot.SendTextMessageAsync(userId, "Я не смог сохранить стикер, попробуй еще раз", ParseMode.Default, false, false, messageId);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
+                Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, userId, ex.StackTrace);
+                await Bot.SendTextMessageAsync(userId, "Я не смог сохранить стикер, попробуй еще раз", ParseMode.Default, false, false, messageId);
             }
         }
 

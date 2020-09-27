@@ -37,6 +37,7 @@ namespace VorishkaBot
                                         id INTEGER PRIMARY KEY,
                                         user_id INT, 
                                         set_name TEXT,
+                                        is_animated BOOLEAN,
                                         created_at DATETIME,
                                         deleted_at DATETIME
                                     );";
@@ -74,7 +75,7 @@ namespace VorishkaBot
         {
             var mapping = new Dictionary<int, string>();
             var query = sqlite.CreateCommand();
-            query.CommandText = "SELECT * FROM users WHERE deleted_at IS NULL;";
+            query.CommandText = "SELECT * FROM users WHERE deleted_at IS NULL and is_animated = false;";
             try
             {
                 var result = query.ExecuteReader();
@@ -92,10 +93,33 @@ namespace VorishkaBot
             return mapping;
         }
 
-        public static void NewUser(int userId, string set_name)
+        public static Dictionary<int, string> GetUsersAnimated()
+        {
+            var mapping = new Dictionary<int, string>();
+            var query = sqlite.CreateCommand();
+            query.CommandText = "SELECT * FROM users WHERE deleted_at IS NULL and is_animated = true;";
+            try
+            {
+                var result = query.ExecuteReader();
+                while (result.Read())
+                {
+                    mapping[result.GetInt32(1)] = result.GetString(2);
+                }
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"{ex.Message} (sqlite code: {ex.SqliteErrorCode})\n" + ex.StackTrace);
+                NewMsg(MsgTypes.ERROR, $"{ex.Message} (sqlite code: {ex.SqliteErrorCode})", 0, ex.StackTrace);
+            }
+
+            return mapping;
+        }
+
+        public static void NewUser(int userId, string setName, bool isAnimated = false)
         {
             var query = sqlite.CreateCommand();
-            query.CommandText = $"INSERT INTO users ('user_id', 'set_name', 'created_at') VALUES ({userId}, '{set_name}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}');";
+            query.CommandText = $"INSERT INTO users ('user_id', 'set_name', 'is_animated', 'created_at') " +
+                                $"VALUES ({userId}, '{setName}', '{isAnimated}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}');";
             try
             {
                 query.ExecuteNonQuery();

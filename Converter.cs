@@ -2,12 +2,13 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace VorishkaBot
 {
     public class Converter
     {
-        public static string WebpToPng(string inputFilename)
+        public static string ToPng(string inputFilename)
         {
             string outputFilename = GetRandomName() + ".png";
             ProcessStartInfo processInfo;
@@ -92,21 +93,65 @@ namespace VorishkaBot
                 Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, 0, ex.StackTrace);
             }
 
+            //File.Delete(Path.Combine(Path.GetTempPath(), inputFilename));
+
+            return outputFilename;
+        }
+
+        public static string ResizePng(string inputFilename)
+        {
+            var outputFilename = GetRandomName() + ".png";            
+            ProcessStartInfo processInfo;
+            Process process;
+
+            processInfo = new ProcessStartInfo();
+#if DEBUG
+            processInfo.FileName = @"C:\Program Files\ImageMagick-7.0.10-Q16-HDRI\magick.exe";
+            processInfo.WorkingDirectory = Path.GetTempPath();
+            processInfo.Arguments = $"{inputFilename} -resize 512x512 {outputFilename}";
+#else
+            processInfo.FileName = Path.Combine("/usr/bin/convert");   
+            processInfo.WorkingDirectory = Path.GetTempPath();
+            processInfo.Arguments = $"{inputFilename} -resize 512x512 {outputFilename}";
+#endif
+
+            processInfo.CreateNoWindow = true;
+            processInfo.UseShellExecute = false;
+            processInfo.RedirectStandardError = true;
+            processInfo.RedirectStandardOutput = true;
+
+            try
+            {
+                process = Process.Start(processInfo);
+
+                process.WaitForExit();
+                process.Close();
+                Db.NewMsg(Db.MsgTypes.INFO, $"Resize {inputFilename} to {outputFilename}", 0);
+
+                File.Delete(inputFilename);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
+                Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, 0, ex.StackTrace);
+            }
+
             File.Delete(Path.Combine(Path.GetTempPath(), inputFilename));
 
             return outputFilename;
         }
 
-        public async static void DowndloadSticker(string savePath, string stickerId, int userId)
+        public async static Task DownloadTgFile(string saveFilename, string fileId, int userId)
         {
-            var telegramFile = await Program.Bot.GetFileAsync(stickerId);
-            using (FileStream downloadFileStream = new FileStream(Path.Combine(Path.GetTempPath(), savePath), FileMode.Create))
+            var telegramFile = await Program.Bot.GetFileAsync(fileId);
+            using (FileStream downloadFileStream = new FileStream(Path.Combine(Path.GetTempPath(), saveFilename), FileMode.Create))
             {
                 try
                 {
                     await Program.Bot.DownloadFileAsync(telegramFile.FilePath, downloadFileStream);
-                    Db.NewMsg(Db.MsgTypes.INFO, $"Downloaded {stickerId} to {savePath}", userId);
-                } catch (Exception ex)
+                    Db.NewMsg(Db.MsgTypes.INFO, $"Downloaded {fileId} to {saveFilename}", userId);
+                } 
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
                     Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, userId, ex.StackTrace);

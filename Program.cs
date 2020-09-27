@@ -82,6 +82,7 @@ namespace VorishkaBot
 
                 // Convert sticker to PNG
                 var pngFilename = Converter.WebpToPng(webpFilename);
+                pngFilename = Converter.QuantifyPng(pngFilename);
 
                 try
                 {
@@ -127,6 +128,7 @@ namespace VorishkaBot
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
+                    Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, userId, ex.StackTrace);
                     await Bot.SendTextMessageAsync(userId, "Я не смог сохранить стикер, попробуй еще раз", ParseMode.Default, false, false, e.Message.MessageId);
                     return;
                 }

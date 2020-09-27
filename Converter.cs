@@ -1,8 +1,5 @@
-﻿using nQuant;
-using System;
+﻿using System;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 
@@ -10,10 +7,9 @@ namespace VorishkaBot
 {
     public class Converter
     {
-        public static string WebpToPng(string inputPath)
+        public static string WebpToPng(string inputFilename)
         {
-            // Convert WEBP to PNG
-            string outputPath = GetRandomName() + ".png";
+            string outputFilename = GetRandomName() + ".png";
             ProcessStartInfo processInfo;
             Process process;
 
@@ -24,7 +20,7 @@ namespace VorishkaBot
             processInfo.FileName = Path.Combine("/usr/bin/ffmpeg");   
 #endif
             processInfo.WorkingDirectory = Path.GetTempPath();
-            processInfo.Arguments = $"-i {inputPath} {outputPath}";
+            processInfo.Arguments = $"-i {inputFilename} {outputFilename}";
             processInfo.CreateNoWindow = true;
             processInfo.UseShellExecute = false;
             processInfo.RedirectStandardError = true;
@@ -41,9 +37,9 @@ namespace VorishkaBot
 
                 process.WaitForExit();
                 process.Close();
-                Db.NewMsg(Db.MsgTypes.INFO, $"Converted {inputPath} to {outputPath}", 0);
+                Db.NewMsg(Db.MsgTypes.INFO, $"Converted {inputFilename} to {outputFilename}", 0);
 
-                File.Delete(inputPath);
+                File.Delete(inputFilename);
             }
             catch (Exception ex)
             {
@@ -51,26 +47,44 @@ namespace VorishkaBot
                 Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, 0, ex.StackTrace);
             }
 
-            // Reduce quality
-            var quantizer = new WuQuantizer();
-            var resizedPng = GetRandomName() + ".png";
+            File.Delete(Path.Combine(Path.GetTempPath(), inputFilename));
+
+            return outputFilename;
+        }
+
+        public static string QuantifyPng(string inputFilename)
+        {
+            var outputFilename = Path.GetFileNameWithoutExtension(inputFilename) + "_quant.png";
+            ProcessStartInfo processInfo;
+            Process process;
+
+            processInfo = new ProcessStartInfo();
+#if DEBUG
+            processInfo.FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Tools", "pngquant.exe");
+#else
+            processInfo.FileName = Path.Combine("/usr/bin/pngquant");   
+#endif
+            processInfo.WorkingDirectory = Path.GetTempPath();
+            processInfo.Arguments = $"{inputFilename} --ext _quant.png";
+            processInfo.CreateNoWindow = true;
+            processInfo.UseShellExecute = false;
+            processInfo.RedirectStandardError = true;
+            processInfo.RedirectStandardOutput = true;
+
             try
             {
-                var bitmap = new Bitmap(Path.Combine(Path.GetTempPath(), outputPath));
-                if (bitmap.PixelFormat != PixelFormat.Format32bppArgb)
-                {
-                    var bmp = new Bitmap(bitmap.Width, bitmap.Height, PixelFormat.Format32bppArgb);
-                    using (var gr = Graphics.FromImage(bmp))
-                        gr.DrawImage(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height));
-                    bitmap.Dispose();
-                    bitmap = bmp;
-                }
-                using (var quantized = quantizer.QuantizeImage(bitmap))
-                {
-                    quantized.Save(Path.Combine(Path.GetTempPath(), resizedPng), ImageFormat.Png);
-                    Db.NewMsg(Db.MsgTypes.INFO, $"Reduced quality of {outputPath} to {resizedPng}", 0);
-                }
-                bitmap.Dispose();
+                process = Process.Start(processInfo);
+
+#if DEBUG
+                var stderr = process.StandardError.ReadToEnd();
+                Db.NewMsg(Db.MsgTypes.DEBUG, stderr, 0);
+#endif
+
+                process.WaitForExit();
+                process.Close();
+                Db.NewMsg(Db.MsgTypes.INFO, $"Reduce bit depth from 32 to 8 for {inputFilename} (--> {outputFilename})", 0);
+
+                File.Delete(inputFilename);
             }
             catch (Exception ex)
             {
@@ -78,9 +92,9 @@ namespace VorishkaBot
                 Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, 0, ex.StackTrace);
             }
 
-            File.Delete(Path.Combine(Path.GetTempPath(), outputPath));
+            File.Delete(Path.Combine(Path.GetTempPath(), inputFilename));
 
-            return resizedPng;
+            return outputFilename;
         }
 
         public async static void DowndloadSticker(string savePath, string stickerId, int userId)

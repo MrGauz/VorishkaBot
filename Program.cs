@@ -29,7 +29,7 @@ namespace VorishkaBot
                 Bot = new TelegramBotClient(Env.GetString("TOKEN"));
                 BotName = Env.GetString("BOT_NAME");
             }
-            
+
             Db.Initialize(BotName);
             UserMapping = Db.GetUsers();
 
@@ -43,6 +43,16 @@ namespace VorishkaBot
         private static async void Bot_OnMessage(object sender, MessageEventArgs e)
         {
             int userId = e.Message.From.Id;
+
+            // Remove user data on restart
+            if (e.Message.Text == "/start")
+            {
+                if (UserMapping.ContainsKey(userId))
+                {
+                    Db.DeleteUser(userId);
+                    UserMapping.Remove(userId);
+                }
+            }
 
             // New user
             if (!UserMapping.ContainsKey(e.Message.From.Id))
@@ -69,7 +79,7 @@ namespace VorishkaBot
                 // Download WEBP sticker
                 var webpFilename = Converter.GetRandomName() + ".webp";
                 Converter.DowndloadSticker(webpFilename, e.Message.Sticker.FileId, userId);
-                
+
                 // Convert sticker to PNG
                 var pngFilename = Converter.WebpToPng(webpFilename);
 
@@ -84,7 +94,7 @@ namespace VorishkaBot
                         Db.NewUser(userId, UserMapping[userId]);
                         try
                         {
-                            await Bot.CreateNewStickerSetAsync(userId, UserMapping[userId], "Сохраненки", newSticker, emoji);                            
+                            await Bot.CreateNewStickerSetAsync(userId, UserMapping[userId], "Сохраненки", newSticker, emoji);
                         }
                         catch (Exception ex)
                         {
@@ -104,7 +114,7 @@ namespace VorishkaBot
                     {
                         try
                         {
-                            await Bot.AddStickerToSetAsync(userId, UserMapping[userId], newSticker, emoji);                            
+                            await Bot.AddStickerToSetAsync(userId, UserMapping[userId], newSticker, emoji);
                         }
                         catch (Exception ex)
                         {
@@ -113,7 +123,7 @@ namespace VorishkaBot
                             await Bot.SendTextMessageAsync(userId, "Я не смог сохранить стикер, попробуй еще раз", ParseMode.Default, false, false, e.Message.MessageId);
                         }
                     }
-                } 
+                }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message + "\n" + ex.StackTrace);

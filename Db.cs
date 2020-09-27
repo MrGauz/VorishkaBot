@@ -37,8 +37,9 @@ namespace VorishkaBot
                                         id INTEGER PRIMARY KEY,
                                         user_id INT, 
                                         set_name TEXT,
-                                        created_at DATETIME
-                                    )";
+                                        created_at DATETIME,
+                                        deleted_at DATETIME
+                                    );";
                 try
                 {
                     query.ExecuteNonQuery();
@@ -56,7 +57,7 @@ namespace VorishkaBot
                                         user INT,
                                         msg TEXT,
                                         stacktrace TEXT
-                                    )";
+                                    );";
                 try
                 {
                     query.ExecuteNonQuery();
@@ -73,7 +74,7 @@ namespace VorishkaBot
         {
             var mapping = new Dictionary<int, string>();
             var query = sqlite.CreateCommand();
-            query.CommandText = "SELECT * FROM users";
+            query.CommandText = "SELECT * FROM users WHERE deleted_at IS NULL;";
             try
             {
                 var result = query.ExecuteReader();
@@ -94,12 +95,28 @@ namespace VorishkaBot
         public static void NewUser(int userId, string set_name)
         {
             var query = sqlite.CreateCommand();
-            query.CommandText = $"INSERT INTO users ('user_id', 'set_name', 'created_at') VALUES ({userId}, '{set_name}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}')";
+            query.CommandText = $"INSERT INTO users ('user_id', 'set_name', 'created_at') VALUES ({userId}, '{set_name}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}');";
             try
             {
                 query.ExecuteNonQuery();
-                NewMsg(Db.MsgTypes.INFO, $"Add new user to DB:{userId}", userId);
+                NewMsg(Db.MsgTypes.INFO, $"Add new user to DB: {userId}", userId);
             } 
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"{ex.Message} (sqlite code: {ex.SqliteErrorCode})\n" + ex.StackTrace);
+                NewMsg(MsgTypes.ERROR, $"{ex.Message} (sqlite code: {ex.SqliteErrorCode})", userId, ex.StackTrace);
+            }
+        }
+
+        public static void DeleteUser(int userId)
+        {
+            var query = sqlite.CreateCommand();
+            query.CommandText = $"UPDATE users SET deleted_at = '{DateTime.Now:yyyy-MM-dd HH:mm:ss}' WHERE user_id = {userId};";
+            try
+            {
+                query.ExecuteNonQuery();
+                NewMsg(Db.MsgTypes.INFO, $"Remove user from DB: {userId}", userId);
+            }
             catch (SqliteException ex)
             {
                 Console.WriteLine($"{ex.Message} (sqlite code: {ex.SqliteErrorCode})\n" + ex.StackTrace);
@@ -116,7 +133,7 @@ namespace VorishkaBot
                 $"{userId}, " +
                 $"'{msg.Replace("'", "''")}', " +
                 $"'{stacktrace.Replace("'", "''")}'" +
-                $")";
+                $");";
             try
             {
                 query.ExecuteNonQuery();

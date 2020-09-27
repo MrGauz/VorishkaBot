@@ -54,19 +54,33 @@ namespace VorishkaBot
             // Reduce quality
             var quantizer = new WuQuantizer();
             var resizedPng = GetRandomName() + ".png";
-            using (var bitmap = new Bitmap(Path.Combine(Path.GetTempPath(), outputPath)))
+            try
             {
+                var bitmap = new Bitmap(Path.Combine(Path.GetTempPath(), outputPath));
+                if (bitmap.PixelFormat != PixelFormat.Format32bppArgb)
+                {
+                    var bmp = new Bitmap(bitmap.Width, bitmap.Height, PixelFormat.Format32bppArgb);
+                    using (var gr = Graphics.FromImage(bmp))
+                        gr.DrawImage(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height));
+                    bitmap.Dispose();
+                    bitmap = bmp;
+                }
                 using (var quantized = quantizer.QuantizeImage(bitmap))
                 {
                     quantized.Save(Path.Combine(Path.GetTempPath(), resizedPng), ImageFormat.Png);
                     Db.NewMsg(Db.MsgTypes.INFO, $"Reduced quality of {outputPath} to {resizedPng}", 0);
                 }
+                bitmap.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
+                Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, 0, ex.StackTrace);
             }
 
             File.Delete(Path.Combine(Path.GetTempPath(), outputPath));
-            outputPath = resizedPng;
 
-            return outputPath;
+            return resizedPng;
         }
 
         public async static void DowndloadSticker(string savePath, string stickerId, int userId)

@@ -90,11 +90,8 @@ namespace VorishkaBot
 
         private static async void OnSticker(Message message, int userId)
         {
-            // Download WEBP sticker
             var webpFilename = Converter.GetRandomName() + ".webp";
             await Converter.DownloadTgFile(webpFilename, message.Sticker.FileId, userId);
-
-            // Convert sticker to PNG
             var pngFilename = Converter.ToPng(webpFilename);
             pngFilename = Converter.QuantifyPng(pngFilename);
 
@@ -114,9 +111,11 @@ namespace VorishkaBot
             saveFilename = Converter.ToPng(saveFilename);
             saveFilename = Converter.ResizePng(saveFilename);
             saveFilename = Converter.QuantifyPng(saveFilename);
+
             // TODO: ask for emoji
             AddSticker(userId, saveFilename, "\ud83d\ude02", message.MessageId);
         }
+
         private static async void AddSticker(int userId, string pngFilename, string emoji, int messageId)
         {
             try
@@ -159,6 +158,8 @@ namespace VorishkaBot
                         await Bot.SendTextMessageAsync(userId, "Я не смог сохранить стикер, попробуй еще раз", ParseMode.Default, false, false, messageId);
                     }
                 }
+
+                await Bot.SendTextMessageAsync(userId, "Стикер добавлен", ParseMode.Default, false, false, messageId);
             }
             catch (Exception ex)
             {

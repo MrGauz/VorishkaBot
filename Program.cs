@@ -56,7 +56,22 @@ namespace VorishkaBot
                     UserMapping.Remove(userId);
                 }
 
-                await Bot.SendTextMessageAsync(userId, "Пришли мне свой первый стикер");
+                await Bot.SendTextMessageAsync(
+                    chatId: userId,
+                    text: "Привет! Я сохраняю твои любимые стикеры в один пак, чтобы тебе не приходилось тратить полдня чтобы найти любимый кек по десяткам сохраненных тобой стикерпаков. Смотри на меня, как на улучшенную версию <i>“Favourites”</i>: она позволяет хранить в себе до 5 стикеров, я же сохраню вплоть до 120, больше Telegram в один пак сохранять не позволяет.\n\n" +
+                            "<b>Что я могу?</b>\n" +
+                            "\u2705 Сохранять статичные стикеры\n" +
+                            "\u2705 Делать стикеры из картинок\n\n" +
+                            "<b>Чего я не могу?</b>\n" +
+                            "\u274c Сохранять анимированные стикеры\n" +
+                            "\u274c Удалять стикеры из стикерпака или менять их порядок\n\n" +
+                            "<b>Что нужно учесть?</b>\n" +
+                            "\u23f3 Добавление стикера не происходит мгновенно. Telegram говорит, что добавление стикера в стикерпак занимает до часа времени. На самом деле, это дело одной - двух минут, но если только что добавленный стикер не появился в стикерпаке сразу же — подожди. Это не баг, это фича.\n" +
+                            "\u2b07\ufe0f Не забудь <i>сохранить</i> стикерпак.\n" +
+                            "\ud83d\udee0 Если нужно что-то поправить в паке, воспользуйся официальным <a href=\"https://t.me/Stickers\">Stickers-ботом</a> Telegram’а. В нём можно менять порядок стикеров, менять эмодзи и удалять стикеры из стикерпака.\n\n" +
+                            "\ud83d\udcec Пришли мне свой первый стикер или картинку, из которой ты хотел бы стикер.",
+                    parseMode: ParseMode.Html
+                    );
             }
 
             if (!UserMapping.ContainsKey(e.Message.From.Id))
@@ -139,7 +154,7 @@ namespace VorishkaBot
                     }
                     await Bot.SendTextMessageAsync(
                             chatId: userId,
-                            text: $"Твои стикеры будут появляться здесь \ud83d\udc47\ud83c\udffb \n[\ud83d\uddbc Твои сохраненки](t.me/addstickers/{UserMapping[userId]})",
+                            text: $"\u2705 Стикер успешно сохранен в [вот сюда](t.me/addstickers/{UserMapping[userId]})\\. Не забудь сохранить этот стикерпак\\.",
                             parseMode: ParseMode.MarkdownV2
                             );
                 }
@@ -155,17 +170,18 @@ namespace VorishkaBot
                     {
                         Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
                         Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, userId, ex.StackTrace);
-                        await Bot.SendTextMessageAsync(userId, "Я не смог сохранить стикер, попробуй еще раз", ParseMode.Default, false, false, messageId);
+                        await Bot.SendTextMessageAsync(userId, "\u274c Task failed successfully. Попробуй еще раз.", ParseMode.Default, false, false, messageId);
+                        return;
                     }
-                }
 
-                await Bot.SendTextMessageAsync(userId, "Стикер добавлен", ParseMode.Default, false, false, messageId);
+                    await Bot.SendTextMessageAsync(userId, "\u2705 Стикер сохранен", ParseMode.Default, false, false, messageId);
+                }                
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
                 Db.NewMsg(Db.MsgTypes.ERROR, ex.Message, userId, ex.StackTrace);
-                await Bot.SendTextMessageAsync(userId, "Я не смог сохранить стикер, попробуй еще раз", ParseMode.Default, false, false, messageId);                
+                await Bot.SendTextMessageAsync(userId, "\u274c Task failed successfully. Попробуй еще раз.", ParseMode.Default, false, false, messageId);                
             }
         }
 

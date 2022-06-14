@@ -30,11 +30,13 @@ namespace VorishkaBot
         private static async void Bot_OnMessage(object sender, MessageEventArgs e)
         {
             int userId = e.Message.From.Id;
-            _ = BotClient.SendChatActionAsync(userId, ChatAction.Typing, CancellationToken.None);
-
+            Log.Information($"Received a message from {userId}");
+            
             // New user
             if (e.Message.Text == "/start")
             {
+                _ = BotClient.SendChatActionAsync(userId, ChatAction.Typing, CancellationToken.None);
+
                 // Remove user data on restart
                 if (UserMapping.ContainsKey(userId))
                 {
@@ -59,14 +61,15 @@ namespace VorishkaBot
                     parseMode: ParseMode.Html
                     );
                 _ = BotClient.PinChatMessageAsync(userId, sentMessage.MessageId, true, CancellationToken.None);
+                Log.Information($"Sent welcome message to {userId}");
             }
             else if (e.Message.Text == "/ping")
             {
+                _ = BotClient.SendChatActionAsync(userId, ChatAction.Typing, CancellationToken.None);
                 _ = BotClient.SendTextMessageAsync(
                        chatId: userId,
-                       text: "Bot is running"
-                       );
-
+                       text: "Bot is running");
+                Log.Information($"Pinged by {userId}");
             }
 
             if (!UserMapping.ContainsKey(e.Message.From.Id))
@@ -80,6 +83,8 @@ namespace VorishkaBot
             {
                 case MessageType.Sticker:
                     {
+                        _ = BotClient.SendChatActionAsync(userId, ChatAction.Typing, CancellationToken.None);
+
                         if (e.Message.Sticker.IsAnimated)
                         {
                             OnAnimatedSticker(e.Message, userId);
@@ -92,6 +97,7 @@ namespace VorishkaBot
                     }
                 case MessageType.Photo:
                     {
+                        _ = BotClient.SendChatActionAsync(userId, ChatAction.Typing, CancellationToken.None);
                         OnPhoto(e.Message, userId);
                         break;
                     }
@@ -100,6 +106,7 @@ namespace VorishkaBot
 
         private static async void OnSticker(Message message, int userId)
         {
+            Log.Information($"Received a sticker from {userId}");
             var filename = Path.Combine(Path.GetTempPath(), $"VorishkaBot_{Converter.GetRandomName()}.webp");
 
             await Converter.DownloadTgFile(filename, message.Sticker.FileId, userId);
@@ -111,11 +118,13 @@ namespace VorishkaBot
 
         private static void OnAnimatedSticker(Message message, int userId)
         {
+            Log.Information($"Received an animated sticker from {userId}");
             _ = BotClient.SendTextMessageAsync(userId, "Я пока не умею сохранять анимированные стикеры :c", ParseMode.Default, false, false, message.MessageId);
         }
 
         private static async void OnPhoto(Message message, int userId)
         {
+            Log.Information($"Received a photo from {userId}");
             var fileId = message.Photo.ToList().OrderByDescending(f => Math.Max(f.Width, f.Height)).First().FileId;
             var filename = Path.Combine(Path.GetTempPath(), $"VorishkaBot_{Converter.GetRandomName()}.jpg");
 
@@ -140,6 +149,7 @@ namespace VorishkaBot
                     UserMapping[userId] = $"Stickers_{Converter.GetRandomName(5)}_by_{BotName}";
                     Db.NewUser(userId, UserMapping[userId]);
                     _ = BotClient.CreateNewStickerSetAsync(userId, UserMapping[userId], "Сохраненки", newSticker, emoji);
+                    Log.Information($"Created new sticker pack {UserMapping[userId]} for {userId}");
                     _ = BotClient.SendTextMessageAsync(
                             chatId: userId,
                             text: $"\u2705 Стикер успешно сохранен в [вот сюда](t.me/addstickers/{UserMapping[userId]})\\. Не забудь сохранить этот стикерпак\\.",
@@ -152,6 +162,7 @@ namespace VorishkaBot
                 {
                     _ = BotClient.AddStickerToSetAsync(userId, UserMapping[userId], newSticker, emoji);
                     _ = BotClient.SendTextMessageAsync(userId, "\u2705 Стикер сохранен", ParseMode.Default, false, false, messageId);
+                    Log.Information($"Added new sticker for {userId}");
                 }
             }
             catch (Exception ex)

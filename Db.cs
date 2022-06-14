@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,17 +10,8 @@ namespace VorishkaBot
     {
         private static SqliteConnection sqlite;
 
-        public enum MsgTypes
-        {
-            INFO,
-            DEBUG,
-            ERROR
-        }
-
         public static void Initialize(string dbName)
         {
-            dbName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Data", dbName);
-
             bool newFile = false;
             if (!File.Exists(dbName + ".sqlite"))
             {
@@ -46,26 +38,7 @@ namespace VorishkaBot
                 }
                 catch (SqliteException ex)
                 {
-                    Console.WriteLine($"{ex.Message} (sqlite code: {ex.SqliteErrorCode})\n" + ex.StackTrace);
-                    NewMsg(MsgTypes.ERROR, $"{ex.Message} (sqlite code: {ex.SqliteErrorCode})", 0, ex.StackTrace);
-                }
-
-                query.CommandText = @"CREATE TABLE logs(
-                                        id INTEGER PRIMARY KEY,
-                                        msg_type TEXT, 
-                                        timestamp DATETIME,
-                                        user INT,
-                                        msg TEXT,
-                                        stacktrace TEXT
-                                    );";
-                try
-                {
-                    query.ExecuteNonQuery();
-                }
-                catch (SqliteException ex)
-                {
-                    Console.WriteLine($"{ex.Message} (sqlite code: {ex.SqliteErrorCode})\n" + ex.StackTrace);
-                    NewMsg(MsgTypes.ERROR, $"{ex.Message} (sqlite code: {ex.SqliteErrorCode})", 0, ex.StackTrace);
+                    Log.Error(ex, $"Db.GetUsers(): {ex.Message} (sqlite code: {ex.SqliteErrorCode})");
                 }
             }
         }
@@ -85,10 +58,9 @@ namespace VorishkaBot
             }
             catch (SqliteException ex)
             {
-                Console.WriteLine($"{ex.Message} (sqlite code: {ex.SqliteErrorCode})\n" + ex.StackTrace);
-                NewMsg(MsgTypes.ERROR, $"{ex.Message} (sqlite code: {ex.SqliteErrorCode})", 0, ex.StackTrace);
+                Log.Error(ex, $"Db.GetUsers(): {ex.Message} (sqlite code: {ex.SqliteErrorCode})");
             }
-            
+
             return mapping;
         }
 
@@ -99,12 +71,11 @@ namespace VorishkaBot
             try
             {
                 query.ExecuteNonQuery();
-                NewMsg(Db.MsgTypes.INFO, $"Add new user to DB: {userId}", userId);
-            } 
+                Log.Information($"Add new user to DB: {userId}");
+            }
             catch (SqliteException ex)
             {
-                Console.WriteLine($"{ex.Message} (sqlite code: {ex.SqliteErrorCode})\n" + ex.StackTrace);
-                NewMsg(MsgTypes.ERROR, $"{ex.Message} (sqlite code: {ex.SqliteErrorCode})", userId, ex.StackTrace);
+                Log.Error(ex, $"Db.NewUser({userId}, {set_name}): {ex.Message} (sqlite code: {ex.SqliteErrorCode})");
             }
         }
 
@@ -115,32 +86,11 @@ namespace VorishkaBot
             try
             {
                 query.ExecuteNonQuery();
-                NewMsg(Db.MsgTypes.INFO, $"Remove user from DB: {userId}", userId);
+                Log.Information($"Remove user from DB: {userId}");
             }
             catch (SqliteException ex)
             {
-                Console.WriteLine($"{ex.Message} (sqlite code: {ex.SqliteErrorCode})\n" + ex.StackTrace);
-                NewMsg(MsgTypes.ERROR, $"{ex.Message} (sqlite code: {ex.SqliteErrorCode})", userId, ex.StackTrace);
-            }
-        }
-
-        public static void NewMsg(MsgTypes msgType, string msg, int userId, string stacktrace = "")
-        {
-            var query = sqlite.CreateCommand();
-            query.CommandText = $"INSERT INTO logs ('msg_type', 'timestamp', 'user', 'msg', 'stacktrace') VALUES (" +
-                $"'{msgType}', " +
-                $"'{DateTime.Now:yyyy-MM-dd HH:mm:ss}', " +
-                $"{userId}, " +
-                $"'{msg.Replace("'", "''")}', " +
-                $"'{stacktrace.Replace("'", "''")}'" +
-                $");";
-            try
-            {
-                query.ExecuteNonQuery();
-            }
-            catch (SqliteException ex)
-            {
-                Console.WriteLine($"{ex.Message} (sqlite code: {ex.SqliteErrorCode})\n" + ex.StackTrace);                
+                Log.Error(ex, $"Db.DeleteUser({userId}): {ex.Message} (sqlite code: {ex.SqliteErrorCode})");
             }
         }
     }

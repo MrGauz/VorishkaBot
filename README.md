@@ -1,6 +1,18 @@
-# VorishkaBot
+# VorishkaBot aka Воришка стикеров
 
-## Run yourself
+> 🤖 Here's [a link to the bot](https://t.me/VorishkaStickersBot). It talks to you in Russian.
+
+This Telegram bot saves your favorite stickers to one pack, so you don't have to spend half a day searching for your favorite meme among dozens of sticker packs you've saved. An upgraded version of pinned "Favourite stickers" if you will.
+
+**What can the chatbot do?**
+- ✅ Saves static stickers
+- ✅ Makes stickers from images
+
+**What can't the chatbot do?**
+- ❌ Saves animated stickers
+- ❌ Deletes stickers from a sticker pack or changes their order
+
+## ⚒️ Run it yourself
 1. Clone this repository:
    - ``git clone https://github.com/MrGauz/VorishkaBot.git``
 2. Create ``.env`` with the config (make a copy of ``.env.example`` and populate it)

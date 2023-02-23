@@ -5,12 +5,12 @@
 This Telegram bot saves your favorite stickers to one pack, so you don't have to spend half a day searching for your favorite meme among dozens of sticker packs you've saved. An upgraded version of pinned "Favourite stickers" if you will.
 
 **What can the chatbot do?**
-- ✅ Saves static stickers
-- ✅ Makes stickers from images
+- ✅ Save static stickers
+- ✅ Make stickers from images
 
 **What can't the chatbot do?**
-- ❌ Saves animated stickers
-- ❌ Deletes stickers from a sticker pack or changes their order
+- ❌ Save animated stickers
+- ❌ Delete stickers from a sticker pack or change their order
 
 ## ⚒️ Run it yourself
 1. Clone this repository:

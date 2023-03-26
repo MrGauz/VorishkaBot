@@ -2,6 +2,8 @@ import logging
 
 from telegram import __version__ as TG_VER
 
+from handlers.commands import start
+
 try:
     from telegram import __version_info__
 except ImportError:
@@ -27,6 +29,7 @@ def main() -> None:
     """Start the bot."""
     application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
 
+    application.add_handler(MessageHandler(filters.COMMAND, start))
     application.add_handler(MessageHandler(filters.Sticker.STATIC, save_static_sticker))
 
     application.run_polling()

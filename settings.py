@@ -1,5 +1,6 @@
 import logging
 import os
+from datetime import time
 
 from dotenv import load_dotenv
 
@@ -19,7 +20,4 @@ else:
 
 # Logging
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
-if DEBUG:
-    LOG_LEVEL = logging.DEBUG
-else:
-    LOG_LEVEL = logging.INFO
+LOG_LEVEL = logging.INFO

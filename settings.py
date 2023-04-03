@@ -14,11 +14,11 @@ TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 if DEBUG:
     DB_NAME = os.getenv('SQLITE_PATH') or 'db.sqlite'
 else:
-    DB_NAME = os.getenv('MYSQL_NAME', 'vorishka_bot')
-DB_HOST = os.getenv('MYSQL_HOST', 'localhost')
-DB_PORT = int(os.getenv('MYSQL_PORT', 3306))
-DB_USER = os.getenv('MYSQL_USER', 'vorishka_bot')
-DB_PASS = os.getenv('MYSQL_PASS', '')
+    DB_NAME = os.getenv('MYSQL_NAME') or 'vorishka_bot'
+DB_HOST = os.getenv('MYSQL_HOST') or 'localhost'
+DB_PORT = int(os.getenv('MYSQL_PORT') or 3306)
+DB_USER = os.getenv('MYSQL_USER') or 'vorishka_bot'
+DB_PASS = os.getenv('MYSQL_PASS')
 
 # Logging
 LOG_FORMAT = '%(asctime)s - %(levelname)s - %(name)s - %(message)s'

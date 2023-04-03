@@ -9,6 +9,7 @@ DEBUG = os.getenv('DEBUG').lower() == 'true'
 
 # Telegram
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+ADMIN_ID = os.getenv('ADMIN_ID')
 
 # Database
 if DEBUG:

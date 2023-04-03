@@ -2,8 +2,9 @@ import logging
 
 from telegram import __version__ as TG_VER
 
-from database.utils import create_tables_and_seed
-from handlers.commands import start
+from database.utils import create_tables
+from handlers.commands import start_command, help_command
+from handlers.errors import update_error_handler, message_error_handler
 
 try:
     from telegram import __version_info__
@@ -19,19 +20,23 @@ if __version_info__ < (20, 0, 0, 'alpha', 1):
 
 from handlers.static_stickers import save_static_sticker
 from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT
-from telegram.ext import Application, MessageHandler, filters
+from telegram.ext import Application, MessageHandler, filters, CommandHandler
 
 logging.basicConfig(format=LOG_FORMAT, level=LOG_LEVEL)
 logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    create_tables_and_seed()
+    create_tables()
 
     application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
 
-    application.add_handler(MessageHandler(filters.COMMAND, start))
+    application.add_handler(CommandHandler("start", start_command))
+    application.add_handler(CommandHandler("help", help_command))
     application.add_handler(MessageHandler(filters.Sticker.STATIC, save_static_sticker))
+
+    application.add_handler(MessageHandler(filters.ALL, message_error_handler))
+    application.add_error_handler(update_error_handler)
 
     application.run_polling()
 

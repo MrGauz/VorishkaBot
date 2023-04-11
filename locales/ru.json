@@ -1,7 +1,9 @@
 {
     "chat": {
         "welcome": "добро пожаловать братан",
-        "help": "ща помогу"
+        "help": "ща помогу",
+        "sticker_saved_new_set": "Стикер сохранен <a href='https://t.me/addstickers/{set_name}'>вот сюда</a>",
+        "sticker_saved": "Стикер сохранен в <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>"
     },
     "errors": {
         "default_no": "Извини, брат, к такому меня жизнь не готовила"

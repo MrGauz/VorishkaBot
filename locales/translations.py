@@ -6,18 +6,24 @@ from settings import DEFAULT_LANG
 logger = logging.getLogger(__name__)
 
 
-def translate(message_id: str, lang_code: str) -> str:
+def translate(message_id: str, lang_code: str, placeholders=None) -> str:
+    if placeholders is None:
+        placeholders = {}
+
     trans = load_translation(lang_code)
     module, message_name = message_id.split(".")
 
     try:
-        # TODO: fill the arguments
-        return trans[module][message_name]
+        message_template = trans[module][message_name]
+        for placeholder, value in placeholders.items():
+            message_template = message_template.replace(f'{{{placeholder}}}', value)
+        return message_template
+
     except (KeyError, TypeError) as e:
         if lang_code != DEFAULT_LANG:
             # Try falling back to default language
             logger.warning(f'Could not find translation for {message_id} in {lang_code}', exc_info=e)
-            return translate(message_id, DEFAULT_LANG)
+            return translate(message_id, DEFAULT_LANG, placeholders)
 
         logger.error(f'Could not find translation for {message_id} in default {lang_code}', exc_info=e)
         # TODO: return something else to display to the user

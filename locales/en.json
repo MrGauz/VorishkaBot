@@ -1,7 +1,9 @@
 {
     "chat": {
         "welcome": "Welcome!",
-        "help": "Help!"
+        "help": "Help!",
+        "sticker_saved_new_set": "Sticker was saved <a href='https://t.me/addstickers/{set_name}'>here</a>",
+        "sticker_saved": "Sticker was saved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>"
     },
     "errors": {
         "no_images": "Sorry, I can't process images yet",

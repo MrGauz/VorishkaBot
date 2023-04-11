@@ -36,10 +36,8 @@ async def save_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE
         )
         new_set = await save_new_set(user, name, title, SetTypes.STATIC)
 
-        # TODO: TRANSLATION
-        await context.bot.send_message(chat_id=user.user_id,
-                                       text=f"Стикер сохранен <a href='https://t.me/addstickers/{new_set.name}'>вот сюда</a>",
-                                       parse_mode=ParseMode.HTML)
+        text = _('chat.sticker_saved_new_set', user.lang_code, {'set_name': new_set.name})
+        await context.bot.send_message(chat_id=user.user_id, text=text, parse_mode=ParseMode.HTML)
     else:
         # TODO: check for available space
         chosen_set = sets.first()
@@ -49,8 +47,7 @@ async def save_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE
             sticker=input_sticker
         )
 
-        # TODO: TRANSLATION
-        await context.bot.send_message(chat_id=user.user_id,
-                                       text=f"Стикер сохранен в <a href='https://t.me/addstickers/{chosen_set.name}'>{chosen_set.title}</a>",
-                                       parse_mode=ParseMode.HTML)
+        text = _('chat.sticker_saved', user.lang_code, {'set_name': chosen_set.name, 'set_title': chosen_set.title})
+        await context.bot.send_message(chat_id=user.user_id, text=text, parse_mode=ParseMode.HTML)
+
     # TODO: show sticker summary

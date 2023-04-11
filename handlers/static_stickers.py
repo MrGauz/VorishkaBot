@@ -52,3 +52,4 @@ async def save_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE
         await context.bot.send_message(chat_id=user.user_id,
                                        text=f"Стикер сохранен в <a href='https://t.me/addstickers/{chosen_set.name}'>{chosen_set.title}</a>",
                                        parse_mode=ParseMode.HTML)
+    # TODO: show sticker summary

@@ -27,13 +27,13 @@ async def get_user(update: Update) -> User:
         logger.info(f"Creating new user @{update.effective_user.username} ({update.effective_user.id})")
         user = User()
         user.user_id = update.effective_user.id
+        user.lang_code = update.effective_user.language_code
 
     # Update any fields that might have changed
     user.username = update.effective_user.username
     user.first_name = update.effective_user.first_name
     user.last_name = update.effective_user.last_name
-    user.is_premium = update.effective_user.is_premium
-    user.language_code = update.effective_user.language_code
+    user.is_premium = update.effective_user.is_premium or False
     if user.is_dirty():
         user.save()
 

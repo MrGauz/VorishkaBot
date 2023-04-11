@@ -24,3 +24,8 @@ DB_PASS = os.getenv('MYSQL_PASS')
 # Logging
 LOG_FORMAT = '%(asctime)s - %(levelname)s - %(name)s - %(message)s'
 LOG_LEVEL = logging.INFO
+
+# Translations
+DEFAULT_LANG = os.getenv('DEFAULT_LANG') or 'en'
+if not os.path.isfile(f'locales/{DEFAULT_LANG}.json'):
+    raise ValueError(f'locales/{DEFAULT_LANG}.json not found - the bot can\'t run without the DEFAULT_LANG translation')

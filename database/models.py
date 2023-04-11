@@ -26,7 +26,7 @@ class User(Model):
     username = CharField(max_length=32, null=True)
     first_name = CharField(max_length=256, null=False)
     last_name = CharField(max_length=256, null=True)
-    language_code = CharField(max_length=3, null=True)
+    lang_code = CharField(max_length=3, null=True)
     is_premium = BooleanField(default=False)
     created_at_utc = DateTimeField(default=datetime.utcnow)
 

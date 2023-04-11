@@ -2,5 +2,15 @@
     "chat": {
         "welcome": "Welcome!",
         "help": "Help!"
+    },
+    "errors": {
+        "no_images": "Sorry, I can't process images yet",
+        "no_animated_stickers": "Sorry, I can't process animated stickers yet",
+        "no_documents": "Sorry, I can't process documents yet",
+        "no_custom_emoji": "Sorry, I can't process custom emoji yet",
+        "default_no": "Sorry, i can't process whatever this is"
+    },
+    "sets": {
+        "default_name": "My stickers"
     }
 }

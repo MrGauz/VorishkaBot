@@ -20,11 +20,12 @@ def translate(message_id: str, lang_code: str) -> str:
             return translate(message_id, DEFAULT_LANG)
 
         logger.error(f'Could not find translation for {message_id} in default {lang_code}', exc_info=e)
-        # TODO: return something to display to the user
-        return ""
+        # TODO: return something else to display to the user
+        return message_id
 
 
 def load_translation(lang_code: str) -> dict:
+    # TODO: translations cache
     try:
         filename = f"locales/{lang_code}.json".lower()
         with open(filename, 'r', encoding='utf-8') as f:

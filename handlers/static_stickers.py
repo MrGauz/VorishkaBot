@@ -8,6 +8,7 @@ from telegram.ext import ContextTypes
 
 from database.models import Set, SetTypes
 from database.utils import get_user, save_new_set
+from locales import _
 
 logger = logging.getLogger(__name__)
 
@@ -21,9 +22,9 @@ async def save_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE
     input_sticker = InputSticker(sticker=sticker_bytes, emoji_list=update.effective_message.sticker.emoji)
 
     if sets.count() == 0:
-        random_str = ''.join(random.choice(string.ascii_lowercase) for _ in range(10))
+        random_str = ''.join(random.choice(string.ascii_lowercase) for i in range(10))
         name = "stickers_%s_by_%s" % (random_str, context.bot.username)
-        title = "Сохраненки"  # TODO: TRANSLATION
+        title = _('sets.default_name', user.lang_code)
 
         await context.bot.create_new_sticker_set(
             user_id=user.user_id,

@@ -4,10 +4,12 @@ import logging
 import traceback
 
 from telegram import Update
-from telegram.constants import ParseMode, StickerType
+from telegram.constants import ParseMode, MessageEntityType
 from telegram.ext import ContextTypes
 
+from database.utils import get_user
 from settings import ADMIN_ID, DEBUG
+from locales import _
 
 logger = logging.getLogger(__name__)
 
@@ -39,19 +41,20 @@ async def update_error_handler(update: object, context: ContextTypes.DEFAULT_TYP
 
 
 async def message_error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    user = await get_user(update)
     message = update.effective_message
+
     if message.photo:
-        # TODO: TRANSLATE
-        await context.bot.send_message(update.effective_user.id, "Sorry, I can't process images yet")
-    elif message.sticker.is_animated or message.sticker.is_video:
-        # TODO: TRANSLATE
-        await context.bot.send_message(update.effective_user.id, "Sorry, I can't process animated stickers yet")
+        await context.bot.send_message(user.user_id, _('errors.no_images', user.lang_code))
+
+    elif message.sticker and (message.sticker.is_animated or message.sticker.is_video):
+        await context.bot.send_message(user.user_id, _('errors.no_animated_stickers', user.lang_code))
+
     elif message.document:
-        # TODO: TRANSLATE
-        await context.bot.send_message(update.effective_user.id, "Sorry, I can't process documents yet")
-    elif message.sticker and message.sticker.type == StickerType.CUSTOM_EMOJI:
-        # TODO: TRANSLATE
-        await context.bot.send_message(update.effective_user.id, "Sorry, I can't process custom emoji yet")
+        await context.bot.send_message(user.user_id, _('errors.no_documents', user.lang_code))
+
+    elif any(entity.type == MessageEntityType.CUSTOM_EMOJI for entity in message.entities):
+        await context.bot.send_message(user.user_id, _('errors.no_custom_emoji', user.lang_code))
+
     else:
-        # TODO: TRANSLATE
-        await context.bot.send_message(update.effective_user.id, "Извини, брат, к такому меня жизнь не готовила")
+        await context.bot.send_message(user.user_id, _('errors.default_no', user.lang_code))

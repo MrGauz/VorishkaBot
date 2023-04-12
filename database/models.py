@@ -21,6 +21,13 @@ class SetTypes(CharEnum):
     EMOJI = "custom_emoji"
 
 
+class Actions(CharEnum):
+    CHANGE_STICKER_EMOJI = "change_sticker_emoji"
+    DELETE_STICKER = "delete_sticker"
+    RENAME_SET = "rename_set"
+    DELETE_SET = "delete_set"
+
+
 class User(Model):
     user_id = BigIntegerField(unique=True, null=False)
     username = CharField(max_length=32, null=True)

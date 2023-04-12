@@ -27,8 +27,12 @@ LOG_LEVEL = logging.INFO
 
 # Translations
 DEFAULT_LANG = os.getenv('DEFAULT_LANG') or 'en'
-if not os.path.isfile(f'locales/{DEFAULT_LANG}.json'):
-    raise ValueError(f'locales/{DEFAULT_LANG}.json not found - the bot can\'t run without the DEFAULT_LANG translation')
+if not os.path.isfile(f'locales/translations/{DEFAULT_LANG}.json'):
+    raise ValueError(
+        f'locales/translations/{DEFAULT_LANG}.json not found - the bot can\'t run without the DEFAULT_LANG translation')
 
 # Stickers
 DEFAULT_EMOJI = u'\U0001F602'
+STATIC_SET_EMOJI = u'\U0001F5BC'
+ANIMATED_SET_EMOJI = u'\U0001F3A5'
+EMOJI_SET_EMOJI = u'\U0001F47D'

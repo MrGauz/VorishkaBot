@@ -45,13 +45,16 @@ async def message_error_handler(update: Update, context: ContextTypes.DEFAULT_TY
     message = update.effective_message
 
     if message.sticker and (message.sticker.is_animated or message.sticker.is_video):
-        await context.bot.send_message(user.user_id, _('errors.no_animated_stickers', user.lang_code))
+        await context.bot.send_message(user.user_id, _('errors.no_animated_stickers', user.lang_code),
+                                       parse_mode=ParseMode.HTML)
 
     elif message.document:
-        await context.bot.send_message(user.user_id, _('errors.no_documents', user.lang_code))
+        await context.bot.send_message(user.user_id, _('errors.no_documents', user.lang_code),
+                                       parse_mode=ParseMode.HTML)
 
     elif any(entity.type == MessageEntityType.CUSTOM_EMOJI for entity in message.entities):
-        await context.bot.send_message(user.user_id, _('errors.no_custom_emoji', user.lang_code))
+        await context.bot.send_message(user.user_id, _('errors.no_custom_emoji', user.lang_code),
+                                       parse_mode=ParseMode.HTML)
 
     else:
-        await context.bot.send_message(user.user_id, _('errors.default_no', user.lang_code))
+        await context.bot.send_message(user.user_id, _('errors.default_no', user.lang_code), parse_mode=ParseMode.HTML)

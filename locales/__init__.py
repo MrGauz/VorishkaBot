@@ -1,1 +1,1 @@
-from locales.translations import translate as _
+from locales.localization import translate as _

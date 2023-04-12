@@ -33,7 +33,7 @@ def translate(message_id: str, lang_code: str, placeholders=None) -> str:
 def load_translation(lang_code: str) -> dict:
     # TODO: translations cache
     try:
-        filename = f"locales/{lang_code}.json".lower()
+        filename = f"locales/translations/{lang_code}.json".lower()
         with open(filename, 'r', encoding='utf-8') as f:
             # TODO: json schema validation
             return json.load(f)

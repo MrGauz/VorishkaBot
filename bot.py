@@ -18,7 +18,7 @@ if __version_info__ < (20, 0, 0, 'alpha', 1):
         f'visit https://docs.python-telegram-bot.org/en/v{TG_VER}/examples.html'
     )
 
-from handlers.static_stickers import save_static_sticker
+from handlers.static_stickers import from_static_sticker, from_photo
 from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT
 from telegram.ext import Application, MessageHandler, filters, CommandHandler
 
@@ -33,7 +33,8 @@ def main() -> None:
 
     application.add_handler(CommandHandler("start", start_command))
     application.add_handler(CommandHandler("help", help_command))
-    application.add_handler(MessageHandler(filters.Sticker.STATIC, save_static_sticker))
+    application.add_handler(MessageHandler(filters.Sticker.STATIC, from_static_sticker))
+    application.add_handler(MessageHandler(filters.PHOTO, from_photo))
 
     application.add_handler(MessageHandler(filters.ALL, message_error_handler))
     application.add_error_handler(update_error_handler)

@@ -44,10 +44,7 @@ async def message_error_handler(update: Update, context: ContextTypes.DEFAULT_TY
     user = await get_user(update)
     message = update.effective_message
 
-    if message.photo:
-        await context.bot.send_message(user.user_id, _('errors.no_images', user.lang_code))
-
-    elif message.sticker and (message.sticker.is_animated or message.sticker.is_video):
+    if message.sticker and (message.sticker.is_animated or message.sticker.is_video):
         await context.bot.send_message(user.user_id, _('errors.no_animated_stickers', user.lang_code))
 
     elif message.document:

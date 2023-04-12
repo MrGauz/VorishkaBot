@@ -6,7 +6,6 @@
         "sticker_saved": "Sticker was saved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>"
     },
     "errors": {
-        "no_images": "Sorry, I can't process images yet",
         "no_animated_stickers": "Sorry, I can't process animated stickers yet",
         "no_documents": "Sorry, I can't process documents yet",
         "no_custom_emoji": "Sorry, I can't process custom emoji yet",

@@ -32,7 +32,7 @@ if not os.path.isfile(f'locales/translations/{DEFAULT_LANG}.json'):
         f'locales/translations/{DEFAULT_LANG}.json not found - the bot can\'t run without the DEFAULT_LANG translation')
 
 # Stickers
-DEFAULT_EMOJI = u'\U0001F602'
-STATIC_SET_EMOJI = u'\U0001F5BC'
+DEFAULT_NEW_STICKER_EMOJI = u'\U0001F602'
+STATIC_SET_EMOJI = u'\U0001F304'
 ANIMATED_SET_EMOJI = u'\U0001F3A5'
 EMOJI_SET_EMOJI = u'\U0001F47D'

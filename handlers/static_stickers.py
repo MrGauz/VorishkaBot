@@ -12,7 +12,7 @@ from telegram.ext import ContextTypes
 from database.models import Set, SetTypes
 from database.utils import get_user, save_new_set
 from locales import _
-from settings import DEFAULT_EMOJI
+from settings import DEFAULT_NEW_STICKER_EMOJI
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +64,7 @@ async def from_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE
 async def from_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     # Get data from Telegram
     emoji_pattern = re.compile("[^\U0001F000-\U0001F999]+")
-    emoji_list = tuple(emoji_pattern.sub('', update.effective_message.caption or '') or DEFAULT_EMOJI)
+    emoji_list = tuple(emoji_pattern.sub('', update.effective_message.caption or '') or DEFAULT_NEW_STICKER_EMOJI)
 
     file_id = update.effective_message.photo[-1].file_id
     photo_file = await context.bot.get_file(file_id)

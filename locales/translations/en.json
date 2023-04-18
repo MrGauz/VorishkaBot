@@ -1,13 +1,16 @@
 {
     "chat": {
-        "welcome": "Welcome!",
-        "help": "Help!",
         "sticker_saved_new_set": "Sticker was saved <a href='https://t.me/addstickers/{set_name}'>here</a>",
         "sticker_saved": "Sticker was saved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "choose_set": "Choose a set:",
         "choose_new_set_name": "Choose a new name for your set",
         "set_renamed_success": "Set was renamed to <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>",
         "set_renamed_error": "Failed to rename the set to {new_name}"
+    },
+    "commands": {
+        "start": "Welcome!",
+        "help": "Help!",
+        "cancel_rename_set": "Cancelled renaming the set"
     },
     "errors": {
         "no_animated_stickers": "Sorry, I can't process animated stickers yet",

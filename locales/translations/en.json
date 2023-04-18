@@ -1,7 +1,7 @@
 {
     "chat": {
-        "sticker_saved_new_set": "Sticker was saved <a href='https://t.me/addstickers/{set_name}'>here</a>",
         "sticker_saved": "Sticker was saved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
+        "emoji_saved": "Emoji was saved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "choose_set": "Choose a set:",
         "choose_new_set_name": "Choose a new name for your set",
         "set_renamed_success": "Set was renamed to <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>",
@@ -19,6 +19,9 @@
         "default_no": "Sorry, i can't process whatever this is"
     },
     "sets": {
-        "default_name": "My stickers"
+        "default_name_static": "My stickers",
+        "default_name_video": "My video stickers",
+        "default_name_animated": "My animated stickers",
+        "default_name_emoji": "My emoji"
     }
 }

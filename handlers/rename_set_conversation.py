@@ -20,12 +20,14 @@ async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = await get_user(update)
     context.user_data.clear()
     await update.message.reply_text(_('commands.cancel_rename_set', user.lang_code), parse_mode=ParseMode.HTML)
+
     return ConversationHandler.END
 
 
 async def rename_set_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = await get_user(update)
     sets = await get_user_sets(user)
+    context.user_data.clear()
 
     buttons = []
     for telegram_set in sets:
@@ -36,8 +38,8 @@ async def rename_set_command(update: Update, context: ContextTypes.DEFAULT_TYPE)
                 emoji = EMOJI_SET_EMOJI
             case SetTypes.STATIC | _:
                 emoji = STATIC_SET_EMOJI
-        buttons.append(InlineKeyboardButton(f'{emoji} {telegram_set.title}', callback_data=telegram_set.name))
-    keyboard = InlineKeyboardMarkup([buttons])
+        buttons.append([InlineKeyboardButton(f'{emoji} {telegram_set.title}', callback_data=telegram_set.name)])
+    keyboard = InlineKeyboardMarkup(buttons)
 
     await update.message.reply_text(_('chat.choose_set', user.lang_code), parse_mode=ParseMode.HTML,
                                     reply_markup=keyboard)

@@ -33,6 +33,10 @@ if not os.path.isfile(f'locales/translations/{DEFAULT_LANG}.json'):
 
 # Stickers
 DEFAULT_NEW_STICKER_EMOJI = u'\U0001F602'
+DEFAULT_STATIC_SET_NAME = 'stickers_%s_by_%s'
+DEFAULT_VIDEO_SET_NAME = 'video_stickers_%s_by_%s'
+DEFAULT_ANIMATED_SET_NAME = 'animated_stickers_%s_by_%s'
+DEFAULT_EMOJI_SET_NAME = 'emoji_%s_by_%s'
 STATIC_SET_EMOJI = u'\U0001F304'
 ANIMATED_SET_EMOJI = u'\U0001F3A5'
 EMOJI_SET_EMOJI = u'\U0001F47D'

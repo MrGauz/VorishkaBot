@@ -5,7 +5,7 @@ from telegram.constants import ParseMode
 from telegram.ext import ConversationHandler, CommandHandler, ContextTypes, CallbackQueryHandler
 from telegram.warnings import PTBUserWarning
 
-from database.utils import get_user, change_user_language
+from database.utils import get_user
 from handlers.conversations import cancel_command
 from locales import _
 from settings import ALL_LANGUAGES
@@ -37,7 +37,8 @@ async def language_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.effective_message.reply_text(_('commands.cancel', user.lang_code), parse_mode=ParseMode.HTML)
         return ConversationHandler.END
 
-    await change_user_language(user.user_id, query.data)
+    user.lang_code = query.data
+    user.save()
     await update.effective_message.reply_text(_('chat.language_changed', query.data), parse_mode=ParseMode.HTML)
 
     return ConversationHandler.END

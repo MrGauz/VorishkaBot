@@ -18,9 +18,6 @@ def create_tables():
 
 
 async def get_user(update: Update) -> User:
-    if db.is_closed():
-        db.connect()
-
     user = User.get_or_none(User.user_id == update.effective_user.id)
 
     if user is None:
@@ -37,41 +34,17 @@ async def get_user(update: Update) -> User:
     if user.is_dirty():
         user.save()
 
-    db.close()
     return user
 
 
 async def save_new_set(user: User, name: str, title: str, set_type: SetTypes) -> Set:
     logger.info(f"Creating new sticker set for @{user.username}: {name}")
 
-    if db.is_closed():
-        db.connect()
     stickers_set = Set()
     stickers_set.user = user
     stickers_set.name = name
     stickers_set.title = title
     stickers_set.set_type = set_type
     stickers_set.save()
-    db.close()
 
     return stickers_set
-
-
-async def rename_set(name: str, new_title: str) -> None:
-    if db.is_closed():
-        db.connect()
-    sticker_set = Set.get_or_none(Set.name == name)
-    if sticker_set is not None:
-        sticker_set.title = new_title
-        sticker_set.save()
-    db.close()
-
-
-async def change_user_language(user_id: str, new_lang: str) -> None:
-    if db.is_closed():
-        db.connect()
-    user = User.get_or_none(User.user_id == user_id)
-    if user is not None:
-        user.lang_code = new_lang
-        user.save()
-    db.close()

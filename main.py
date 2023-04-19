@@ -20,13 +20,14 @@ from telegram.ext import Application, MessageHandler, filters, CommandHandler, P
 from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT
 from database.utils import create_tables
 
-from handlers.static_stickers import from_static_sticker, from_photo
-from handlers.commands import start_command, help_command, set_bot_commands
-from handlers.errors import update_error_handler, message_error_handler
-from handlers.rename_set_conversation import rename_set_conversation
-from handlers.translate_conversation import translate_conversation
-from handlers.video_stickers import from_video_sticker, from_video
-from handlers.delete_set_conversation import delete_set_conversation
+from bot.bot import set_bot_commands
+from bot.handlers.static_stickers import from_static_sticker, from_photo
+from bot.handlers.commands import start_command, help_command
+from bot.handlers.errors import update_error_handler, message_error_handler
+from bot.handlers.rename_set_conversation import rename_set_conversation
+from bot.handlers.translate_conversation import translate_conversation
+from bot.handlers.video_stickers import from_video_sticker, from_video
+from bot.handlers.delete_set_conversation import delete_set_conversation
 
 filterwarnings(action="ignore", category=DeprecationWarning)
 

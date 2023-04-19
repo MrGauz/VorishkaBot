@@ -8,10 +8,10 @@ from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandl
     ContextTypes
 from telegram.warnings import PTBUserWarning
 
-from bot.set_utils import get_set_selection_buttons
+from bot.sets import get_set_selection_buttons
 from database.models import Set
 from database.utils import get_user
-from handlers.conversations import cancel_command
+from bot.conversations import cancel_command
 from locales import _
 
 filterwarnings(action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning)

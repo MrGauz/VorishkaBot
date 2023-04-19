@@ -6,7 +6,7 @@ from telegram.ext import ConversationHandler, CommandHandler, ContextTypes, Call
 from telegram.warnings import PTBUserWarning
 
 from database.utils import get_user
-from handlers.conversations import cancel_command
+from bot.conversations import cancel_command
 from locales import _
 from settings import ALL_LANGUAGES
 

@@ -7,7 +7,7 @@ from telegram import Update, InputSticker
 from telegram.ext import ContextTypes
 
 from database.models import SetTypes
-from handlers.stickers import save_sticker
+from bot.stickers import save_sticker
 from settings import DEFAULT_NEW_STICKER_EMOJI, EMOJI_ONLY_REGEX
 
 logger = logging.getLogger(__name__)

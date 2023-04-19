@@ -9,7 +9,7 @@ from telegram.ext import ContextTypes
 
 from database.models import SetTypes
 from database.utils import get_user
-from handlers.stickers import save_sticker
+from bot.stickers import save_sticker
 from locales import _
 from settings import DEFAULT_NEW_STICKER_EMOJI, EMOJI_ONLY_REGEX, ADMIN_ID
 

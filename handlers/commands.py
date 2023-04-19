@@ -9,7 +9,7 @@ from settings import ALL_LANGUAGES
 
 
 async def set_bot_commands(bot: BT):
-    for lang_code in ALL_LANGUAGES:
+    for lang_code in list(ALL_LANGUAGES.keys()):
         await bot.set_my_commands([
             BotCommand(command='rename_set', description=_('bot.rename_set_desc', lang_code)),
             BotCommand(command='translate', description=_('bot.translate_desc', lang_code)),

@@ -8,6 +8,7 @@ from telegram.warnings import PTBUserWarning
 from database.utils import get_user, change_user_language
 from handlers.conversations import cancel_command
 from locales import _
+from settings import ALL_LANGUAGES
 
 filterwarnings(action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning)
 
@@ -20,13 +21,8 @@ async def translate_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         update.effective_user.id,
         'Choose language',
         reply_markup=InlineKeyboardMarkup([
-            [
-                InlineKeyboardButton('\U0001f1ec\U0001f1e7', callback_data='en'),
-                InlineKeyboardButton('\U0001f1f7\U0001f1fa', callback_data='ru'),
-            ],
-            [
-                InlineKeyboardButton(_('buttons.cancel', user.lang_code), callback_data='cancel'),
-            ]
+            [InlineKeyboardButton(v, callback_data=k) for k, v in ALL_LANGUAGES.items()],
+            [InlineKeyboardButton(_('buttons.cancel', user.lang_code), callback_data='cancel')]
         ])
     )
     return LANGUAGE_CHOICE

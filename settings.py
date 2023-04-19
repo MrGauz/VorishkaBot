@@ -26,7 +26,7 @@ LOG_FORMAT = '%(asctime)s - %(levelname)s - %(name)s - %(message)s'
 LOG_LEVEL = logging.INFO
 
 # Translations
-ALL_LANGUAGES = ['en', 'ru']
+ALL_LANGUAGES = {'en': '\U0001f1ec\U0001f1e7', 'ru': '\U0001f1f7\U0001f1fa'}
 DEFAULT_LANG = os.getenv('DEFAULT_LANG') or 'en'
 if not os.path.isfile(f'locales/translations/{DEFAULT_LANG}.json'):
     raise ValueError(

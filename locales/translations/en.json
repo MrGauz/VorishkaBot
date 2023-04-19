@@ -22,7 +22,8 @@
         "no_documents": "Sorry, I can't process documents yet",
         "no_custom_emoji": "Sorry, I can't process custom emoji yet",
         "default_no": "Sorry, i can't process whatever this is",
-        "generic_error": "Task failed successfully"
+        "generic_error": "Task failed successfully",
+        "no_sets": "You don't have any sticker sets yet"
     },
     "sets": {
         "default_name_static": "My stickers",

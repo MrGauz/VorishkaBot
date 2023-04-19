@@ -22,6 +22,10 @@ async def rename_set_command(update: Update, context: ContextTypes.DEFAULT_TYPE)
     sets = await get_user_sets(user)
     context.user_data.clear()
 
+    if not sets:
+        await update.effective_message.reply_text(_('errors.no_sets', user.lang_code), parse_mode=ParseMode.HTML)
+        return ConversationHandler.END
+
     buttons = []
     for telegram_set in sets:
         match telegram_set.set_type:

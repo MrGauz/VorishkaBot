@@ -57,14 +57,6 @@ async def save_new_set(user: User, name: str, title: str, set_type: SetTypes) ->
     return stickers_set
 
 
-async def get_user_sets(user: User) -> list[Set]:
-    if db.is_closed():
-        db.connect()
-    sets = Set.select().where(Set.user == user).order_by(Set.set_type.desc())
-    db.close()
-    return sets
-
-
 async def rename_set(name: str, new_title: str) -> None:
     if db.is_closed():
         db.connect()

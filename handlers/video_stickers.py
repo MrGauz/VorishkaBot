@@ -11,7 +11,7 @@ from database.models import SetTypes
 from database.utils import get_user
 from handlers.stickers import save_sticker
 from locales import _
-from settings import DEFAULT_NEW_STICKER_EMOJI, EMOJI_ONLY_REGEX
+from settings import DEFAULT_NEW_STICKER_EMOJI, EMOJI_ONLY_REGEX, ADMIN_ID
 
 logger = logging.getLogger(__name__)
 
@@ -31,10 +31,25 @@ async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     mp4_filename = tempfile.mktemp(suffix='.mp4')
     webm_filename = tempfile.mktemp(suffix='.webm')
 
-    file = await update.effective_message.video.get_file()
-    await file.download_to_drive(mp4_filename)
     emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX).sub('', update.effective_message.caption or '')
                        or DEFAULT_NEW_STICKER_EMOJI)
+    if update.effective_message.video:
+        file = await update.effective_message.video.get_file()
+        filename = update.effective_message.video.file_name
+    elif update.effective_message.animation:
+        file = await update.effective_message.animation.get_file()
+        filename = update.effective_message.animation.file_name
+    else:
+        # Doesn't ever get here, it's only here to avoid warnings
+        file = None
+        filename = ""
+
+    if filename.lower().endswith('.gif'):
+        # Oh wow, finally a gif animation
+        await context.bot.send_message(ADMIN_ID, "GIF animation detected")
+        await update.effective_message.forward(ADMIN_ID)
+
+    await file.download_to_drive(mp4_filename)
 
     # Get video metadata
     probe = ffmpeg.probe(mp4_filename)
@@ -63,8 +78,8 @@ async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
          .run(capture_stdout=True, capture_stderr=True)
          )
     except ffmpeg.Error as e:
-        logger.error('Failed to process ', e.stderr)
-        await update.effective_message.reply_text(_('errors.generic_error', user.lang_code))
+        logger.error(f'Failed to process {mp4_filename}', e.stderr)
+        await update.effective_message.reply_text(_('errors.ffmpeg_error', user.lang_code))
         return
 
     input_sticker = InputSticker(sticker=open(webm_filename, 'rb'), emoji_list=emoji_list)

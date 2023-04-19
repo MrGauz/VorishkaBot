@@ -2,12 +2,16 @@
     "chat": {
         "sticker_saved": "Sticker was saved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "emoji_saved": "Emoji was saved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
-        "choose_set": "Choose a set:",
+        "choose_set_rename": "Choose a set to rename:",
+        "choose_set_delete": "Choose a set to delete:",
         "choose_new_set_name": "Choose a new name for your set (or send /cancel to abort):",
         "set_renamed_success": "Set was renamed to <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>",
         "set_renamed_error": "Failed to rename the set to {new_name}",
         "time_warning": "This might take a while, please be patient",
-        "language_changed": "Now i speak a new language"
+        "language_changed": "Now i speak a new language",
+        "confirm_delete_set": "Are you sure you want to delete <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>? This action can't be undone",
+        "set_deleted_success": "Set {set_title} was deleted",
+        "set_deleted_error": "Failed to delete set {set_title}"
     },
     "commands": {
         "start": "Welcome!",
@@ -15,14 +19,17 @@
         "cancel": "Don't worry, I stopped"
     },
     "buttons": {
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "delete_set_no": "No",
+        "delete_set_nope": "Nope, nevermind",
+        "delete_set_yes": "Yes, delete the set"
     },
     "errors": {
         "no_animated_stickers": "Sorry, I can't process animated stickers yet",
         "no_documents": "Sorry, I can't process documents yet",
         "no_custom_emoji": "Sorry, I can't process custom emoji yet",
         "default_no": "Sorry, i can't process whatever this is",
-        "generic_error": "Task failed successfully",
+        "ffmpeg_error": "Task failed successfully",
         "no_sets": "You don't have any sticker sets yet"
     },
     "sets": {
@@ -33,6 +40,7 @@
     },
     "bot": {
         "rename_set_desc": "Rename a sticker set",
+        "delete_set_desc": "Delete a sticker set",
         "translate_desc": "Change language",
         "help_decs": "Helpful message"
     }

@@ -26,6 +26,7 @@ from handlers.errors import update_error_handler, message_error_handler
 from handlers.rename_set_conversation import rename_set_conversation
 from handlers.translate_conversation import translate_conversation
 from handlers.video_stickers import from_video_sticker, from_video
+from handlers.delete_set_conversation import delete_set_conversation
 
 filterwarnings(action="ignore", category=DeprecationWarning)
 
@@ -35,6 +36,8 @@ logger = logging.getLogger(__name__)
 
 def main() -> None:
     create_tables()
+
+    # TODO: ignore messages in group chats
 
     persistence = PicklePersistence(filepath="context_data")
     application = Application.builder().token(TELEGRAM_BOT_TOKEN).persistence(persistence).build()
@@ -46,11 +49,12 @@ def main() -> None:
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(translate_conversation)
     application.add_handler(rename_set_conversation)
+    application.add_handler(delete_set_conversation)
 
     application.add_handler(MessageHandler(filters.Sticker.STATIC, from_static_sticker))
     application.add_handler(MessageHandler(filters.PHOTO, from_photo))
     application.add_handler(MessageHandler(filters.Sticker.VIDEO, from_video_sticker))
-    application.add_handler(MessageHandler(filters.VIDEO, from_video))
+    application.add_handler(MessageHandler(filters.VIDEO | filters.ANIMATION, from_video))
 
     application.add_handler(MessageHandler(filters.ALL, message_error_handler))
     application.add_error_handler(update_error_handler)

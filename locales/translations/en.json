@@ -29,5 +29,10 @@
         "default_name_video": "My video stickers",
         "default_name_animated": "My animated stickers",
         "default_name_emoji": "My emoji"
+    },
+    "bot": {
+        "rename_set_desc": "Rename a sticker set",
+        "translate_desc": "Change language",
+        "help_decs": "Helpful message"
     }
 }

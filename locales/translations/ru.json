@@ -10,5 +10,10 @@
     },
     "sets": {
         "default_name": "Сохраненки"
+    },
+    "bot": {
+        "rename_set_desc": "Переменовать стикерпак",
+        "translate_desc": "Поменять язык",
+        "help_decs": "Помочь?"
     }
 }

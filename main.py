@@ -1,9 +1,4 @@
-import logging
-
 from telegram import __version__ as TG_VER
-
-from handlers.translate_conversation import translate_conversation
-from handlers.video_stickers import from_video_sticker, from_video
 
 try:
     from telegram import __version_info__
@@ -17,13 +12,22 @@ if __version_info__ < (20, 0, 0, 'alpha', 1):
         f'visit https://docs.python-telegram-bot.org/en/v{TG_VER}/examples.html'
     )
 
+from warnings import filterwarnings
+import logging
+from asyncio import get_event_loop
 from telegram.ext import Application, MessageHandler, filters, CommandHandler, PicklePersistence
-from handlers.static_stickers import from_static_sticker, from_photo
-from handlers.commands import start_command, help_command
-from handlers.errors import update_error_handler, message_error_handler
+
 from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT
 from database.utils import create_tables
+
+from handlers.static_stickers import from_static_sticker, from_photo
+from handlers.commands import start_command, help_command, set_bot_commands
+from handlers.errors import update_error_handler, message_error_handler
 from handlers.rename_set_conversation import rename_set_conversation
+from handlers.translate_conversation import translate_conversation
+from handlers.video_stickers import from_video_sticker, from_video
+
+filterwarnings(action="ignore", category=DeprecationWarning)
 
 logging.basicConfig(format=LOG_FORMAT, level=LOG_LEVEL)
 logger = logging.getLogger(__name__)
@@ -34,6 +38,9 @@ def main() -> None:
 
     persistence = PicklePersistence(filepath="context_data")
     application = Application.builder().token(TELEGRAM_BOT_TOKEN).persistence(persistence).build()
+
+    loop = get_event_loop()
+    loop.run_until_complete(set_bot_commands(application.bot))
 
     application.add_handler(CommandHandler("start", start_command))
     application.add_handler(CommandHandler("help", help_command))

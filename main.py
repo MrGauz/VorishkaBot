@@ -2,7 +2,7 @@ import logging
 
 from telegram import __version__ as TG_VER
 
-from handlers.video_stickers import from_video_sticker
+from handlers.video_stickers import from_video_sticker, from_video
 
 try:
     from telegram import __version_info__
@@ -41,6 +41,7 @@ def main() -> None:
     application.add_handler(MessageHandler(filters.Sticker.STATIC, from_static_sticker))
     application.add_handler(MessageHandler(filters.PHOTO, from_photo))
     application.add_handler(MessageHandler(filters.Sticker.VIDEO, from_video_sticker))
+    application.add_handler(MessageHandler(filters.VIDEO, from_video))
 
     application.add_handler(MessageHandler(filters.ALL, message_error_handler))
     application.add_error_handler(update_error_handler)

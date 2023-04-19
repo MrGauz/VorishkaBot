@@ -8,7 +8,7 @@ from telegram.ext import ContextTypes
 
 from database.models import SetTypes
 from handlers.stickers import save_sticker
-from settings import DEFAULT_NEW_STICKER_EMOJI
+from settings import DEFAULT_NEW_STICKER_EMOJI, EMOJI_ONLY_REGEX
 
 logger = logging.getLogger(__name__)
 
@@ -22,9 +22,8 @@ async def from_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 async def from_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     # Get data from Telegram
-    emoji_pattern = re.compile("[^\U0001F000-\U0001F999]+")
-    emoji_list = tuple(emoji_pattern.sub('', update.effective_message.caption or '') or DEFAULT_NEW_STICKER_EMOJI)
-
+    emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX).sub('', update.effective_message.caption or '')
+                       or DEFAULT_NEW_STICKER_EMOJI)
     file_id = update.effective_message.photo[-1].file_id
     photo_file = await context.bot.get_file(file_id)
     photo_bytes = bytes(await photo_file.download_as_bytearray())
@@ -32,13 +31,12 @@ async def from_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     # Open image
     image = Image.open(io.BytesIO(photo_bytes))
     width, height = image.size
-    max_size = 512
 
     # Quantize the image to 8 bits (256 colors)
     image = image.quantize(colors=256, method=2)
 
     # Resize the image by scaling
-    scale = max_size / max(width, height)
+    scale = 512 / max(width, height)
     new_width = 512 if width > height else int(width * scale)
     new_height = 512 if width < height else int(height * scale)
     image = image.resize((new_width, new_height), resample=Image.LANCZOS)

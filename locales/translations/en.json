@@ -5,7 +5,8 @@
         "choose_set": "Choose a set:",
         "choose_new_set_name": "Choose a new name for your set",
         "set_renamed_success": "Set was renamed to <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>",
-        "set_renamed_error": "Failed to rename the set to {new_name}"
+        "set_renamed_error": "Failed to rename the set to {new_name}",
+        "time_warning": "This might take a while, please be patient"
     },
     "commands": {
         "start": "Welcome!",
@@ -16,7 +17,8 @@
         "no_animated_stickers": "Sorry, I can't process animated stickers yet",
         "no_documents": "Sorry, I can't process documents yet",
         "no_custom_emoji": "Sorry, I can't process custom emoji yet",
-        "default_no": "Sorry, i can't process whatever this is"
+        "default_no": "Sorry, i can't process whatever this is",
+        "generic_error": "Task failed successfully"
     },
     "sets": {
         "default_name_static": "My stickers",

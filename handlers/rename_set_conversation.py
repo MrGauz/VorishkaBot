@@ -8,20 +8,13 @@ from telegram.warnings import PTBUserWarning
 
 from database.models import SetTypes
 from database.utils import get_user, get_user_sets, rename_set
+from handlers.conversations import cancel_command
 from locales import _
 from settings import ANIMATED_SET_EMOJI, EMOJI_SET_EMOJI, STATIC_SET_EMOJI
 
 filterwarnings(action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning)
 
 SELECT_SET, RENAME_SET = range(2)
-
-
-async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = await get_user(update)
-    context.user_data.clear()
-    await update.message.reply_text(_('commands.cancel_rename_set', user.lang_code), parse_mode=ParseMode.HTML)
-
-    return ConversationHandler.END
 
 
 async def rename_set_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -39,6 +32,7 @@ async def rename_set_command(update: Update, context: ContextTypes.DEFAULT_TYPE)
             case SetTypes.STATIC | _:
                 emoji = STATIC_SET_EMOJI
         buttons.append([InlineKeyboardButton(f'{emoji} {telegram_set.title}', callback_data=telegram_set.name)])
+    buttons.append([InlineKeyboardButton(_('buttons.cancel', user.lang_code), callback_data='cancel')])
     keyboard = InlineKeyboardMarkup(buttons)
 
     await update.message.reply_text(_('chat.choose_set', user.lang_code), parse_mode=ParseMode.HTML,
@@ -50,10 +44,11 @@ async def rename_set_command(update: Update, context: ContextTypes.DEFAULT_TYPE)
 async def sticker_set_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = await get_user(update)
     query = update.callback_query
-
-    # CallbackQueries need to be answered, even if no notification to the user is needed
-    # Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery
     await query.answer()
+
+    if query.data == 'cancel':
+        await update.effective_message.reply_text(_('commands.cancel', user.lang_code), parse_mode=ParseMode.HTML)
+        return ConversationHandler.END
 
     context.user_data['selected_set'] = query.data
     await context.bot.send_message(user.user_id, _('chat.choose_new_set_name', user.lang_code),
@@ -66,6 +61,10 @@ async def new_set_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = await get_user(update)
     text = update.effective_message.text
     set_name = context.user_data['selected_set']
+
+    if text == '/cancel':
+        await update.effective_message.reply_text(_('commands.cancel', user.lang_code), parse_mode=ParseMode.HTML)
+        return ConversationHandler.END
 
     result = await context.bot.set_sticker_set_title(set_name, text)
     if result:

@@ -2,6 +2,7 @@ import logging
 
 from telegram import __version__ as TG_VER
 
+from handlers.translate_conversation import translate_conversation
 from handlers.video_stickers import from_video_sticker, from_video
 
 try:
@@ -36,6 +37,7 @@ def main() -> None:
 
     application.add_handler(CommandHandler("start", start_command))
     application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(translate_conversation)
     application.add_handler(rename_set_conversation)
 
     application.add_handler(MessageHandler(filters.Sticker.STATIC, from_static_sticker))

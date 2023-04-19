@@ -3,15 +3,19 @@
         "sticker_saved": "Sticker was saved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "emoji_saved": "Emoji was saved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "choose_set": "Choose a set:",
-        "choose_new_set_name": "Choose a new name for your set",
+        "choose_new_set_name": "Choose a new name for your set (or send /cancel to abort):",
         "set_renamed_success": "Set was renamed to <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>",
         "set_renamed_error": "Failed to rename the set to {new_name}",
-        "time_warning": "This might take a while, please be patient"
+        "time_warning": "This might take a while, please be patient",
+        "language_changed": "Now i speak a new language"
     },
     "commands": {
         "start": "Welcome!",
         "help": "Help!",
-        "cancel_rename_set": "Cancelled renaming the set"
+        "cancel": "Don't worry, I stopped"
+    },
+    "buttons": {
+        "cancel": "Cancel"
     },
     "errors": {
         "no_animated_stickers": "Sorry, I can't process animated stickers yet",

@@ -4,7 +4,7 @@ import logging
 import traceback
 
 from telegram import Update
-from telegram.constants import ParseMode, MessageEntityType
+from telegram.constants import ParseMode
 from telegram.error import TelegramError
 from telegram.ext import ContextTypes
 

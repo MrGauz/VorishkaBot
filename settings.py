@@ -11,6 +11,11 @@ DEBUG = os.getenv('DEBUG').lower() == 'true'
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 ADMIN_ID = os.getenv('ADMIN_ID')
 
+# Payments
+PAYMENT_PROVIDER_TOKEN = os.getenv('PAYMENT_PROVIDER_TOKEN')
+# https://core.telegram.org/bots/payments#supported-currencies
+PAYMENT_CURRENCY = os.getenv('PAYMENT_CURRENCY') or 'UAH'
+
 # Database
 if DEBUG:
     DB_NAME = os.getenv('SQLITE_PATH') or 'db.sqlite'

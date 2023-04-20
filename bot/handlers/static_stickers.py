@@ -13,8 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 async def from_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    input_sticker = InputSticker(sticker=update.effective_message.sticker.file_id,
-                                 emoji_list=update.effective_message.sticker.emoji)
+    # TODO: webp is treated as a sticker - convert
+    emoji_list = update.effective_message.sticker.emoji or DEFAULT_NEW_STICKER_EMOJI
+    input_sticker = InputSticker(sticker=update.effective_message.sticker.file_id, emoji_list=emoji_list)
 
     await save_sticker(update, context, input_sticker, SetTypes.STATIC)
 

@@ -1,33 +1,9 @@
-import io
 import logging
 import os
 import tempfile
-
 import ffmpeg
-from PIL import Image
 
 logger = logging.getLogger(__name__)
-
-
-def convert_image(image: bytes) -> bytes:
-    # Open image
-    image = Image.open(io.BytesIO(image))
-    width, height = image.size
-
-    # Quantize the image to 8 bits (256 colors)
-    image = image.quantize(colors=256, method=2)
-
-    # Resize the image by scaling
-    scale = 512 / max(width, height)
-    new_width = 512 if width > height else int(width * scale)
-    new_height = 512 if width < height else int(height * scale)
-    image = image.resize((new_width, new_height), resample=Image.LANCZOS)
-
-    # Save image to bytes
-    output_buffer = io.BytesIO()
-    image.save(output_buffer, format='PNG')
-
-    return output_buffer.getvalue()
 
 
 def convert_video(file_path: str) -> str | None:
@@ -52,7 +28,7 @@ def convert_video(file_path: str) -> str | None:
             webm_filename,
             format='webm',
             vcodec='libvpx-vp9',  # VP9 codec
-            crf=30,  # Set quality to 30
+            crf=18,  # Set quality to 18
             r=30,  # Set frame rate to 30 FPS
             an=None,  # Remove audio
             t=3,  # Limit the duration to 3 seconds

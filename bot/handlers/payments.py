@@ -21,7 +21,9 @@ async def invoice_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             LabeledPrice(label="Жопа", amount=10000),
             LabeledPrice(label="Нологи", amount=0),
         ],
-        photo_url='https://media.licdn.com/dms/image/C5103AQFVGge3yGJg-w/profile-displayphoto-shrink_200_200/0/1540739888325?e=1687392000&v=beta&t=R2WvjcVuayucWv6eGEx8zI79fbRJHFjGXg_6HWTzezk'
+        photo_url='https://gauz.net/zhopa.jpg',
+        photo_width=800,
+        photo_height=800,
     )
 
 

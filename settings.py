@@ -8,11 +8,11 @@ load_dotenv()
 DEBUG = os.getenv('DEBUG').lower() == 'true'
 
 # Telegram
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-ADMIN_ID = os.getenv('ADMIN_ID')
+TELEGRAM_BOT_TOKEN = os.environ['TELEGRAM_BOT_TOKEN']
+ADMIN_ID = os.environ['ADMIN_ID']
 
 # Payments
-PAYMENT_PROVIDER_TOKEN = os.getenv('PAYMENT_PROVIDER_TOKEN')
+PAYMENT_PROVIDER_TOKEN = os.environ['PAYMENT_PROVIDER_TOKEN']
 # https://core.telegram.org/bots/payments#supported-currencies
 PAYMENT_CURRENCY = os.getenv('PAYMENT_CURRENCY') or 'UAH'
 
@@ -38,12 +38,11 @@ if not os.path.isfile(f'locales/translations/{DEFAULT_LANG}.json'):
         f'locales/translations/{DEFAULT_LANG}.json not found - the bot can\'t run without the DEFAULT_LANG translation')
 
 # Stickers
-DEFAULT_STATIC_SET_NAME = 'stickers_%s_by_%s'
-DEFAULT_VIDEO_SET_NAME = 'video_stickers_%s_by_%s'
+DEFAULT_VIDEO_SET_NAME = 'stickers_%s_by_%s'
 DEFAULT_ANIMATED_SET_NAME = 'animated_stickers_%s_by_%s'
 DEFAULT_EMOJI_SET_NAME = 'emoji_%s_by_%s'
 DEFAULT_NEW_STICKER_EMOJI = u'\U0001F602'
-STATIC_SET_EMOJI = u'\U0001F304'
-ANIMATED_SET_EMOJI = u'\U0001F3A5'
+ANIMATED_SET_EMOJI = u'\U0001F304'
 EMOJI_SET_EMOJI = u'\U0001F47D'
 EMOJI_ONLY_REGEX = "[^\U0001F000-\U0001F999]+"
+MAX_FILE_SIZE = 20971520  # 20 MB

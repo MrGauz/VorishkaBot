@@ -8,7 +8,7 @@ from telegram.ext import ContextTypes
 from database.models import Set, SetTypes
 from database.utils import get_user, save_new_set
 from locales import _
-from settings import DEFAULT_VIDEO_SET_NAME, DEFAULT_STATIC_SET_NAME, DEFAULT_ANIMATED_SET_NAME, DEFAULT_EMOJI_SET_NAME
+from settings import DEFAULT_VIDEO_SET_NAME, DEFAULT_ANIMATED_SET_NAME, DEFAULT_EMOJI_SET_NAME
 
 
 async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input_sticker: InputSticker,
@@ -23,23 +23,17 @@ async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input
             new_set_name = DEFAULT_ANIMATED_SET_NAME
             new_set_title = _('sets.default_name_animated', user.lang_code)
             response_message_id = 'chat.sticker_saved'
-        case SetTypes.VIDEO:
-            sticker_format = StickerFormat.VIDEO
-            sticker_type = Sticker.REGULAR
-            new_set_name = DEFAULT_VIDEO_SET_NAME
-            new_set_title = _('sets.default_name_video', user.lang_code)
-            response_message_id = 'chat.sticker_saved'
         case SetTypes.EMOJI:
             sticker_format = StickerFormat.STATIC
             sticker_type = Sticker.CUSTOM_EMOJI
             new_set_name = DEFAULT_EMOJI_SET_NAME
             new_set_title = _('sets.default_name_emoji', user.lang_code)
             response_message_id = 'chat.emoji_saved'
-        case SetTypes.STATIC | _:
-            sticker_format = StickerFormat.STATIC
+        case SetTypes.VIDEO | _:
+            sticker_format = StickerFormat.VIDEO
             sticker_type = Sticker.REGULAR
-            new_set_name = DEFAULT_STATIC_SET_NAME
-            new_set_title = _('sets.default_name_static', user.lang_code)
+            new_set_name = DEFAULT_VIDEO_SET_NAME
+            new_set_title = _('sets.default_name_video', user.lang_code)
             response_message_id = 'chat.sticker_saved'
 
     if sets.count() == 0:

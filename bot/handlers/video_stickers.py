@@ -11,7 +11,7 @@ from database.models import SetTypes
 from database.utils import get_user
 from bot.stickers import save_sticker
 from locales import _
-from settings import DEFAULT_NEW_STICKER_EMOJI, EMOJI_ONLY_REGEX, ADMIN_ID
+from settings import DEFAULT_NEW_STICKER_EMOJI, EMOJI_ONLY_REGEX, MAX_FILE_SIZE
 
 logger = logging.getLogger(__name__)
 
@@ -26,20 +26,25 @@ async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = get_user(update)
-    await update.effective_message.reply_text(_("chat.time_warning", user.lang_code))
 
     mp4_filename = tempfile.mktemp(suffix='.mp4')
     emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX).sub('', update.effective_message.caption or '')
                        or DEFAULT_NEW_STICKER_EMOJI)
 
     if update.effective_message.video:
-        file = await update.effective_message.video.get_file()
+        media = update.effective_message.video
     elif update.effective_message.animation:
-        file = await update.effective_message.animation.get_file()
+        media = update.effective_message.animation
     else:
         # Doesn't ever get here, it's only here to avoid warnings
-        file = None
+        media = None
 
+    if media.file_size > MAX_FILE_SIZE:
+        await update.effective_message.reply_text(_('errors.file_too_big', user.lang_code))
+        return
+
+    await update.effective_message.reply_text(_("chat.time_warning", user.lang_code))
+    file = await media.get_file()
     await file.download_to_drive(mp4_filename)
 
     sticker_path = convert_video(mp4_filename)

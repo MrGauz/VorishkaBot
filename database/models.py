@@ -16,7 +16,6 @@ class CharEnum(str, Enum):
 
 class SetTypes(CharEnum):
     # TODO: custom emoji can be of each of the sticker types
-    STATIC = "static"
     ANIMATED = "animated"
     VIDEO = "video"
     EMOJI = "custom_emoji"

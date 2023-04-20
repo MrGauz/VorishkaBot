@@ -14,7 +14,6 @@ from settings import DEFAULT_VIDEO_SET_NAME, DEFAULT_ANIMATED_SET_NAME, DEFAULT_
 async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input_sticker: InputSticker,
                        set_type: SetTypes) -> None:
     user = get_user(update)
-    sets = Set.select().where(Set.user == user, Set.set_type == set_type)
 
     match set_type:
         case SetTypes.ANIMATED:
@@ -36,7 +35,19 @@ async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input
             new_set_title = _('sets.default_name_video', user.lang_code)
             response_message_id = 'chat.sticker_saved'
 
-    if sets.count() == 0:
+    chosen_set = None
+    for user_set in Set.select().where(Set.user == user, Set.set_type == set_type):
+        telegram_set = await context.bot.get_sticker_set(user_set.name)
+        if len(telegram_set.stickers) < 50:
+            chosen_set = user_set
+            await context.bot.add_sticker_to_set(
+                user_id=user.user_id,
+                name=chosen_set.name,
+                sticker=input_sticker
+            )
+            break
+
+    if chosen_set is None:
         random_str = ''.join(random.choice(string.ascii_lowercase) for i in range(10))
         name = new_set_name % (random_str, context.bot.username)
 
@@ -48,18 +59,9 @@ async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input
             sticker_type=sticker_type,
             stickers=[input_sticker]
         )
-        effective_set = await save_new_set(user, name, new_set_title, set_type)
+        chosen_set = await save_new_set(user, name, new_set_title, set_type)
 
-    else:
-        # TODO: check for available space
-        effective_set = sets.first()
-        await context.bot.add_sticker_to_set(
-            user_id=user.user_id,
-            name=effective_set.name,
-            sticker=input_sticker
-        )
-
-    text = _(response_message_id, user.lang_code, {'set_name': effective_set.name, 'set_title': effective_set.title})
+    text = _(response_message_id, user.lang_code, {'set_name': chosen_set.name, 'set_title': chosen_set.title})
     await context.bot.send_message(chat_id=user.user_id, text=text, parse_mode=ParseMode.HTML)
 
     # TODO: show sticker summary

@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 SELECT_SET, DELETE_SET = range(2)
 
 
-async def delete_set_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start_delete_set_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = await get_user(update)
     context.user_data.clear()
 
@@ -90,8 +90,8 @@ async def delete_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 
-delete_set_conversation = ConversationHandler(
-    entry_points=[CommandHandler('delete_set', delete_set_command)],
+delete_set_command = ConversationHandler(
+    entry_points=[CommandHandler('delete_set', start_delete_set_command)],
     states={
         SELECT_SET: [CallbackQueryHandler(sticker_set_selected)],
         DELETE_SET: [CallbackQueryHandler(delete_set)],

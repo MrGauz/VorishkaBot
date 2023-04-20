@@ -35,19 +35,11 @@ async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
                        or DEFAULT_NEW_STICKER_EMOJI)
     if update.effective_message.video:
         file = await update.effective_message.video.get_file()
-        filename = update.effective_message.video.file_name
     elif update.effective_message.animation:
         file = await update.effective_message.animation.get_file()
-        filename = update.effective_message.animation.file_name
     else:
         # Doesn't ever get here, it's only here to avoid warnings
         file = None
-        filename = ""
-
-    if filename.lower().endswith('.gif'):
-        # Oh wow, finally a gif animation
-        await context.bot.send_message(ADMIN_ID, "GIF animation detected")
-        await update.effective_message.forward(ADMIN_ID)
 
     await file.download_to_drive(mp4_filename)
 

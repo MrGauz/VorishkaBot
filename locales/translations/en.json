@@ -30,7 +30,8 @@
         "no_custom_emoji": "Sorry, I can't process custom emoji yet",
         "default_no": "Sorry, i can't process whatever this is",
         "ffmpeg_error": "Task failed successfully",
-        "no_sets": "You don't have any sticker sets yet"
+        "no_sets": "You don't have any sticker sets yet",
+        "group_chat": "Sorry, I like privacy, send me a dm"
     },
     "sets": {
         "default_name_static": "My stickers",

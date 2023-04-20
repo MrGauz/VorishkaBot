@@ -15,7 +15,7 @@ filterwarnings(action="ignore", message=r".*CallbackQueryHandler", category=PTBU
 LANGUAGE_CHOICE = 0
 
 
-async def translate_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start_translate_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = await get_user(update)
     await context.bot.send_message(
         update.effective_user.id,
@@ -44,8 +44,8 @@ async def language_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 
-translate_conversation = ConversationHandler(
-    entry_points=[CommandHandler('translate', translate_command)],
+translate_command = ConversationHandler(
+    entry_points=[CommandHandler('translate', start_translate_command)],
     states={
         LANGUAGE_CHOICE: [CallbackQueryHandler(language_selected)],
     },

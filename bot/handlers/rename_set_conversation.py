@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 SELECT_SET, RENAME_SET = range(2)
 
 
-async def rename_set_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start_rename_set_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = await get_user(update)
     context.user_data.clear()
 
@@ -82,8 +82,8 @@ async def new_set_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 
-rename_set_conversation = ConversationHandler(
-    entry_points=[CommandHandler('rename_set', rename_set_command)],
+rename_set_command = ConversationHandler(
+    entry_points=[CommandHandler('rename_set', start_rename_set_command)],
     states={
         SELECT_SET: [CallbackQueryHandler(sticker_set_selected)],
         RENAME_SET: [MessageHandler(filters.TEXT, new_set_name)],

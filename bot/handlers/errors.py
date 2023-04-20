@@ -5,10 +5,11 @@ import traceback
 
 from telegram import Update
 from telegram.constants import ParseMode, MessageEntityType
+from telegram.error import TelegramError
 from telegram.ext import ContextTypes
 
 from database.utils import get_user
-from settings import ADMIN_ID, DEBUG
+from settings import ADMIN_ID, DEBUG, DEFAULT_LANG
 from locales import _
 
 logger = logging.getLogger(__name__)
@@ -58,3 +59,10 @@ async def message_error_handler(update: Update, context: ContextTypes.DEFAULT_TY
 
     else:
         await context.bot.send_message(user.user_id, _('errors.default_no', user.lang_code), parse_mode=ParseMode.HTML)
+
+
+async def group_chat_error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    try:
+        await update.effective_message.reply_text(_('errors.group_chat', DEFAULT_LANG), parse_mode=ParseMode.HTML)
+    except TelegramError as e:
+        logger.error(f'Error sending group chat error message\nupdate={json.dumps(update.to_dict())}', exc_info=e)

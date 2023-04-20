@@ -17,7 +17,7 @@ def create_tables():
     db.close()
 
 
-async def get_user(update: Update) -> User:
+def get_user(update: Update) -> User:
     user = User.get_or_none(User.user_id == update.effective_user.id)
 
     if user is None:

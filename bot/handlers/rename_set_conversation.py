@@ -3,7 +3,7 @@ from warnings import filterwarnings
 
 from telegram import Update
 from telegram.constants import ParseMode
-from telegram.error import BadRequest
+from telegram.error import TelegramError
 from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, filters, \
     ContextTypes
 from telegram.warnings import PTBUserWarning
@@ -22,7 +22,7 @@ SELECT_SET, RENAME_SET = range(2)
 
 
 async def start_rename_set_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = await get_user(update)
+    user = get_user(update)
     context.user_data.clear()
 
     keyboard = await get_set_selection_buttons(user, update.effective_chat)
@@ -36,7 +36,7 @@ async def start_rename_set_command(update: Update, context: ContextTypes.DEFAULT
 
 
 async def sticker_set_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = await get_user(update)
+    user = get_user(update)
     query = update.callback_query
     await query.answer()
 
@@ -52,7 +52,7 @@ async def sticker_set_selected(update: Update, context: ContextTypes.DEFAULT_TYP
 
 
 async def new_set_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = await get_user(update)
+    user = get_user(update)
     text = update.effective_message.text
     set_name = context.user_data['selected_set']
 
@@ -62,7 +62,7 @@ async def new_set_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     try:
         result = await context.bot.set_sticker_set_title(set_name, text)
-    except BadRequest as e:
+    except TelegramError as e:
         logger.error(f'Error renaming set {set_name}', exc_info=e)
         result = False
 

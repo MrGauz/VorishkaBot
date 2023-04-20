@@ -25,13 +25,11 @@
         "delete_set_yes": "Yes, delete the set"
     },
     "errors": {
-        "no_animated_stickers": "Sorry, I can't process animated stickers yet",
-        "no_documents": "Sorry, I can't process documents yet",
-        "no_custom_emoji": "Sorry, I can't process custom emoji yet",
-        "default_no": "Sorry, i can't process whatever this is",
+        "unsupported_update": "Sorry, i can't process whatever this is",
         "ffmpeg_error": "Task failed successfully",
         "no_sets": "You don't have any sticker sets yet",
-        "group_chat": "Sorry, I like privacy, send me a dm"
+        "group_chat": "Sorry, I like privacy, send me a dm",
+        "unknown_document_type": "Sorry, I can't process this document type yet"
     },
     "sets": {
         "default_name_static": "My stickers",

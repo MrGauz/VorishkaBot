@@ -16,7 +16,7 @@ LANGUAGE_CHOICE = 0
 
 
 async def start_translate_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = await get_user(update)
+    user = get_user(update)
     await context.bot.send_message(
         update.effective_user.id,
         'Choose language',
@@ -29,7 +29,7 @@ async def start_translate_command(update: Update, context: ContextTypes.DEFAULT_
 
 
 async def language_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = await get_user(update)
+    user = get_user(update)
     query = update.callback_query
     await query.answer()
 

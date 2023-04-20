@@ -21,7 +21,7 @@ SELECT_SET, DELETE_SET = range(2)
 
 
 async def start_delete_set_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = await get_user(update)
+    user = get_user(update)
     context.user_data.clear()
 
     keyboard = await get_set_selection_buttons(user, update.effective_chat)
@@ -35,7 +35,7 @@ async def start_delete_set_command(update: Update, context: ContextTypes.DEFAULT
 
 
 async def sticker_set_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = await get_user(update)
+    user = get_user(update)
     query = update.callback_query
     await query.answer()
 
@@ -60,7 +60,7 @@ async def sticker_set_selected(update: Update, context: ContextTypes.DEFAULT_TYP
 
 
 async def delete_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = await get_user(update)
+    user = get_user(update)
     query = update.callback_query
     await query.answer()
 

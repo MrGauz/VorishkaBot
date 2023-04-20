@@ -13,7 +13,7 @@ from settings import DEFAULT_VIDEO_SET_NAME, DEFAULT_STATIC_SET_NAME, DEFAULT_AN
 
 async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input_sticker: InputSticker,
                        set_type: SetTypes) -> None:
-    user = await get_user(update)
+    user = get_user(update)
     sets = Set.select().where(Set.user == user, Set.set_type == set_type)
 
     match set_type:

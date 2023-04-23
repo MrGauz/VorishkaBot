@@ -16,7 +16,7 @@ def translate(message_id: str, lang_code: str, placeholders=None) -> str:
     try:
         message_template = trans[module][message_name]
         for placeholder, value in placeholders.items():
-            message_template = message_template.replace(f'{{{placeholder}}}', value)
+            message_template = message_template.replace(f'{{{placeholder}}}', str(value))
         return message_template
 
     except (KeyError, TypeError) as e:

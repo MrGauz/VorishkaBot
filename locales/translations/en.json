@@ -11,7 +11,8 @@
         "language_changed": "Now i speak a new language",
         "confirm_delete_set": "Are you sure you want to delete <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>? This action can't be undone",
         "set_deleted_success": "Set {set_title} was deleted",
-        "set_deleted_error": "Failed to delete set {set_title}"
+        "set_deleted_error": "Failed to delete set {set_title}",
+        "set_summary_message": "Set: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\nStickers: {sticker_count}/50"
     },
     "commands": {
         "start": "Welcome!",
@@ -21,6 +22,8 @@
     },
     "buttons": {
         "cancel": "Cancel",
+        "rename_set": "Rename set",
+        "delete_set": "Delete set",
         "delete_set_no": "No",
         "delete_set_nope": "Nope, nevermind",
         "delete_set_yes": "Yes, delete the set"

@@ -4,8 +4,8 @@ from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import ConversationHandler, CommandHandler, ContextTypes, CallbackQueryHandler
 from telegram.warnings import PTBUserWarning
 
+from bot.handlers.commands import cancel_command
 from database.utils import store_user
-from bot.conversations import cancel_command
 from locales import _
 from settings import ALL_LANGUAGES
 

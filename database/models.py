@@ -14,6 +14,12 @@ class CharEnum(str, Enum):
         return name
 
 
+class ActionTypes(CharEnum):
+    RENAME = "rename"
+    DELETE = "delete"
+    CANCEL = "cancel"
+
+
 class SetTypes(CharEnum):
     # TODO: custom emoji can be of each of the sticker types
     ANIMATED = "animated"

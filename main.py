@@ -24,8 +24,7 @@ from database.utils import create_tables
 from bot.bot import set_bot_commands, set_bot_description, set_bot_about
 from bot.handlers.commands import start_command, help_command
 from bot.handlers.translate_conversation import translate_command
-from bot.handlers.rename_set_conversation import rename_set_command
-from bot.handlers.delete_set_conversation import delete_set_command
+from bot.handlers.my_sets_conversation import my_sets_command
 from bot.handlers.static_stickers import from_static_sticker, from_photo
 from bot.handlers.video_stickers import from_video_sticker, from_video
 from bot.handlers.documents import from_document
@@ -62,8 +61,7 @@ def main() -> None:
     application.add_handler(CommandHandler("start", start_command))
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(translate_command)
-    application.add_handler(rename_set_command)
-    application.add_handler(delete_set_command)
+    application.add_handler(my_sets_command)
 
     # Add media handlers
     application.add_handler(MessageHandler(filters.Sticker.STATIC, from_static_sticker))

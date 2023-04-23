@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum
 
-from peewee import Model, BigIntegerField, CharField, BooleanField, DateTimeField, ForeignKeyField
+from peewee import Model, BigIntegerField, CharField, BooleanField, DateTimeField, ForeignKeyField, IntegerField
 
 from database.connection import db
 
@@ -18,6 +18,7 @@ class ActionTypes(CharEnum):
     RENAME = "rename"
     DELETE = "delete"
     CANCEL = "cancel"
+    SUBSCRIBE_365 = "subscribe_365"
 
 
 class SetTypes(CharEnum):
@@ -34,11 +35,15 @@ class User(Model):
     last_name = CharField(max_length=256, null=True)
     lang_code = CharField(max_length=3, null=True)
     is_premium = BooleanField(default=False)
+    subscription_end_date_utc = DateTimeField(null=True, default=None)
     created_at_utc = DateTimeField(default=datetime.utcnow)
 
     class Meta:
         table_name = 'users'
         database = db
+
+    def is_subscribed(self) -> bool:
+        return self.subscription_end_date_utc is not None and self.subscription_end_date_utc > datetime.utcnow()
 
 
 class Set(Model):
@@ -50,4 +55,18 @@ class Set(Model):
 
     class Meta:
         table_name = 'sets'
+        database = db
+
+
+class Transaction(Model):
+    user = ForeignKeyField(User, on_delete='CASCADE', backref='transactions', null=False)
+    invoice_type = CharField(max_length=100, null=False)
+    currency = CharField(max_length=5, null=False)
+    total_amount = IntegerField(null=False)
+    telegram_payment_charge_id = CharField(max_length=100, null=False)
+    provider_payment_charge_id = CharField(max_length=100, null=False)
+    created_at_utc = DateTimeField(default=datetime.utcnow)
+
+    class Meta:
+        table_name = 'transactions'
         database = db

@@ -9,6 +9,7 @@ async def set_bot_commands(bot: BT):
     for lang_code in list(ALL_LANGUAGES.keys()):
         await bot.set_my_commands([
             BotCommand(command='my_sets', description=_('bot.my_sets_desc', lang_code)),
+            BotCommand(command='subscription', description=_('bot.subscription_desc', lang_code)),
             BotCommand(command='translate', description=_('bot.translate_desc', lang_code)),
             BotCommand(command='help', description=_('bot.help_decs', lang_code))
         ], language_code=lang_code)

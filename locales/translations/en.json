@@ -26,7 +26,8 @@
         "delete_set": "Delete set",
         "delete_set_no": "No",
         "delete_set_nope": "Nope, nevermind",
-        "delete_set_yes": "Yes, delete the set"
+        "delete_set_yes": "Yes, delete the set",
+        "subscribe": "Buy PROscription"
     },
     "errors": {
         "unsupported_update": "Sorry, i can't process whatever this is",
@@ -34,7 +35,8 @@
         "no_sets": "You don't have any sticker sets yet",
         "group_chat": "Sorry, I like privacy, send me a dm",
         "unknown_document_type": "Sorry, I can't process this document type yet",
-        "file_too_big": "Sorry, this file is too big (max 20 MB)"
+        "file_too_big": "Sorry, this file is too big (max 20 MB)",
+        "not_subscribed": "You don't have an active PROscription. Run /subscription to buy one."
     },
     "sets": {
         "default_name_video": "My stickers",
@@ -45,7 +47,16 @@
         "description": "This is the text seen before the bot is started",
         "about": "This is the \"about\" in bot's profile",
         "my_sets_desc": "List your sticker sets",
+        "subscription_desc": "Manage your PROscription",
         "translate_desc": "Change language",
         "help_decs": "Helpful message"
+    },
+    "subscription": {
+        "invoice_title": "PROscription",
+        "invoice_description": "PROscribe to get access to all the features",
+        "subscription_not_active": "You don't have an active PROscription. Press the button below to buy one.",
+        "subscription_status": "Your PROscription is active until {date}. Press the button below to buy additional 365 days.",
+        "payment_success": "Thank you for your purchase! Your PROscription is active until {date}.",
+        "deny_precheckout": "I don't know how you got here, but you can't buy this"
     }
 }

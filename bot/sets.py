@@ -26,12 +26,11 @@ async def get_set_list_keyboard(user: User, chat: Chat) -> InlineKeyboardMarkup 
 
 
 def get_set_actions_keyboard(user: User) -> InlineKeyboardMarkup:
-    buttons = [
+    return InlineKeyboardMarkup([
         [InlineKeyboardButton(_('buttons.rename_set', user.lang_code), callback_data=ActionTypes.RENAME)],
         [InlineKeyboardButton(_('buttons.delete_set', user.lang_code), callback_data=ActionTypes.DELETE)],
         [InlineKeyboardButton(_('buttons.cancel', user.lang_code), callback_data=ActionTypes.CANCEL)]
-    ]
-    return InlineKeyboardMarkup(buttons)
+    ])
 
 
 def get_set_delete_confirm_keyboard(user: User) -> InlineKeyboardMarkup:

@@ -17,6 +17,12 @@ logger = logging.getLogger(__name__)
 
 
 async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = store_user(update)
+
+    if not user.is_subscribed():
+        await update.effective_message.reply_text(_('errors.not_subscribed', user.lang_code))
+        return
+
     file = await update.effective_message.sticker.get_file()
     sticker_bytes = bytes(await file.download_as_bytearray())
     input_sticker = InputSticker(sticker=sticker_bytes, emoji_list=update.effective_message.sticker.emoji)
@@ -26,6 +32,10 @@ async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = store_user(update)
+
+    if not user.is_subscribed():
+        await update.effective_message.reply_text(_('errors.not_subscribed', user.lang_code))
+        return
 
     mp4_filename = tempfile.mktemp(suffix='.mp4')
     emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX).sub('', update.effective_message.caption or '')

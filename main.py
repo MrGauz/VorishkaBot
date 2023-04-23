@@ -15,7 +15,8 @@ if __version_info__ < (20, 0, 0, 'alpha', 1):
 from warnings import filterwarnings
 import logging
 from asyncio import get_event_loop
-from telegram.ext import Application, MessageHandler, filters, CommandHandler, PicklePersistence, Defaults
+from telegram.ext import Application, MessageHandler, filters, CommandHandler, PicklePersistence, Defaults, \
+    PreCheckoutQueryHandler
 from telegram.constants import ParseMode
 
 from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT, CONTEXT_DATA_PATH
@@ -28,6 +29,7 @@ from bot.handlers.my_sets_conversation import my_sets_command
 from bot.handlers.static_stickers import from_static_sticker, from_photo
 from bot.handlers.video_stickers import from_video_sticker, from_video
 from bot.handlers.documents import from_document
+from bot.handlers.subscription_conversation import subscription_command, pre_checkout_query, successful_payment
 from bot.handlers.errors import update_error_handler, message_error_handler, group_chat_error_handler
 
 filterwarnings(action="ignore", category=DeprecationWarning)
@@ -42,10 +44,10 @@ def main() -> None:
 
     # Initialize the bot
     persistence = PicklePersistence(filepath=CONTEXT_DATA_PATH)
-    application = Application.builder()\
-        .token(TELEGRAM_BOT_TOKEN)\
-        .persistence(persistence)\
-        .defaults(Defaults(parse_mode=ParseMode.HTML))\
+    application = Application.builder() \
+        .token(TELEGRAM_BOT_TOKEN) \
+        .persistence(persistence) \
+        .defaults(Defaults(parse_mode=ParseMode.HTML)) \
         .build()
 
     # Fill out bot's profile in supported languages
@@ -69,6 +71,11 @@ def main() -> None:
     application.add_handler(MessageHandler(filters.PHOTO, from_photo))
     application.add_handler(MessageHandler(filters.VIDEO | filters.ANIMATION, from_video))
     application.add_handler(MessageHandler(filters.Document.VIDEO | filters.Document.IMAGE, from_document))
+
+    # Payments handlers
+    application.add_handler(subscription_command)
+    application.add_handler(PreCheckoutQueryHandler(pre_checkout_query))
+    application.add_handler(MessageHandler(filters.SUCCESSFUL_PAYMENT, successful_payment))
 
     # Catch-all for the rest
     application.add_handler(MessageHandler(filters.ALL, message_error_handler))

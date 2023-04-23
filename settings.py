@@ -16,6 +16,7 @@ CONTEXT_DATA_PATH = 'context_data'
 PAYMENT_PROVIDER_TOKEN = os.environ['PAYMENT_PROVIDER_TOKEN']
 # https://core.telegram.org/bots/payments#supported-currencies
 PAYMENT_CURRENCY = os.getenv('PAYMENT_CURRENCY') or 'UAH'
+SUBSCRIPTION_365_PRICE = int(os.environ['SUBSCRIPTION_365_PRICE'])
 
 # Database
 if DEBUG:

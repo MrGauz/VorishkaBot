@@ -57,6 +57,7 @@
         "subscription_not_active": "You don't have an active PROscription. Press the button below to buy one.",
         "subscription_status": "Your PROscription is active until {date}. Press the button below to buy additional 365 days.",
         "payment_success": "Thank you for your purchase! Your PROscription is active until {date}.",
-        "deny_precheckout": "I don't know how you got here, but you can't buy this"
+        "deny_precheckout": "I don't know how you got here, but you can't buy this",
+        "renewal_reminder": "Your PROscription ends in {days_left} days. Run /subscription to renew it."
     }
 }

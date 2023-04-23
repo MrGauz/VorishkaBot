@@ -14,6 +14,7 @@ if __version_info__ < (20, 0, 0, 'alpha', 1):
 
 from warnings import filterwarnings
 import logging
+from datetime import time
 from asyncio import get_event_loop
 from telegram.ext import Application, MessageHandler, filters, CommandHandler, PicklePersistence, Defaults, \
     PreCheckoutQueryHandler
@@ -29,7 +30,8 @@ from bot.handlers.my_sets_conversation import my_sets_command
 from bot.handlers.static_stickers import from_static_sticker, from_photo
 from bot.handlers.video_stickers import from_video_sticker, from_video
 from bot.handlers.documents import from_document
-from bot.handlers.subscription_conversation import subscription_command, pre_checkout_query, successful_payment
+from bot.handlers.subscription import subscription_command, pre_checkout_query, successful_payment, \
+    subscription_reminder
 from bot.handlers.errors import update_error_handler, message_error_handler, group_chat_error_handler
 
 filterwarnings(action="ignore", category=DeprecationWarning)
@@ -80,6 +82,9 @@ def main() -> None:
     # Catch-all for the rest
     application.add_handler(MessageHandler(filters.ALL, message_error_handler))
     application.add_error_handler(update_error_handler)
+
+    # Schedule subscription renewal reminders
+    application.job_queue.run_daily(subscription_reminder, time=time(20, 11))
 
     # Start receiving
     # TODO: test parallel requests with webhooks

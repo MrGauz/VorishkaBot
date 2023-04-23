@@ -25,7 +25,7 @@ async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         await update.effective_message.reply_text(_('errors.not_subscribed', user.lang_code))
         return
 
-    if not document.mime_type in ('image/png', 'image/jpeg', 'image/webp',
+    if document.mime_type not in ('image/png', 'image/jpeg', 'image/webp',
                                   'image/gif', 'video/mp4', 'video/webm', 'video/quicktime'):
         logger.warning(f'Received unknown document type: {update.message.document.mime_type}\n'
                        f'update={json.dumps(update.to_dict())}')

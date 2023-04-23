@@ -7,7 +7,7 @@ from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandl
 from telegram.warnings import PTBUserWarning
 
 from bot.handlers.commands import cancel_command
-from database.models import ActionTypes, Transaction
+from database.models import ActionTypes, Transaction, User
 from database.utils import store_user
 from locales import _
 from settings import PAYMENT_PROVIDER_TOKEN, PAYMENT_CURRENCY, SUBSCRIPTION_365_PRICE
@@ -92,6 +92,17 @@ async def successful_payment(update: Update, context: ContextTypes.DEFAULT_TYPE)
     await update.effective_message.reply_text(
         _('subscription.payment_success', user.lang_code,
           placeholders={'date': user.subscription_end_date_utc.strftime("%d/%m/%Y")}))
+
+
+async def subscription_reminder(context: ContextTypes.DEFAULT_TYPE):
+    users = User.select().where(User.subscription_end_date_utc is not None)
+    for user in list(users):
+        end_date = user.subscription_end_date_utc
+        days_left = (end_date - datetime.utcnow()).days
+        if user.is_subscribed() and days_left < 3:
+            await context.bot.send_message(chat_id=user.user_id,
+                                           text=_('subscription.renewal_reminder', user.lang_code,
+                                                  placeholders={'days_left': days_left}))
 
 
 subscription_command = ConversationHandler(

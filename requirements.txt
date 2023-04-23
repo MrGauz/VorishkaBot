@@ -1,5 +1,5 @@
-python-dotenv>=1.0.0
-python-telegram-bot>=20.2
-virtualenv==20.22.0
-peewee>=3.16.1
-ffmpeg-python>=0.2.0
+python-dotenv
+python-telegram-bot[job-queue]
+virtualenv
+peewee
+ffmpeg-python

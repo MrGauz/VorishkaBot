@@ -16,7 +16,8 @@
     "commands": {
         "start": "Welcome!",
         "help": "Help!",
-        "cancel": "Don't worry, I stopped"
+        "cancel": "Don't worry, I stopped",
+        "my_sets": "Here are your sets, choose one to do something:"
     },
     "buttons": {
         "cancel": "Cancel",
@@ -38,8 +39,9 @@
         "default_name_emoji": "My emoji"
     },
     "bot": {
-        "rename_set_desc": "Rename a sticker set",
-        "delete_set_desc": "Delete a sticker set",
+        "description": "This is the text seen before the bot is started",
+        "about": "This is the \"about\" in bot's profile",
+        "my_sets_desc": "List your sticker sets",
         "translate_desc": "Change language",
         "help_decs": "Helpful message"
     }

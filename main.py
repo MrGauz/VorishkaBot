@@ -20,7 +20,7 @@ from telegram.ext import Application, MessageHandler, filters, CommandHandler, P
 from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT
 from database.utils import create_tables
 
-from bot.bot import set_bot_commands
+from bot.bot import set_bot_commands, set_bot_description, set_bot_about
 from bot.handlers.commands import start_command, help_command
 from bot.handlers.translate_conversation import translate_command
 from bot.handlers.rename_set_conversation import rename_set_command
@@ -37,33 +37,44 @@ logger = logging.getLogger(__name__)
 
 
 def main() -> None:
+    # Migrate the database
     create_tables()
 
+    # Initialize the bot
     persistence = PicklePersistence(filepath="context_data")
     application = Application.builder().token(TELEGRAM_BOT_TOKEN).persistence(persistence).build()
 
+    # Fill out bot's profile in supported languages
     loop = get_event_loop()
     loop.run_until_complete(set_bot_commands(application.bot))
+    loop.run_until_complete(set_bot_description(application.bot))
+    loop.run_until_complete(set_bot_about(application.bot))
 
+    # Ignore all updates from non-private chats
     application.add_handler(MessageHandler(~ filters.ChatType.PRIVATE, group_chat_error_handler))
 
+    # Add command handlers
     application.add_handler(CommandHandler("start", start_command))
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(translate_command)
     application.add_handler(rename_set_command)
     application.add_handler(delete_set_command)
 
+    # Add media handlers
     application.add_handler(MessageHandler(filters.Sticker.STATIC, from_static_sticker))
     application.add_handler(MessageHandler(filters.Sticker.VIDEO, from_video_sticker))
     application.add_handler(MessageHandler(filters.PHOTO, from_photo))
     application.add_handler(MessageHandler(filters.VIDEO | filters.ANIMATION, from_video))
     application.add_handler(MessageHandler(filters.Document.VIDEO | filters.Document.IMAGE, from_document))
 
+    # Catch-all for the rest
     application.add_handler(MessageHandler(filters.ALL, message_error_handler))
     application.add_error_handler(update_error_handler)
 
+    # Start receiving
     application.run_polling()
 
 
 if __name__ == '__main__':
+    # TODO: parallel requests
     main()

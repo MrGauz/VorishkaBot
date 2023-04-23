@@ -9,7 +9,7 @@ from telegram.ext import ContextTypes
 from bot.converters import convert_video
 from database.models import SetTypes
 from bot.stickers import save_sticker
-from database.utils import get_user
+from database.utils import store_user
 from settings import DEFAULT_NEW_STICKER_EMOJI, EMOJI_ONLY_REGEX, MAX_FILE_SIZE
 from locales import _
 
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 async def from_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    user = get_user(update)
+    user = store_user(update)
     webp_filename = tempfile.mktemp(suffix='.webp')
     emoji_list = update.effective_message.sticker.emoji or DEFAULT_NEW_STICKER_EMOJI
 
@@ -41,7 +41,7 @@ async def from_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 
 async def from_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    user = get_user(update)
+    user = store_user(update)
     png_filename = tempfile.mktemp(suffix='.png')
     emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX).sub('', update.effective_message.caption or '')
                        or DEFAULT_NEW_STICKER_EMOJI)

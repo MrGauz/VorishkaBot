@@ -15,9 +15,10 @@ if __version_info__ < (20, 0, 0, 'alpha', 1):
 from warnings import filterwarnings
 import logging
 from asyncio import get_event_loop
-from telegram.ext import Application, MessageHandler, filters, CommandHandler, PicklePersistence
+from telegram.ext import Application, MessageHandler, filters, CommandHandler, PicklePersistence, Defaults
+from telegram.constants import ParseMode
 
-from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT
+from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT, CONTEXT_DATA_PATH
 from database.utils import create_tables
 
 from bot.bot import set_bot_commands, set_bot_description, set_bot_about
@@ -41,8 +42,12 @@ def main() -> None:
     create_tables()
 
     # Initialize the bot
-    persistence = PicklePersistence(filepath="context_data")
-    application = Application.builder().token(TELEGRAM_BOT_TOKEN).persistence(persistence).build()
+    persistence = PicklePersistence(filepath=CONTEXT_DATA_PATH)
+    application = Application.builder()\
+        .token(TELEGRAM_BOT_TOKEN)\
+        .persistence(persistence)\
+        .defaults(Defaults(parse_mode=ParseMode.HTML))\
+        .build()
 
     # Fill out bot's profile in supported languages
     loop = get_event_loop()
@@ -72,9 +77,9 @@ def main() -> None:
     application.add_error_handler(update_error_handler)
 
     # Start receiving
+    # TODO: test parallel requests with webhooks
     application.run_polling()
 
 
 if __name__ == '__main__':
-    # TODO: parallel requests
     main()

@@ -8,7 +8,7 @@ from telegram.ext import ContextTypes
 
 from bot.converters import convert_video
 from database.models import SetTypes
-from database.utils import get_user
+from database.utils import store_user
 from bot.stickers import save_sticker
 from locales import _
 from settings import DEFAULT_NEW_STICKER_EMOJI, EMOJI_ONLY_REGEX, MAX_FILE_SIZE
@@ -25,7 +25,7 @@ async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 
 async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = get_user(update)
+    user = store_user(update)
 
     mp4_filename = tempfile.mktemp(suffix='.mp4')
     emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX).sub('', update.effective_message.caption or '')

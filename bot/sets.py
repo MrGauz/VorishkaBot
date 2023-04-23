@@ -1,5 +1,4 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Chat
-from telegram.constants import ParseMode
 
 from database.models import Set, SetTypes, User
 from settings import ANIMATED_SET_EMOJI, EMOJI_SET_EMOJI
@@ -10,7 +9,7 @@ async def get_set_selection_buttons(user: User, chat: Chat) -> InlineKeyboardMar
     sets = Set.select().where(Set.user == user).order_by(Set.set_type.desc())
 
     if not sets:
-        await chat.send_message(_('errors.no_sets', user.lang_code), parse_mode=ParseMode.HTML)
+        await chat.send_message(_('errors.no_sets', user.lang_code))
         return None
 
     buttons = []

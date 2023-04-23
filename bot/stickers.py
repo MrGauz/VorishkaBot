@@ -2,18 +2,18 @@ import random
 import string
 
 from telegram import Update, InputSticker, Sticker
-from telegram.constants import ParseMode, StickerFormat
+from telegram.constants import StickerFormat
 from telegram.ext import ContextTypes
 
 from database.models import Set, SetTypes
-from database.utils import get_user, save_new_set
+from database.utils import store_user, save_new_set
 from locales import _
 from settings import DEFAULT_VIDEO_SET_NAME, DEFAULT_ANIMATED_SET_NAME, DEFAULT_EMOJI_SET_NAME
 
 
 async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input_sticker: InputSticker,
                        set_type: SetTypes) -> None:
-    user = get_user(update)
+    user = store_user(update)
 
     match set_type:
         case SetTypes.ANIMATED:
@@ -62,6 +62,6 @@ async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input
         chosen_set = await save_new_set(user, name, new_set_title, set_type)
 
     text = _(response_message_id, user.lang_code, {'set_name': chosen_set.name, 'set_title': chosen_set.title})
-    await context.bot.send_message(chat_id=user.user_id, text=text, parse_mode=ParseMode.HTML)
+    await context.bot.send_message(chat_id=user.user_id, text=text)
 
     # TODO: show sticker summary

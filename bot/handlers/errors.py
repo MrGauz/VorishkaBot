@@ -4,11 +4,10 @@ import logging
 import traceback
 
 from telegram import Update
-from telegram.constants import ParseMode
 from telegram.error import TelegramError
 from telegram.ext import ContextTypes
 
-from database.utils import get_user
+from database.utils import store_user
 from settings import ADMIN_ID, DEBUG, DEFAULT_LANG
 from locales import _
 
@@ -36,18 +35,16 @@ async def update_error_handler(update: object, context: ContextTypes.DEFAULT_TYP
         )
 
         # Finally, send the message
-        await context.bot.send_message(
-            chat_id=ADMIN_ID, text=message[:4095], parse_mode=ParseMode.HTML
-        )
+        await context.bot.send_message(chat_id=ADMIN_ID, text=message[:4095])
 
 
 async def message_error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    user = get_user(update)
-    await update.effective_message.reply_text(_('errors.unsupported_update', user.lang_code), parse_mode=ParseMode.HTML)
+    user = store_user(update)
+    await update.effective_message.reply_text(_('errors.unsupported_update', user.lang_code))
 
 
 async def group_chat_error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
-        await update.effective_message.reply_text(_('errors.group_chat', DEFAULT_LANG), parse_mode=ParseMode.HTML)
+        await update.effective_message.reply_text(_('errors.group_chat', DEFAULT_LANG))
     except TelegramError as e:
         logger.error(f'Error sending group chat error message\nupdate={json.dumps(update.to_dict())}', exc_info=e)

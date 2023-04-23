@@ -2,14 +2,13 @@ import logging
 from warnings import filterwarnings
 
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.constants import ParseMode
 from telegram.error import BadRequest
 from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandler, ContextTypes
 from telegram.warnings import PTBUserWarning
 
 from bot.sets import get_set_selection_buttons
 from database.models import Set
-from database.utils import get_user
+from database.utils import store_user
 from bot.conversations import cancel_command
 from locales import _
 
@@ -21,26 +20,25 @@ SELECT_SET, DELETE_SET = range(2)
 
 
 async def start_delete_set_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = get_user(update)
+    user = store_user(update)
     context.user_data.clear()
 
     keyboard = await get_set_selection_buttons(user, update.effective_chat)
     if not keyboard:
         return ConversationHandler.END
 
-    await update.message.reply_text(_('chat.choose_set_delete', user.lang_code), parse_mode=ParseMode.HTML,
-                                    reply_markup=keyboard)
+    await update.message.reply_text(_('chat.choose_set_delete', user.lang_code), reply_markup=keyboard)
 
     return SELECT_SET
 
 
 async def sticker_set_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = get_user(update)
+    user = store_user(update)
     query = update.callback_query
     await query.answer()
 
     if query.data == 'cancel':
-        await update.effective_message.reply_text(_('commands.cancel', user.lang_code), parse_mode=ParseMode.HTML)
+        await update.effective_message.reply_text(_('commands.cancel', user.lang_code))
         return ConversationHandler.END
 
     context.user_data['selected_set'] = query.data
@@ -54,18 +52,18 @@ async def sticker_set_selected(update: Update, context: ContextTypes.DEFAULT_TYP
     telegram_set: Set = Set.get(user=user, name=query.data)
     await update.callback_query.message.edit_text(
         _('chat.confirm_delete_set', user.lang_code, {'set_name': telegram_set.name, 'set_title': telegram_set.title}),
-        parse_mode=ParseMode.HTML, reply_markup=keyboard)
+        reply_markup=keyboard)
 
     return DELETE_SET
 
 
 async def delete_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = get_user(update)
+    user = store_user(update)
     query = update.callback_query
     await query.answer()
 
     if query.data == 'cancel':
-        await update.effective_message.reply_text(_('commands.cancel', user.lang_code), parse_mode=ParseMode.HTML)
+        await update.effective_message.reply_text(_('commands.cancel', user.lang_code))
         return ConversationHandler.END
 
     telegram_set: Set = Set.get(user=user, name=context.user_data['selected_set'])
@@ -78,13 +76,11 @@ async def delete_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if result:
         await context.bot.send_message(user.user_id,
-                                       _('chat.set_deleted_success', user.lang_code, {'set_title': telegram_set.title}),
-                                       parse_mode=ParseMode.HTML)
+                                       _('chat.set_deleted_success', user.lang_code, {'set_title': telegram_set.title}))
         telegram_set.delete_instance()
     else:
         await context.bot.send_message(user.user_id,
-                                       _('chat.set_deleted_error', user.lang_code, {'set_title': telegram_set.title}),
-                                       parse_mode=ParseMode.HTML)
+                                       _('chat.set_deleted_error', user.lang_code, {'set_title': telegram_set.title}))
 
     context.user_data.clear()
     return ConversationHandler.END

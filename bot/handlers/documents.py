@@ -9,7 +9,7 @@ from telegram.ext import ContextTypes
 from bot.converters import convert_video
 from bot.stickers import save_sticker
 from database.models import SetTypes
-from database.utils import get_user
+from database.utils import store_user
 from locales import _
 from settings import EMOJI_ONLY_REGEX, DEFAULT_NEW_STICKER_EMOJI, MAX_FILE_SIZE
 
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    user = get_user(update)
+    user = store_user(update)
 
     emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX).sub('', update.effective_message.caption or '')
                        or DEFAULT_NEW_STICKER_EMOJI)

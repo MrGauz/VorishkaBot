@@ -27,15 +27,24 @@ async def get_set_list_keyboard(user: User, chat: Chat) -> InlineKeyboardMarkup 
 
 def get_set_actions_keyboard(user: User) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton(_('buttons.rename_set', user.lang_code), callback_data=ActionTypes.RENAME)],
-        [InlineKeyboardButton(_('buttons.delete_set', user.lang_code), callback_data=ActionTypes.DELETE)],
+        [InlineKeyboardButton(_('buttons.rename_set', user.lang_code), callback_data=ActionTypes.RENAME_SET)],
+        [InlineKeyboardButton(_('buttons.delete_set', user.lang_code), callback_data=ActionTypes.DELETE_SET)],
         [InlineKeyboardButton(_('buttons.cancel', user.lang_code), callback_data=ActionTypes.CANCEL)]
     ])
 
 
-def get_set_delete_confirm_keyboard(user: User) -> InlineKeyboardMarkup:
+def get_delete_confirm_keyboard(user: User, is_sticker=False) -> InlineKeyboardMarkup:
+    delete_action = ActionTypes.DELETE_STICKER if is_sticker else ActionTypes.DELETE_SET
     return InlineKeyboardMarkup([
         [InlineKeyboardButton(_('buttons.delete_set_no', user.lang_code), callback_data=ActionTypes.CANCEL)],
         [InlineKeyboardButton(_('buttons.delete_set_nope', user.lang_code), callback_data=ActionTypes.CANCEL)],
-        [InlineKeyboardButton(_('buttons.delete_set_yes', user.lang_code), callback_data=ActionTypes.DELETE)]
+        [InlineKeyboardButton(_('buttons.delete_set_yes', user.lang_code), callback_data=delete_action)]
+    ])
+
+
+def get_sticker_actions_keyboard(user: User) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton(_('buttons.change_emoji', user.lang_code), callback_data=ActionTypes.CHANGE_EMOJI)],
+        [InlineKeyboardButton(_('buttons.delete_sticker', user.lang_code), callback_data=ActionTypes.DELETE_STICKER)],
+        [InlineKeyboardButton(_('buttons.cancel', user.lang_code), callback_data=ActionTypes.CANCEL)]
     ])

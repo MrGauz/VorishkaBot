@@ -8,7 +8,7 @@ from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandl
 from telegram.warnings import PTBUserWarning
 
 from bot.handlers.commands import cancel_command
-from bot.sets import get_set_list_keyboard, get_set_actions_keyboard, get_set_delete_confirm_keyboard
+from bot.keyboards import get_set_list_keyboard, get_set_actions_keyboard, get_delete_confirm_keyboard
 from database.models import Set, ActionTypes
 from database.utils import store_user
 from locales import _
@@ -55,19 +55,19 @@ async def set_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ACTION_SELECTED
 
 
-async def action_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def set_action_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = store_user(update)
     query = update.callback_query
     context.user_data['selected_action'] = query.data
     await query.answer()
 
     match query.data:
-        case ActionTypes.RENAME:
+        case ActionTypes.RENAME_SET:
             await update.effective_message.edit_text(_('chat.choose_new_set_name', user.lang_code), reply_markup=None)
             return RENAME_SET
 
-        case ActionTypes.DELETE:
-            confirm_keyboard = get_set_delete_confirm_keyboard(user)
+        case ActionTypes.DELETE_SET:
+            confirm_keyboard = get_delete_confirm_keyboard(user)
             telegram_set: Set = Set.get(user=user, name=context.user_data['selected_set'])
             await update.effective_message.edit_text(
                 text=_('chat.confirm_delete_set', user.lang_code,
@@ -112,7 +112,7 @@ async def delete_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
 
-    if query.data == ActionTypes.CANCEL:
+    if query.data != ActionTypes.DELETE_SET:
         return await cancel_command(update, context)
 
     telegram_set: Set = Set.get(user=user, name=context.user_data['selected_set'])
@@ -138,7 +138,7 @@ my_sets_command = ConversationHandler(
     entry_points=[CommandHandler('my_sets', start_my_sets_command)],
     states={
         SET_SELECTED: [CallbackQueryHandler(set_selected)],
-        ACTION_SELECTED: [CallbackQueryHandler(action_selected)],
+        ACTION_SELECTED: [CallbackQueryHandler(set_action_selected)],
         RENAME_SET: [MessageHandler(filters.TEXT, rename_set)],
         DELETE_SET: [CallbackQueryHandler(delete_set)],
     },

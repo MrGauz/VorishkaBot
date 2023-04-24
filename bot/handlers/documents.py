@@ -38,7 +38,7 @@ async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
     await update.effective_message.reply_text(_("chat.time_warning", user.lang_code))
 
-    emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX).sub('', update.effective_message.caption or '')
+    emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX).sub('', update.effective_message.caption or '')[:20]
                        or DEFAULT_NEW_STICKER_EMOJI)
     filename = tempfile.mktemp(suffix='.' + document.mime_type.split('/')[1])
     file = await document.get_file()

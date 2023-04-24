@@ -18,6 +18,9 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = store_user(update)
     context.user_data.clear()
-    await update.effective_message.edit_text(_('commands.cancel', user.lang_code), reply_markup=None)
+    if update.effective_message.from_user.username == context.bot.username:
+        await update.effective_message.edit_text(_('commands.cancel', user.lang_code), reply_markup=None)
+    else:
+        await update.effective_message.reply_text(_('commands.cancel', user.lang_code), reply_markup=None)
 
     return ConversationHandler.END

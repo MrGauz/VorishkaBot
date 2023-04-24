@@ -27,6 +27,7 @@ from bot.bot import set_bot_commands, set_bot_description, set_bot_about
 from bot.handlers.commands import start_command, help_command
 from bot.handlers.translate_conversation import translate_command
 from bot.handlers.my_sets_conversation import my_sets_command
+from bot.handlers.my_sticker_conversation import my_sticker_conversation
 from bot.handlers.static_stickers import from_static_sticker, from_photo
 from bot.handlers.video_stickers import from_video_sticker, from_video
 from bot.handlers.documents import from_document
@@ -68,6 +69,7 @@ def main() -> None:
     application.add_handler(my_sets_command)
 
     # Add media handlers
+    application.add_handler(my_sticker_conversation)  # Must come before the filters.Sticker.VIDEO handler
     application.add_handler(MessageHandler(filters.Sticker.STATIC, from_static_sticker))
     application.add_handler(MessageHandler(filters.Sticker.VIDEO, from_video_sticker))
     application.add_handler(MessageHandler(filters.PHOTO, from_photo))

@@ -76,14 +76,10 @@ async def successful_payment(update: Update, context: ContextTypes.DEFAULT_TYPE)
     user = store_user(update)
     payment_info = update.effective_message.successful_payment
 
-    transaction = Transaction()
-    transaction.user = user
-    transaction.invoice_type = payment_info.invoice_payload
-    transaction.currency = payment_info.currency
-    transaction.total_amount = payment_info.total_amount
-    transaction.telegram_payment_charge_id = payment_info.telegram_payment_charge_id
-    transaction.provider_payment_charge_id = payment_info.provider_payment_charge_id
-    transaction.save()
+    Transaction.create(user=user, invoice_type=payment_info.invoice_payload,
+                       currency=payment_info.currency, total_amount=payment_info.total_amount,
+                       telegram_payment_charge_id=payment_info.telegram_payment_charge_id,
+                       provider_payment_charge_id=payment_info.provider_payment_charge_id)
 
     end_date = user.subscription_end_date_utc or datetime.utcnow()
     user.subscription_end_date_utc = end_date.replace(year=end_date.year + 1)

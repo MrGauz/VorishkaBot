@@ -15,10 +15,12 @@ class CharEnum(str, Enum):
 
 
 class ActionTypes(CharEnum):
-    RENAME = "rename"
-    DELETE = "delete"
-    CANCEL = "cancel"
+    RENAME_SET = "rename_set"
+    DELETE_SET = "delete_set"
+    CHANGE_EMOJI = "change_emoji"
+    DELETE_STICKER = "delete_sticker"
     SUBSCRIBE_365 = "subscribe_365"
+    CANCEL = "cancel"
 
 
 class SetTypes(CharEnum):

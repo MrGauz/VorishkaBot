@@ -14,6 +14,7 @@ from settings import DEFAULT_VIDEO_SET_NAME, DEFAULT_ANIMATED_SET_NAME, DEFAULT_
 async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input_sticker: InputSticker,
                        set_type: SetTypes) -> None:
     user = store_user(update)
+    # TODO: move validation and conversion here
 
     match set_type:
         case SetTypes.ANIMATED:

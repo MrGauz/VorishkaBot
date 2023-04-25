@@ -5,7 +5,8 @@ from settings import ANIMATED_SET_EMOJI, EMOJI_SET_EMOJI
 from locales import _
 
 
-async def get_set_list_keyboard(user: User, chat: Chat) -> InlineKeyboardMarkup | None:
+async def get_set_list_keyboard(user: User, chat: Chat, show_new=False,
+                                hide_name: str = None) -> InlineKeyboardMarkup | None:
     sets = Set.select().where(Set.user == user).order_by(Set.set_type.desc())
 
     if not sets:
@@ -13,12 +14,16 @@ async def get_set_list_keyboard(user: User, chat: Chat) -> InlineKeyboardMarkup 
         return None
 
     buttons = []
+    if show_new:
+        buttons.append([InlineKeyboardButton(_('buttons.new_set', user.lang_code), callback_data=ActionTypes.NEW_SET)])
     for telegram_set in sets:
         match telegram_set.set_type:
             case SetTypes.EMOJI:
                 emoji = EMOJI_SET_EMOJI
             case SetTypes.ANIMATED | SetTypes.VIDEO | _:
                 emoji = ANIMATED_SET_EMOJI
+        if telegram_set.name == hide_name:
+            continue
         buttons.append([InlineKeyboardButton(f'{emoji} {telegram_set.title}', callback_data=telegram_set.name)])
     buttons.append([InlineKeyboardButton(_('buttons.cancel', user.lang_code), callback_data=ActionTypes.CANCEL)])
 
@@ -45,6 +50,7 @@ def get_delete_confirm_keyboard(user: User, is_sticker=False) -> InlineKeyboardM
 def get_sticker_actions_keyboard(user: User) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([
         [InlineKeyboardButton(_('buttons.change_emoji', user.lang_code), callback_data=ActionTypes.CHANGE_EMOJI)],
+        [InlineKeyboardButton(_('buttons.move_sticker', user.lang_code), callback_data=ActionTypes.MOVE_STICKER)],
         [InlineKeyboardButton(_('buttons.delete_sticker', user.lang_code), callback_data=ActionTypes.DELETE_STICKER)],
         [InlineKeyboardButton(_('buttons.cancel', user.lang_code), callback_data=ActionTypes.CANCEL)]
     ])

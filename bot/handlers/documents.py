@@ -8,25 +8,27 @@ from telegram.ext import ContextTypes
 
 from bot.converters import convert_video
 from bot.stickers import save_sticker
-from database.models import SetTypes
 from database.utils import store_user
 from locales import _
-from settings import EMOJI_ONLY_REGEX, DEFAULT_NEW_STICKER_EMOJI, MAX_FILE_SIZE
+from settings import EMOJI_ONLY_REGEX, DEFAULT_STICKER_EMOJI, MAX_FILE_SIZE
 
 logger = logging.getLogger(__name__)
+
+supported_image_formats = ('image/png', 'image/jpeg', 'image/webp')
+supported_video_formats = ('image/gif', 'video/mp4', 'video/webm', 'video/quicktime')
 
 
 async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = store_user(update)
     document = update.effective_message.document
 
-    if not user.is_subscribed() and document.mime_type \
-            in ('image/gif', 'image/mp4', 'video/mp4', 'video/webm', 'video/quicktime'):
+    # Subscription check
+    if not user.is_subscribed() and document.mime_type in supported_video_formats:
         await update.effective_message.reply_text(_('errors.not_subscribed', user.lang_code))
         return
 
-    if document.mime_type not in ('image/png', 'image/jpeg', 'image/webp',
-                                  'image/gif', 'video/mp4', 'video/webm', 'video/quicktime'):
+    # Filter out unsupported file types
+    if document.mime_type not in supported_image_formats + supported_video_formats:
         logger.warning(f'Received unknown document type: {update.message.document.mime_type}\n'
                        f'update={json.dumps(update.to_dict())}')
         await update.effective_message.reply_text(_('errors.unknown_document_type', user.lang_code))
@@ -39,7 +41,7 @@ async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     await update.effective_message.reply_text(_("chat.time_warning", user.lang_code))
 
     emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX).sub('', update.effective_message.caption or '')[:20]
-                       or DEFAULT_NEW_STICKER_EMOJI)
+                       or DEFAULT_STICKER_EMOJI)
     filename = tempfile.mktemp(suffix='.' + document.mime_type.split('/')[1])
     file = await document.get_file()
 
@@ -51,4 +53,7 @@ async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         return
 
     input_sticker = InputSticker(sticker=open(sticker_path, 'rb'), emoji_list=emoji_list)
-    await save_sticker(update, context, input_sticker, SetTypes.VIDEO)
+    user_set = await save_sticker(update, context, input_sticker)
+
+    await update.effective_message.reply_text(_('chat.sticker_saved', user.lang_code,
+                                                placeholders={'set_name': user_set.name, 'set_title': user_set.title}))

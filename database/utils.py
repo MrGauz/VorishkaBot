@@ -3,7 +3,7 @@ import logging
 from telegram import Update
 
 from database.connection import db
-from database.models import User, Set, SetTypes, Transaction
+from database.models import User, Set, Transaction
 
 logger = logging.getLogger(__name__)
 
@@ -35,16 +35,3 @@ def store_user(update: Update) -> User:
         user.save()
 
     return user
-
-
-async def save_new_set(user: User, name: str, title: str, set_type: SetTypes) -> Set:
-    logger.info(f"Creating new sticker set for @{user.username}: {name}")
-
-    stickers_set = Set()
-    stickers_set.user = user
-    stickers_set.name = name
-    stickers_set.title = title
-    stickers_set.set_type = set_type
-    stickers_set.save()
-
-    return stickers_set

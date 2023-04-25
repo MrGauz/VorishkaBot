@@ -20,7 +20,10 @@
         "emoji_change_success": "Emoji was changed to {new_emoji}",
         "emoji_change_error": "Failed to change emoji, try again later",
         "sticker_deleted_success": "Sticker was deleted",
-        "sticker_deleted_error": "Failed to delete sticker, try again later"
+        "sticker_deleted_error": "Failed to delete sticker, try again later",
+        "sticker_moved_success": "Sticker was moved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
+        "sticker_moved_error": "Failed to move sticker, try again later",
+        "choose_set_move": "Choose a set to move the sticker to:"
     },
     "commands": {
         "start": "Welcome!",
@@ -37,7 +40,9 @@
         "delete_set_yes": "Yes, delete the set",
         "subscribe": "Buy PROscription",
         "change_emoji": "Change emoji",
-        "delete_sticker": "Delete sticker"
+        "delete_sticker": "Delete sticker",
+        "move_sticker": "Move sticker",
+        "new_set": "New set"
     },
     "errors": {
         "unsupported_update": "Sorry, i can't process whatever this is",

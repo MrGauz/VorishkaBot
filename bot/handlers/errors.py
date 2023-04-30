@@ -4,6 +4,7 @@ import logging
 import traceback
 
 from telegram import Update
+from telegram.constants import ChatAction
 from telegram.error import TelegramError
 from telegram.ext import ContextTypes
 
@@ -35,16 +36,25 @@ async def update_error_handler(update: object, context: ContextTypes.DEFAULT_TYP
         )
 
         # Finally, send the message
-        await context.bot.send_message(chat_id=ADMIN_ID, text=message[:4095])
+        try:
+            await update.effective_chat.send_action(ChatAction.TYPING)
+            await context.bot.send_message(chat_id=ADMIN_ID, text=message[:4095])
+        except TelegramError as e:
+            logger.critical(f"Couldn't send error message to admin\nupdate={json.dumps(update.to_dict())}", exc_info=e)
 
 
 async def message_error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = store_user(update)
-    await update.effective_message.reply_text(_('errors.unsupported_update', user.lang_code))
+    try:
+        await update.effective_chat.send_action(ChatAction.TYPING)
+        await update.effective_message.reply_text(_('errors.unsupported_update', user.lang_code))
+    except TelegramError as e:
+        logger.error(f'Error sending message error message\nupdate={json.dumps(update.to_dict())}', exc_info=e)
 
 
 async def group_chat_error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
+        await update.effective_chat.send_action(ChatAction.TYPING)
         await update.effective_message.reply_text(_('errors.no_group_chats', DEFAULT_LANG))
     except TelegramError as e:
         logger.error(f'Error sending group chat error message\nupdate={json.dumps(update.to_dict())}', exc_info=e)

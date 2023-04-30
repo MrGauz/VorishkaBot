@@ -3,6 +3,7 @@ from datetime import datetime
 from warnings import filterwarnings
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, LabeledPrice
+from telegram.constants import ChatAction
 from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandler, ContextTypes
 from telegram.warnings import PTBUserWarning
 
@@ -20,6 +21,7 @@ SUBSCRIBE = range(1)
 
 
 async def start_subscription_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     context.user_data.clear()
 
@@ -40,6 +42,7 @@ async def start_subscription_command(update: Update, context: ContextTypes.DEFAU
 
 
 async def generate_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     query = update.callback_query
 
@@ -73,6 +76,7 @@ async def pre_checkout_query(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 
 async def successful_payment(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     payment_info = update.effective_message.successful_payment
 
@@ -96,6 +100,7 @@ async def subscription_reminder(context: ContextTypes.DEFAULT_TYPE):
         end_date = user.subscription_end_date_utc
         days_left = (end_date - datetime.utcnow()).days
         if user.is_subscribed() and days_left < 3:
+            await context.bot.send_chat_action(chat_id=user.user_id, action=ChatAction.TYPING)
             await context.bot.send_message(chat_id=user.user_id,
                                            text=_('subscription.renewal_reminder', user.lang_code,
                                                   placeholders={'days_left': days_left}))

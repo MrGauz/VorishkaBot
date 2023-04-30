@@ -10,6 +10,7 @@ async def get_set_list_keyboard(user: User, chat: Chat, show_new=False,
     sets = Set.select().where(Set.user == user).order_by(Set.set_type.desc())
 
     if not sets:
+        # TODO: move to calling methods
         await chat.send_message(_('errors.no_sets', user.lang_code))
         return None
 

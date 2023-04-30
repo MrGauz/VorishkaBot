@@ -2,6 +2,7 @@ import logging
 from warnings import filterwarnings
 
 from telegram import Update
+from telegram.constants import ChatAction
 from telegram.error import TelegramError, BadRequest
 from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, filters, \
     ContextTypes
@@ -21,6 +22,7 @@ SET_SELECTED, ACTION_SELECTED, RENAME_SET, DELETE_SET = range(4)
 
 
 async def start_my_sets_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     context.user_data.clear()
 
@@ -42,6 +44,7 @@ async def set_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query.data == ActionTypes.CANCEL:
         return await cancel_command(update, context)
 
+    await update.effective_chat.send_action(ChatAction.FIND_LOCATION)
     telegram_set = await context.bot.get_sticker_set(query.data)
     placeholders = {
         'set_title': telegram_set.title,
@@ -61,6 +64,7 @@ async def set_action_selected(update: Update, context: ContextTypes.DEFAULT_TYPE
     context.user_data['selected_action'] = query.data
     await query.answer()
 
+    await update.effective_chat.send_action(ChatAction.TYPING)
     match query.data:
         case ActionTypes.RENAME_SET:
             await update.effective_message.edit_text(_('sets.choose_new_name', user.lang_code), reply_markup=None)
@@ -80,6 +84,7 @@ async def set_action_selected(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 
 async def rename_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     text = update.effective_message.text[:64]
     set_name = context.user_data['selected_set']
@@ -108,6 +113,7 @@ async def rename_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def delete_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     query = update.callback_query
     await query.answer()

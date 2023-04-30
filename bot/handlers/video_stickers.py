@@ -4,6 +4,7 @@ import re
 import tempfile
 
 from telegram import Update, InputSticker
+from telegram.constants import ChatAction
 from telegram.ext import ContextTypes
 
 from bot.converters import convert_video
@@ -19,23 +20,28 @@ async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE)
     user = store_user(update)
 
     if not user.is_subscribed():
+        await update.effective_chat.send_action(ChatAction.TYPING)
         await update.effective_message.reply_text(_('errors.not_subscribed', user.lang_code))
         return
 
+    await update.effective_chat.send_action(ChatAction.UPLOAD_VIDEO)
     file = await update.effective_message.sticker.get_file()
     sticker_bytes = bytes(await file.download_as_bytearray())
     emoji_list = re.compile(EMOJI_ONLY_REGEX).sub('', update.effective_message.sticker.emoji) or DEFAULT_STICKER_EMOJI
     input_sticker = InputSticker(sticker=sticker_bytes, emoji_list=emoji_list)
 
+    await update.effective_chat.send_action(ChatAction.TYPING)
     user_set = await save_sticker(update, context, input_sticker)
     await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
                                                 placeholders={'set_name': user_set.name, 'set_title': user_set.title}))
+    # TODO: show sticker summary
 
 
 async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = store_user(update)
 
     if not user.is_subscribed():
+        await update.effective_chat.send_action(ChatAction.TYPING)
         await update.effective_message.reply_text(_('errors.not_subscribed', user.lang_code))
         return
 
@@ -51,16 +57,19 @@ async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # Doesn't ever get here, it's only here to avoid warnings
         media = None
 
+    await update.effective_chat.send_action(ChatAction.TYPING)
     if media.file_size > MAX_FILE_SIZE:
         await update.effective_message.reply_text(_('errors.file_too_big', user.lang_code))
         return
 
     await update.effective_message.reply_text(_("errors.takes_time_warning", user.lang_code))
+    await update.effective_chat.send_action(ChatAction.UPLOAD_VIDEO)
     file = await media.get_file()
     await file.download_to_drive(mp4_filename)
 
     sticker_path = convert_video(mp4_filename)
 
+    await update.effective_chat.send_action(ChatAction.TYPING)
     if sticker_path is None:
         await update.effective_message.reply_text(_('errors.ffmpeg_failed', user.lang_code))
         return
@@ -72,3 +81,4 @@ async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                                 placeholders={'set_name': user_set.name, 'set_title': user_set.title}))
 
     os.remove(sticker_path)
+    # TODO: show sticker summary

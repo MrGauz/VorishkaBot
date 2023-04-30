@@ -4,6 +4,7 @@ import re
 import tempfile
 
 from telegram import Update, InputSticker
+from telegram.constants import ChatAction
 from telegram.ext import ContextTypes
 
 from bot.converters import convert_video
@@ -22,13 +23,16 @@ async def from_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE
 
     sticker = update.effective_message.sticker
     if sticker.file_size > MAX_FILE_SIZE:
+        await update.effective_chat.send_action(ChatAction.TYPING)
         await update.effective_message.reply_text(_('errors.file_too_big', user.lang_code))
         return
 
+    await update.effective_chat.send_action(ChatAction.UPLOAD_PHOTO)
     file = await sticker.get_file()
     await file.download_to_drive(webp_filename)
 
     sticker_path = convert_video(webp_filename)
+    await update.effective_chat.send_action(ChatAction.TYPING)
     if sticker_path is None:
         await update.effective_message.reply_text(_('errors.ffmpeg_failed', user.lang_code))
         return
@@ -40,9 +44,11 @@ async def from_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE
                                                 placeholders={'set_name': user_set.name, 'set_title': user_set.title}))
 
     os.remove(sticker_path)
+    # TODO: display sticker summary
 
 
 async def from_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.effective_chat.send_action(ChatAction.UPLOAD_PHOTO)
     user = store_user(update)
     png_filename = tempfile.mktemp(suffix='.png')
     emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX).sub('', update.effective_message.caption or '')
@@ -57,6 +63,7 @@ async def from_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     await file.download_to_drive(png_filename)
 
     sticker_path = convert_video(png_filename)
+    await update.effective_chat.send_action(ChatAction.TYPING)
     if sticker_path is None:
         await update.effective_message.reply_text(_('errors.ffmpeg_failed', user.lang_code))
         return
@@ -68,3 +75,4 @@ async def from_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
                                                 placeholders={'set_name': user_set.name, 'set_title': user_set.title}))
 
     os.remove(sticker_path)
+    # TODO: display sticker summary

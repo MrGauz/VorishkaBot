@@ -4,6 +4,7 @@ import re
 from warnings import filterwarnings
 
 from telegram import Update, Sticker, InputSticker
+from telegram.constants import ChatAction
 from telegram.error import TelegramError, BadRequest
 from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, filters, \
     ContextTypes
@@ -26,6 +27,7 @@ ACTION_SELECTED, CHANGE_EMOJI, MOVE_STICKER, DELETE_STICKER = range(4)
 
 
 async def start_my_sticker_conversation(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.effective_chat.send_action(ChatAction.CHOOSE_STICKER)
     user = store_user(update)
     sticker = update.effective_message.sticker
     context.user_data.clear()
@@ -42,6 +44,7 @@ async def start_my_sticker_conversation(update: Update, context: ContextTypes.DE
 
 
 async def sticker_action_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     query = update.callback_query
     await query.answer()
@@ -71,6 +74,7 @@ async def sticker_action_selected(update: Update, context: ContextTypes.DEFAULT_
 
 
 async def change_sticker_emoji(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     text = update.effective_message.text
 
@@ -100,6 +104,7 @@ async def change_sticker_emoji(update: Update, context: ContextTypes.DEFAULT_TYP
 
 
 async def move_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.effective_chat.send_action(ChatAction.CHOOSE_STICKER)
     user = store_user(update)
     query = update.callback_query
     await query.answer()
@@ -121,6 +126,7 @@ async def move_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
                      exc_info=e)
         user_set = False
 
+    await update.effective_chat.send_action(ChatAction.TYPING)
     if user_set:
         await context.bot.delete_sticker_from_set(sticker.file_id)
         await update.effective_message.edit_text(
@@ -131,6 +137,7 @@ async def move_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def delete_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.effective_chat.send_action(ChatAction.CHOOSE_STICKER)
     user = store_user(update)
     query = update.callback_query
     await query.answer()
@@ -145,6 +152,7 @@ async def delete_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
         logger.error(f'Error deleting sticker {sticker_id} for user {user.user_id} ({user.username})', exc_info=e)
         result = False
 
+    await update.effective_chat.send_action(ChatAction.TYPING)
     if result:
         await update.effective_message.edit_text(_('stickers.deleted', user.lang_code))
     else:

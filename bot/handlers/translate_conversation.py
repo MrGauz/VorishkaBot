@@ -1,6 +1,7 @@
 from warnings import filterwarnings
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram.constants import ChatAction
 from telegram.ext import ConversationHandler, CommandHandler, ContextTypes, CallbackQueryHandler
 from telegram.warnings import PTBUserWarning
 
@@ -15,6 +16,7 @@ LANGUAGE_CHOICE = 0
 
 
 async def start_translate_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     await context.bot.send_message(
         update.effective_user.id,
@@ -32,6 +34,7 @@ async def language_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
 
+    await update.effective_chat.send_action(ChatAction.TYPING)
     if query.data == 'cancel':
         await update.effective_message.reply_text(_('bot.cancel_command', user.lang_code))
         return ConversationHandler.END

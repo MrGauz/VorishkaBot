@@ -47,6 +47,4 @@ async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input
             sticker=input_sticker
         )
 
-    # TODO: show sticker summary
-
     return chosen_set

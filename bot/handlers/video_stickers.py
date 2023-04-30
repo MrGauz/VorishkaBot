@@ -28,7 +28,7 @@ async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE)
     input_sticker = InputSticker(sticker=sticker_bytes, emoji_list=emoji_list)
 
     user_set = await save_sticker(update, context, input_sticker)
-    await update.effective_message.reply_text(_('chat.sticker_saved', user.lang_code,
+    await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
                                                 placeholders={'set_name': user_set.name, 'set_title': user_set.title}))
 
 
@@ -55,20 +55,20 @@ async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.effective_message.reply_text(_('errors.file_too_big', user.lang_code))
         return
 
-    await update.effective_message.reply_text(_("chat.time_warning", user.lang_code))
+    await update.effective_message.reply_text(_("errors.takes_time_warning", user.lang_code))
     file = await media.get_file()
     await file.download_to_drive(mp4_filename)
 
     sticker_path = convert_video(mp4_filename)
 
     if sticker_path is None:
-        await update.effective_message.reply_text(_('errors.ffmpeg_error', user.lang_code))
+        await update.effective_message.reply_text(_('errors.ffmpeg_failed', user.lang_code))
         return
 
     input_sticker = InputSticker(sticker=open(sticker_path, 'rb'), emoji_list=emoji_list)
     user_set = await save_sticker(update, context, input_sticker)
 
-    await update.effective_message.reply_text(_('chat.sticker_saved', user.lang_code,
+    await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
                                                 placeholders={'set_name': user_set.name, 'set_title': user_set.title}))
 
     os.remove(sticker_path)

@@ -1,37 +1,18 @@
 {
-    "chat": {
-        "sticker_saved": "Sticker was saved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
-        "emoji_saved": "Emoji was saved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
-        "choose_set_rename": "Choose a set to rename:",
-        "choose_set_delete": "Choose a set to delete:",
-        "choose_new_set_name": "Choose a new name for your set (or send /cancel to abort):",
-        "set_renamed_success": "Set was renamed to <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>",
-        "set_renamed_error": "Failed to rename the set to {new_name}",
-        "time_warning": "This might take a while, please be patient",
-        "language_changed": "Now i speak a new language",
-        "confirm_delete_set": "Are you sure you want to delete <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>? This action can't be undone",
-        "set_deleted_success": "Set {set_title} was deleted",
-        "set_deleted_error": "Failed to delete set {set_title}",
-        "set_summary_message": "Set: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\nStickers: {sticker_count}/50",
-        "sticker_summary_message": "Emoji: {emoji}\nSet: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
-        "choose_new_sticker_emoji": "Choose a new emoji for this sticker (or send /cancel to abort):",
-        "confirm_delete_sticker": "Are you sure you want to delete this sticker?",
-        "emoji_invalid": "Invalid emoji, try again (or send /cancel to abort)",
-        "emoji_change_success": "Emoji was changed to {new_emoji}",
-        "emoji_change_error": "Failed to change emoji, try again later",
-        "sticker_deleted_success": "Sticker was deleted",
-        "sticker_deleted_error": "Failed to delete sticker, try again later",
-        "sticker_moved_success": "Sticker was moved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
-        "sticker_moved_error": "Failed to move sticker, try again later",
-        "choose_set_move": "Choose a set to move the sticker to:"
+    "bot": {
+        "description": "This is the text seen before the bot is started",
+        "about": "This is the \"about\" in bot's profile",
+        "my_sets_desc": "List your sticker sets",
+        "subscription_desc": "Manage your PROscription",
+        "translate_desc": "Change language",
+        "help_decs": "Helpful message",
+        "default_video_set_name": "My stickers",
+        "start_command": "Welcome!",
+        "help_command": "Help!",
+        "cancel_command": "Don't worry, I stopped",
+        "language_changed": "Now i speak a new language"
     },
-    "commands": {
-        "start": "Welcome!",
-        "help": "Help!",
-        "cancel": "Don't worry, I stopped",
-        "my_sets": "Here are your sets, choose one to do something:"
-    },
-    "buttons": {
+    "keyboards": {
         "cancel": "Cancel",
         "rename_set": "Rename set",
         "delete_set": "Delete set",
@@ -46,32 +27,44 @@
     },
     "errors": {
         "unsupported_update": "Sorry, i can't process whatever this is",
-        "ffmpeg_error": "Task failed successfully",
+        "ffmpeg_failed": "Task failed successfully",
         "no_sets": "You don't have any sticker sets yet, send me a sticker to start",
-        "group_chat": "Sorry, I like privacy, send me a dm",
+        "no_group_chats": "Sorry, I like privacy, send me a dm",
         "unknown_document_type": "Sorry, I can't process this document type yet",
         "file_too_big": "Sorry, this file is too big (max 20 MB)",
         "not_subscribed": "You don't have an active PROscription. Run /subscription to buy one.",
-        "tgs_converter_error": "Task failed successfully"
+        "tgs_converter_failed": "Task failed successfully",
+        "sticker_not_moved": "Failed to move sticker, try again later",
+        "sticker_not_deleted": "Failed to delete sticker, try again later",
+        "set_not_deleted": "Failed to delete set {set_title}",
+        "invalid_emoji": "Invalid emoji, try again (or send /cancel to abort)",
+        "emoji_not_changed": "Failed to change emoji, try again later",
+        "set_not_renamed": "Failed to rename the set to {new_name}",
+        "takes_time_warning": "This might take a while, please be patient"
     },
     "sets": {
-        "default_name_video": "My stickers",
-        "default_name_animated": "My animated stickers",
-        "default_name_emoji": "My emoji"
+        "summary_message": "Set: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\nStickers: {sticker_count}/50",
+        "choose_to_rename": "Choose a set to rename:",
+        "choose_new_name": "Choose a new name for your set (or send /cancel to abort):",
+        "renamed": "Set was renamed to <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>",
+        "confirm_delete": "Are you sure you want to delete <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>? This action can't be undone",
+        "deleted": "Set {set_title} was deleted"
     },
-    "bot": {
-        "description": "This is the text seen before the bot is started",
-        "about": "This is the \"about\" in bot's profile",
-        "my_sets_desc": "List your sticker sets",
-        "subscription_desc": "Manage your PROscription",
-        "translate_desc": "Change language",
-        "help_decs": "Helpful message"
+    "stickers": {
+        "summary_message": "Emoji: {emoji}\nSet: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
+        "new_saved": "Sticker was saved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
+        "choose_new_emoji": "Choose a new emoji for this sticker (or send /cancel to abort):",
+        "emoji_changed": "Emoji was changed to {new_emoji}",
+        "choose_set_to_move": "Choose a set to move the sticker to:",
+        "moved": "Sticker was moved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
+        "confirm_delete": "Are you sure you want to delete this sticker?",
+        "deleted": "Sticker was deleted"
     },
     "subscription": {
         "invoice_title": "PROscription",
         "invoice_description": "PROscribe to get access to all the features",
-        "subscription_not_active": "You don't have an active PROscription. Press the button below to buy one.",
-        "subscription_status": "Your PROscription is active until {date}. Press the button below to buy additional 365 days.",
+        "not_active": "You don't have an active PROscription. Press the button below to buy one.",
+        "status": "Your PROscription is active until {date}. Press the button below to buy additional 365 days.",
         "payment_success": "Thank you for your purchase! Your PROscription is active until {date}.",
         "deny_precheckout": "I don't know how you got here, but you can't buy this",
         "renewal_reminder": "Your PROscription ends in {days_left} days. Run /subscription to renew it."

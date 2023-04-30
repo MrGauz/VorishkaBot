@@ -28,7 +28,7 @@ async def start_my_sets_command(update: Update, context: ContextTypes.DEFAULT_TY
     if not keyboard:
         return ConversationHandler.END
 
-    await update.message.reply_text(_('chat.choose_set_rename', user.lang_code), reply_markup=keyboard)
+    await update.message.reply_text(_('sets.choose_to_rename', user.lang_code), reply_markup=keyboard)
 
     return SET_SELECTED
 
@@ -49,7 +49,7 @@ async def set_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
         'sticker_count': len(telegram_set.stickers)
     }
     actions_keyboard = get_set_actions_keyboard(user)
-    await update.effective_message.edit_text(_('chat.set_summary_message', user.lang_code, placeholders=placeholders),
+    await update.effective_message.edit_text(_('sets.summary_message', user.lang_code, placeholders=placeholders),
                                              reply_markup=actions_keyboard)
 
     return ACTION_SELECTED
@@ -63,14 +63,14 @@ async def set_action_selected(update: Update, context: ContextTypes.DEFAULT_TYPE
 
     match query.data:
         case ActionTypes.RENAME_SET:
-            await update.effective_message.edit_text(_('chat.choose_new_set_name', user.lang_code), reply_markup=None)
+            await update.effective_message.edit_text(_('sets.choose_new_name', user.lang_code), reply_markup=None)
             return RENAME_SET
 
         case ActionTypes.DELETE_SET:
             confirm_keyboard = get_delete_confirm_keyboard(user)
             telegram_set: Set = Set.get(user=user, name=context.user_data['selected_set'])
             await update.effective_message.edit_text(
-                text=_('chat.confirm_delete_set', user.lang_code,
+                text=_('sets.confirm_delete', user.lang_code,
                        placeholders={'set_name': telegram_set.name, 'set_title': telegram_set.title}),
                 reply_markup=confirm_keyboard)
             return DELETE_SET
@@ -94,14 +94,14 @@ async def rename_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
         result = False
 
     if result:
-        await update.effective_message.reply_text(_('chat.set_renamed_success', user.lang_code,
+        await update.effective_message.reply_text(_('sets.renamed', user.lang_code,
                                                     {'set_name': set_name, 'new_title': text}))
 
         sticker_set = Set.get(Set.name == set_name)
         sticker_set.title = text.strip()
         sticker_set.save()
     else:
-        await update.effective_message.reply_text(_('chat.set_renamed_error', user.lang_code, {'new_name': text}))
+        await update.effective_message.reply_text(_('errors.set_not_renamed', user.lang_code, {'new_name': text}))
 
     context.user_data.clear()
     return ConversationHandler.END
@@ -123,11 +123,11 @@ async def delete_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
         result = False
 
     if result:
-        await update.effective_message.edit_text(_('chat.set_deleted_success', user.lang_code,
+        await update.effective_message.edit_text(_('sets.deleted', user.lang_code,
                                                    placeholders={'set_title': telegram_set.title}))
         telegram_set.delete_instance()
     else:
-        await update.effective_message.edit_text(_('chat.set_deleted_error', user.lang_code,
+        await update.effective_message.edit_text(_('errors.set_not_deleted', user.lang_code,
                                                    placeholders={'set_title': telegram_set.title}))
 
     context.user_data.clear()

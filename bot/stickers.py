@@ -16,7 +16,7 @@ async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input
     user = store_user(update)
     # TODO: move validation and conversion here
 
-    new_set_title = _('sets.default_name_video', user.lang_code)
+    new_set_title = _('bot.default_video_set_name', user.lang_code)
 
     chosen_set = None
     if not create_new:

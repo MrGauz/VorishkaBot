@@ -21,7 +21,7 @@ async def start_translate_command(update: Update, context: ContextTypes.DEFAULT_
         'Choose language',
         reply_markup=InlineKeyboardMarkup([
             [InlineKeyboardButton(v, callback_data=k) for k, v in ALL_LANGUAGES.items()],
-            [InlineKeyboardButton(_('buttons.cancel', user.lang_code), callback_data='cancel')]
+            [InlineKeyboardButton(_('keyboards.cancel', user.lang_code), callback_data='cancel')]
         ])
     )
     return LANGUAGE_CHOICE
@@ -33,12 +33,12 @@ async def language_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
 
     if query.data == 'cancel':
-        await update.effective_message.reply_text(_('commands.cancel', user.lang_code))
+        await update.effective_message.reply_text(_('bot.cancel_command', user.lang_code))
         return ConversationHandler.END
 
     user.lang_code = query.data
     user.save()
-    await update.effective_message.reply_text(_('chat.language_changed', query.data))
+    await update.effective_message.reply_text(_('bot.language_changed', query.data))
 
     return ConversationHandler.END
 

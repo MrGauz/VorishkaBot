@@ -24,14 +24,14 @@ async def start_subscription_command(update: Update, context: ContextTypes.DEFAU
     context.user_data.clear()
 
     if not user.is_subscribed():
-        reply_message = _('subscription.subscription_not_active', user.lang_code)
+        reply_message = _('subscription.not_active', user.lang_code)
     else:
-        reply_message = _('subscription.subscription_status', user.lang_code,
+        reply_message = _('subscription.status', user.lang_code,
                           placeholders={'date': user.subscription_end_date_utc.strftime("%d/%m/%Y")})
 
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton(_('buttons.subscribe', user.lang_code), callback_data=ActionTypes.SUBSCRIBE_365)],
-        [InlineKeyboardButton(_('buttons.cancel', user.lang_code), callback_data=ActionTypes.CANCEL)]
+        [InlineKeyboardButton(_('keyboards.subscribe', user.lang_code), callback_data=ActionTypes.SUBSCRIBE_365)],
+        [InlineKeyboardButton(_('keyboards.cancel', user.lang_code), callback_data=ActionTypes.CANCEL)]
     ])
 
     await update.message.reply_text(reply_message, reply_markup=keyboard)

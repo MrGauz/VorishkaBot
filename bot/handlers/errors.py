@@ -45,6 +45,6 @@ async def message_error_handler(update: Update, context: ContextTypes.DEFAULT_TY
 
 async def group_chat_error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
-        await update.effective_message.reply_text(_('errors.group_chat', DEFAULT_LANG))
+        await update.effective_message.reply_text(_('errors.no_group_chats', DEFAULT_LANG))
     except TelegramError as e:
         logger.error(f'Error sending group chat error message\nupdate={json.dumps(update.to_dict())}', exc_info=e)

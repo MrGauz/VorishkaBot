@@ -34,7 +34,7 @@ async def start_my_sticker_conversation(update: Update, context: ContextTypes.DE
     user_set = Set.get(Set.user_id == user.id, Set.name == sticker.set_name)
     actions_keyboard = get_sticker_actions_keyboard(user)
     await update.message.reply_text(
-        _('chat.sticker_summary_message', user.lang_code,
+        _('stickers.summary_message', user.lang_code,
           placeholders={'emoji': sticker.emoji, 'set_name': user_set.name, 'set_title': user_set.title}),
         reply_markup=actions_keyboard)
 
@@ -48,7 +48,7 @@ async def sticker_action_selected(update: Update, context: ContextTypes.DEFAULT_
 
     match query.data:
         case ActionTypes.CHANGE_EMOJI:
-            await update.effective_message.edit_text(_('chat.choose_new_sticker_emoji', user.lang_code),
+            await update.effective_message.edit_text(_('stickers.choose_new_emoji', user.lang_code),
                                                      reply_markup=None)
             return CHANGE_EMOJI
 
@@ -56,13 +56,13 @@ async def sticker_action_selected(update: Update, context: ContextTypes.DEFAULT_
             current_set_name = Sticker.de_json(json.loads(context.user_data['selected_sticker']), context.bot).set_name
             sets_keyboard = await get_set_list_keyboard(user, update.effective_chat, show_new=True,
                                                         hide_name=current_set_name)
-            await update.effective_message.edit_text(_('chat.choose_set_move', user.lang_code),
+            await update.effective_message.edit_text(_('stickers.choose_set_to_move', user.lang_code),
                                                      reply_markup=sets_keyboard)
             return MOVE_STICKER
 
         case ActionTypes.DELETE_STICKER:
             confirm_keyboard = get_delete_confirm_keyboard(user, is_sticker=True)
-            await update.effective_message.edit_text(text=_('chat.confirm_delete_sticker', user.lang_code),
+            await update.effective_message.edit_text(text=_('stickers.confirm_delete', user.lang_code),
                                                      reply_markup=confirm_keyboard)
             return DELETE_STICKER
 
@@ -79,7 +79,7 @@ async def change_sticker_emoji(update: Update, context: ContextTypes.DEFAULT_TYP
 
     emoji = tuple(set(re.compile(EMOJI_ONLY_REGEX).sub('', text)[:20]))
     if not emoji:
-        await update.effective_message.reply_text(_('chat.emoji_invalid', user.lang_code))
+        await update.effective_message.reply_text(_('errors.invalid_emoji', user.lang_code))
         return CHANGE_EMOJI
 
     sticker_id = Sticker.de_json(json.loads(context.user_data['selected_sticker']), context.bot).file_id
@@ -91,10 +91,10 @@ async def change_sticker_emoji(update: Update, context: ContextTypes.DEFAULT_TYP
         result = False
 
     if result:
-        await update.effective_message.reply_text(_('chat.emoji_change_success', user.lang_code,
+        await update.effective_message.reply_text(_('stickers.emoji_changed', user.lang_code,
                                                     placeholders={'new_emoji': ''.join(emoji)}))
     else:
-        await update.effective_message.reply_text(_('chat.emoji_change_error', user.lang_code))
+        await update.effective_message.reply_text(_('errors.emoji_not_changed', user.lang_code))
 
     return ConversationHandler.END
 
@@ -124,10 +124,10 @@ async def move_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if user_set:
         await context.bot.delete_sticker_from_set(sticker.file_id)
         await update.effective_message.edit_text(
-            _('chat.sticker_moved_success', user.lang_code,
+            _('stickers.moved', user.lang_code,
               placeholders={'set_name': user_set.name, 'set_title': user_set.title}))
     else:
-        await update.effective_message.edit_text(_('chat.sticker_moved_error', user.lang_code))
+        await update.effective_message.edit_text(_('errors.sticker_not_moved', user.lang_code))
 
 
 async def delete_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -146,9 +146,9 @@ async def delete_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
         result = False
 
     if result:
-        await update.effective_message.edit_text(_('chat.sticker_deleted_success', user.lang_code))
+        await update.effective_message.edit_text(_('stickers.deleted', user.lang_code))
     else:
-        await update.effective_message.edit_text(_('chat.sticker_deleted_error', user.lang_code))
+        await update.effective_message.edit_text(_('errors.sticker_not_deleted', user.lang_code))
 
     context.user_data.clear()
     return ConversationHandler.END

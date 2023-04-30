@@ -21,7 +21,7 @@ def store_user(update: Update) -> User:
     user = User.get_or_none(User.user_id == update.effective_user.id)
 
     if user is None:
-        logger.info(f"Creating new user @{update.effective_user.username} ({update.effective_user.id})")
+        logger.info(f'Creating new user @{update.effective_user.username} ({update.effective_user.id})')
         user = User()
         user.user_id = update.effective_user.id
         user.lang_code = update.effective_user.language_code

@@ -13,7 +13,7 @@ from database.utils import store_user
 from locales import _
 from settings import PAYMENT_PROVIDER_TOKEN, PAYMENT_CURRENCY, SUBSCRIPTION_365_PRICE
 
-filterwarnings(action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning)
+filterwarnings(action='ignore', message=r'.*CallbackQueryHandler', category=PTBUserWarning)
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ async def start_subscription_command(update: Update, context: ContextTypes.DEFAU
         reply_message = _('subscription.not_active', user.lang_code)
     else:
         reply_message = _('subscription.status', user.lang_code,
-                          placeholders={'date': user.subscription_end_date_utc.strftime("%d/%m/%Y")})
+                          placeholders={'date': user.subscription_end_date_utc.strftime('%d/%m/%Y')})
 
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton(_('keyboards.subscribe', user.lang_code), callback_data=ActionTypes.SUBSCRIBE_365)],
@@ -50,13 +50,13 @@ async def generate_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return await cancel_command(update, context)
 
     await update.effective_message.reply_invoice(
-        title=_("subscription.invoice_title", user.lang_code),
-        description=_("subscription.invoice_description", user.lang_code),
+        title=_('subscription.invoice_title', user.lang_code),
+        description=_('subscription.invoice_description', user.lang_code),
         payload=ActionTypes.SUBSCRIBE_365.value,
         provider_token=PAYMENT_PROVIDER_TOKEN,
         currency=PAYMENT_CURRENCY,
         prices=[
-            LabeledPrice(label=_("subscription.invoice_title", user.lang_code), amount=SUBSCRIPTION_365_PRICE),
+            LabeledPrice(label=_('subscription.invoice_title', user.lang_code), amount=SUBSCRIPTION_365_PRICE),
         ],
         photo_url='https://gauz.net/zhopa.jpg',  # TODO: replace
         photo_width=800,  # TODO: replace
@@ -91,7 +91,7 @@ async def successful_payment(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
     await update.effective_message.reply_text(
         _('subscription.payment_success', user.lang_code,
-          placeholders={'date': user.subscription_end_date_utc.strftime("%d/%m/%Y")}))
+          placeholders={'date': user.subscription_end_date_utc.strftime('%d/%m/%Y')}))
 
 
 async def subscription_reminder(context: ContextTypes.DEFAULT_TYPE):

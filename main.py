@@ -1,7 +1,5 @@
 from telegram import __version__ as TG_VER
 
-from bot.handlers.animated_stickers import from_animated_sticker
-
 try:
     from telegram import __version_info__
 except ImportError:
@@ -32,12 +30,13 @@ from bot.handlers.my_sets_conversation import my_sets_command
 from bot.handlers.my_sticker_conversation import my_sticker_conversation
 from bot.handlers.static_stickers import from_static_sticker, from_photo
 from bot.handlers.video_stickers import from_video_sticker, from_video
+from bot.handlers.animated_stickers import from_animated_sticker
 from bot.handlers.documents import from_document
 from bot.handlers.subscription import subscription_command, pre_checkout_query, successful_payment, \
     subscription_reminder
 from bot.handlers.errors import update_error_handler, message_error_handler, group_chat_error_handler
 
-filterwarnings(action="ignore", category=DeprecationWarning)
+filterwarnings(action='ignore', category=DeprecationWarning)
 
 logging.basicConfig(format=LOG_FORMAT, level=LOG_LEVEL)
 logger = logging.getLogger(__name__)
@@ -65,8 +64,8 @@ def main() -> None:
     application.add_handler(MessageHandler(~ filters.ChatType.PRIVATE, group_chat_error_handler))
 
     # Add command handlers
-    application.add_handler(CommandHandler("start", start_command))
-    application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler('start', start_command))
+    application.add_handler(CommandHandler('help', help_command))
     application.add_handler(translate_command)
     application.add_handler(my_sets_command)
 

@@ -40,7 +40,7 @@ async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         await update.effective_message.reply_text(_('errors.file_too_big', user.lang_code))
         return
 
-    await update.effective_message.reply_text(_("errors.takes_time_warning", user.lang_code))
+    await update.effective_message.reply_text(_('errors.takes_time_warning', user.lang_code))
 
     if document.mime_type in supported_image_formats:
         await update.effective_chat.send_action(ChatAction.UPLOAD_PHOTO)

@@ -62,7 +62,7 @@ async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.effective_message.reply_text(_('errors.file_too_big', user.lang_code))
         return
 
-    await update.effective_message.reply_text(_("errors.takes_time_warning", user.lang_code))
+    await update.effective_message.reply_text(_('errors.takes_time_warning', user.lang_code))
     await update.effective_chat.send_action(ChatAction.UPLOAD_VIDEO)
     file = await media.get_file()
     await file.download_to_drive(mp4_filename)

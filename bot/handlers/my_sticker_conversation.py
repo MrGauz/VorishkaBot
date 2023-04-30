@@ -19,7 +19,7 @@ from database.utils import store_user
 from locales import _
 from settings import EMOJI_ONLY_REGEX, DEFAULT_STICKER_EMOJI
 
-filterwarnings(action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning)
+filterwarnings(action='ignore', message=r'.*CallbackQueryHandler', category=PTBUserWarning)
 
 logger = logging.getLogger(__name__)
 

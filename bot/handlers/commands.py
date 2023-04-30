@@ -9,13 +9,13 @@ from locales import _
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
-    await update.message.reply_text(_("bot.start_command", user.lang_code))
+    await update.message.reply_text(_('bot.start_command', user.lang_code))
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
-    await update.message.reply_text(_("bot.help_command", user.lang_code))
+    await update.message.reply_text(_('bot.help_command', user.lang_code))
 
 
 async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE):

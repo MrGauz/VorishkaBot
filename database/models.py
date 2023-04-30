@@ -15,21 +15,20 @@ class CharEnum(str, Enum):
 
 
 class ActionTypes(CharEnum):
-    RENAME_SET = "rename_set"
-    DELETE_SET = "delete_set"
-    CHANGE_EMOJI = "change_emoji"
-    MOVE_STICKER = "move_sticker"
-    NEW_SET = "new_set"
-    DELETE_STICKER = "delete_sticker"
-    SUBSCRIBE_365 = "subscribe_365"
-    CANCEL = "cancel"
+    RENAME_SET = 'rename_set'
+    DELETE_SET = 'delete_set'
+    CHANGE_EMOJI = 'change_emoji'
+    MOVE_STICKER = 'move_sticker'
+    NEW_SET = 'new_set'
+    DELETE_STICKER = 'delete_sticker'
+    SUBSCRIBE_365 = 'subscribe_365'
+    CANCEL = 'cancel'
 
 
 class SetTypes(CharEnum):
     # TODO: custom emoji can be of each of the sticker types
-    ANIMATED = "animated"
-    VIDEO = "video"
-    EMOJI = "custom_emoji"
+    VIDEO = 'video'
+    EMOJI = 'custom_emoji'
 
 
 class User(Model):

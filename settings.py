@@ -46,9 +46,9 @@ DEFAULT_EMOJI_SET_NAME = 'emoji_%s_by_%s'
 DEFAULT_STICKER_EMOJI = u'\U0001F602'
 ANIMATED_SET_EMOJI = u'\U0001F304'
 EMOJI_SET_EMOJI = u'\U0001F47D'
-EMOJI_ONLY_REGEX = "[^\U0001F000-\U0001F999]+"
+EMOJI_ONLY_REGEX = '[^\U0001F000-\U0001F999]+'
 MAX_FILE_SIZE = 20971520  # 20 MB
 
 # TGS to WEBM converter
 # TODO: dockerize
-TGS_CONVERTER_PATH = "C:\\Users\\gauz\\Coding\\VorishkaBot2.0\\converter\\SkottieSkiaSharp\\bin\\Debug\\net7.0\\SkottieSkiaSharp.exe"
+TGS_CONVERTER_PATH = 'C:\\Users\\gauz\\Coding\\VorishkaBot2.0\\converter\\SkottieSkiaSharp\\bin\\Debug\\net7.0\\SkottieSkiaSharp.exe'

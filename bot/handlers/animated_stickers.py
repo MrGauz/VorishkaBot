@@ -21,7 +21,7 @@ async def from_animated_sticker(update: Update, context: ContextTypes.DEFAULT_TY
         await update.effective_message.reply_text(_('errors.not_subscribed', user.lang_code))
         return
 
-    await update.effective_message.reply_text(_("errors.takes_time_warning", user.lang_code))
+    await update.effective_message.reply_text(_('errors.takes_time_warning', user.lang_code))
 
     await update.effective_chat.send_action(ChatAction.UPLOAD_VIDEO)
     tgs_filename = tempfile.mktemp(suffix='.tgs')

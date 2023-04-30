@@ -11,7 +11,7 @@ def translate(message_id: str, lang_code: str, placeholders=None) -> str:
         placeholders = {}
 
     trans = load_translation(lang_code)
-    module, message_name = message_id.split(".")
+    module, message_name = message_id.split('.')
 
     try:
         message_template = trans[module][message_name]
@@ -33,7 +33,7 @@ def translate(message_id: str, lang_code: str, placeholders=None) -> str:
 
 def load_translation(lang_code: str) -> dict:
     try:
-        filename = f"locales/translations/{lang_code}.json".lower()
+        filename = f'locales/translations/{lang_code}.json'.lower()
         with open(filename, 'r', encoding='utf-8') as f:
             return json.load(f)
 

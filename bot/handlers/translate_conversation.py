@@ -10,7 +10,7 @@ from database.utils import store_user
 from locales import _
 from settings import ALL_LANGUAGES
 
-filterwarnings(action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning)
+filterwarnings(action='ignore', message=r'.*CallbackQueryHandler', category=PTBUserWarning)
 
 LANGUAGE_CHOICE = 0
 

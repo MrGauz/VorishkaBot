@@ -14,7 +14,7 @@ from database.models import Set, ActionTypes
 from database.utils import store_user
 from locales import _
 
-filterwarnings(action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning)
+filterwarnings(action='ignore', message=r'.*CallbackQueryHandler', category=PTBUserWarning)
 
 logger = logging.getLogger(__name__)
 

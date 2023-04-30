@@ -1,11 +1,15 @@
 import logging
 import os
 import tempfile
+from asyncio import create_subprocess_exec
 import ffmpeg
+
+from settings import TGS_CONVERTER_PATH
 
 logger = logging.getLogger(__name__)
 
 
+# TODO: async
 def convert_video(file_path: str) -> str | None:
     webm_filename = tempfile.mktemp(suffix='.webm')
 
@@ -40,5 +44,20 @@ def convert_video(file_path: str) -> str | None:
         return None
 
     os.remove(file_path)
+
+    return webm_filename
+
+
+async def convert_tgs(tgs_path: str) -> str | None:
+    webm_filename = tempfile.mktemp(suffix='.webm')
+
+    process = await create_subprocess_exec(TGS_CONVERTER_PATH, tgs_path, webm_filename)
+    await process.wait()
+
+    if process.returncode != 0:
+        logger.error(f'Failed to convert TGS {tgs_path}')
+        return None
+
+    os.remove(tgs_path)
 
     return webm_filename

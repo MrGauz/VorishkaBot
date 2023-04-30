@@ -48,3 +48,7 @@ ANIMATED_SET_EMOJI = u'\U0001F304'
 EMOJI_SET_EMOJI = u'\U0001F47D'
 EMOJI_ONLY_REGEX = "[^\U0001F000-\U0001F999]+"
 MAX_FILE_SIZE = 20971520  # 20 MB
+
+# TGS to WEBM converter
+# TODO: dockerize
+TGS_CONVERTER_PATH = "C:\\Users\\gauz\\Coding\\VorishkaBot2.0\\converter\\SkottieSkiaSharp\\bin\\Debug\\net7.0\\SkottieSkiaSharp.exe"

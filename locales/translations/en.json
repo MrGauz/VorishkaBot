@@ -51,7 +51,8 @@
         "group_chat": "Sorry, I like privacy, send me a dm",
         "unknown_document_type": "Sorry, I can't process this document type yet",
         "file_too_big": "Sorry, this file is too big (max 20 MB)",
-        "not_subscribed": "You don't have an active PROscription. Run /subscription to buy one."
+        "not_subscribed": "You don't have an active PROscription. Run /subscription to buy one.",
+        "tgs_converter_error": "Task failed successfully"
     },
     "sets": {
         "default_name_video": "My stickers",

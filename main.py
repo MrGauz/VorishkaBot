@@ -1,5 +1,7 @@
 from telegram import __version__ as TG_VER
 
+from bot.handlers.animated_stickers import from_animated_sticker
+
 try:
     from telegram import __version_info__
 except ImportError:
@@ -75,6 +77,7 @@ def main() -> None:
     application.add_handler(MessageHandler(filters.PHOTO, from_photo))
     application.add_handler(MessageHandler(filters.VIDEO | filters.ANIMATION, from_video))
     application.add_handler(MessageHandler(filters.Document.VIDEO | filters.Document.IMAGE, from_document))
+    application.add_handler(MessageHandler(filters.Sticker.ANIMATED, from_animated_sticker))
 
     # Payments handlers
     application.add_handler(subscription_command)
@@ -86,7 +89,7 @@ def main() -> None:
     application.add_error_handler(update_error_handler)
 
     # Schedule subscription renewal reminders
-    application.job_queue.run_daily(subscription_reminder, time=time(20, 11))
+    application.job_queue.run_daily(subscription_reminder, time=time(16, 20))
 
     # Start receiving
     # TODO: test parallel requests with webhooks

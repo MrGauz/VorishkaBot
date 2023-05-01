@@ -9,8 +9,7 @@ from settings import TGS_CONVERTER_PATH
 logger = logging.getLogger(__name__)
 
 
-# TODO: async
-def convert_video(file_path: str) -> str | None:
+async def convert_video(file_path: str) -> str | None:
     webm_filename = tempfile.mktemp(suffix='.webm')
 
     # Get video metadata

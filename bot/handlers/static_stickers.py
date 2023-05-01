@@ -31,7 +31,7 @@ async def from_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE
     file = await sticker.get_file()
     await file.download_to_drive(webp_filename)
 
-    sticker_path = convert_video(webp_filename)
+    sticker_path = await convert_video(webp_filename)
     await update.effective_chat.send_action(ChatAction.TYPING)
     if sticker_path is None:
         await update.effective_message.reply_text(_('errors.ffmpeg_failed', user.lang_code))
@@ -65,7 +65,7 @@ async def from_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     file = await photo.get_file()
     await file.download_to_drive(png_filename)
 
-    sticker_path = convert_video(png_filename)
+    sticker_path = await convert_video(png_filename)
     await update.effective_chat.send_action(ChatAction.TYPING)
     if sticker_path is None:
         await update.effective_message.reply_text(_('errors.ffmpeg_failed', user.lang_code))

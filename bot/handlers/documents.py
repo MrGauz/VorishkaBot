@@ -53,7 +53,7 @@ async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     file = await document.get_file()
 
     await file.download_to_drive(filename)
-    sticker_path = convert_video(filename)
+    sticker_path = await convert_video(filename)
 
     if sticker_path is None:
         await update.effective_chat.send_action(ChatAction.TYPING)

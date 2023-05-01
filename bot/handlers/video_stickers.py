@@ -70,7 +70,7 @@ async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     file = await media.get_file()
     await file.download_to_drive(mp4_filename)
 
-    sticker_path = convert_video(mp4_filename)
+    sticker_path = await convert_video(mp4_filename)
 
     await update.effective_chat.send_action(ChatAction.TYPING)
     if sticker_path is None:

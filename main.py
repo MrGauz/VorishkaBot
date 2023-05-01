@@ -51,13 +51,13 @@ def main() -> None:
     # Ignore all updates from non-private chats
     application.add_handler(MessageHandler(~ filters.ChatType.PRIVATE, group_chat_error_handler))
 
-    # Add command handlers
+    # Command handlers
     application.add_handler(CommandHandler('start', start_command))
     application.add_handler(CommandHandler('help', help_command))
     application.add_handler(translate_command)
     application.add_handler(my_sets_command)
 
-    # Add media handlers
+    # Media handlers
     application.add_handler(my_sticker_conversation)  # Must come before the filters.Sticker.VIDEO handler
     application.add_handler(MessageHandler(filters.Sticker.STATIC, from_static_sticker))
     application.add_handler(MessageHandler(filters.Sticker.VIDEO, from_video_sticker))
@@ -88,4 +88,5 @@ if __name__ == '__main__':
     #loop = get_event_loop()
     #loop.run_until_complete(main())
     #asyncio.run(main())
+    # updater - dispatcher
     main()

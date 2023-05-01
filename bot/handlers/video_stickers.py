@@ -35,8 +35,8 @@ async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE)
     if user_set:
         await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
                                                     placeholders={'set_name': user_set.name,
-                                                                  'set_title': user_set.title}))
-    # TODO: show sticker summary
+                                                                  'set_title': user_set.title,
+                                                                  'emoji': emoji_list}))
 
 
 async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -83,7 +83,7 @@ async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if user_set:
         await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
                                                     placeholders={'set_name': user_set.name,
-                                                                  'set_title': user_set.title}))
+                                                                  'set_title': user_set.title,
+                                                                  'emoji': ''.join(emoji_list)}))
 
     os.remove(sticker_path)
-    # TODO: show sticker summary

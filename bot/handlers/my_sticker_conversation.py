@@ -51,7 +51,7 @@ async def custom_entry_point(update: Update, context: ContextTypes.DEFAULT_TYPE,
 
     user_set = Set.get(Set.user_id == user.id, Set.name == sticker.set_name)
     actions_keyboard = get_sticker_actions_keyboard(user)
-    await update.message.reply_text(
+    await update.effective_message.reply_text(
         _('stickers.summary_message', user.lang_code,
           placeholders={'emoji': sticker.emoji, 'set_name': user_set.name, 'set_title': user_set.title}),
         reply_markup=actions_keyboard)

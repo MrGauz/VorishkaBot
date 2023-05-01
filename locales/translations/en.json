@@ -56,7 +56,7 @@
     },
     "stickers": {
         "summary_message": "Emoji: {emoji}\nSet: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
-        "new_saved": "Sticker was saved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
+        "new_saved": "Sticker was saved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a> with emoji {emoji}. Send it to me to change anything",
         "choose_new_emoji": "Choose a new emoji for this sticker (or send /cancel to abort):",
         "emoji_changed": "Emoji was changed to {new_emoji}",
         "choose_set_to_move": "Choose a set to move the sticker to:",

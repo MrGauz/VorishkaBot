@@ -42,7 +42,7 @@ async def from_animated_sticker(update: Update, context: ContextTypes.DEFAULT_TY
         await update.effective_chat.send_action(ChatAction.TYPING)
         await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
                                                     placeholders={'set_name': user_set.name,
-                                                                  'set_title': user_set.title}))
-        # TODO: send sticker summary
+                                                                  'set_title': user_set.title,
+                                                                  'emoji': emoji_list}))
 
     os.remove(sticker_path)

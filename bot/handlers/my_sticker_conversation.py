@@ -4,7 +4,7 @@ import re
 from warnings import filterwarnings
 
 from telegram import Update, Sticker, InputSticker
-from telegram.constants import ChatAction
+from telegram.constants import ChatAction, StickerLimit
 from telegram.error import TelegramError, BadRequest
 from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, filters, \
     ContextTypes
@@ -43,6 +43,22 @@ async def start_my_sticker_conversation(update: Update, context: ContextTypes.DE
     return ACTION_SELECTED
 
 
+async def custom_entry_point(update: Update, context: ContextTypes.DEFAULT_TYPE, sticker: Sticker):
+    await update.effective_chat.send_action(ChatAction.CHOOSE_STICKER)
+    user = store_user(update)
+    context.user_data.clear()
+    context.user_data['selected_sticker'] = sticker.to_json()
+
+    user_set = Set.get(Set.user_id == user.id, Set.name == sticker.set_name)
+    actions_keyboard = get_sticker_actions_keyboard(user)
+    await update.message.reply_text(
+        _('stickers.summary_message', user.lang_code,
+          placeholders={'emoji': sticker.emoji, 'set_name': user_set.name, 'set_title': user_set.title}),
+        reply_markup=actions_keyboard)
+
+    return ACTION_SELECTED
+
+
 async def sticker_action_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
@@ -57,8 +73,11 @@ async def sticker_action_selected(update: Update, context: ContextTypes.DEFAULT_
 
         case ActionTypes.MOVE_STICKER:
             current_set_name = Sticker.de_json(json.loads(context.user_data['selected_sticker']), context.bot).set_name
-            sets_keyboard = await get_set_list_keyboard(user, update.effective_chat, show_new=True,
-                                                        hide_name=current_set_name)
+            sets_keyboard = await get_set_list_keyboard(user, show_new=True, hide_name=current_set_name)
+            if not sets_keyboard:
+                await update.effective_message.reply_text(_('errors.no_sets', user.lang_code))
+                return ConversationHandler.END
+
             await update.effective_message.edit_text(_('stickers.choose_set_to_move', user.lang_code),
                                                      reply_markup=sets_keyboard)
             return MOVE_STICKER
@@ -81,7 +100,7 @@ async def change_sticker_emoji(update: Update, context: ContextTypes.DEFAULT_TYP
     if text == '/' + ActionTypes.CANCEL:
         return await cancel_command(update, context)
 
-    emoji = tuple(set(re.compile(EMOJI_ONLY_REGEX).sub('', text)[:20]))
+    emoji = tuple(set(re.compile(EMOJI_ONLY_REGEX).sub('', text)[:StickerLimit.MAX_STICKER_EMOJI]))
     if not emoji:
         await update.effective_message.reply_text(_('errors.invalid_emoji', user.lang_code))
         return CHANGE_EMOJI
@@ -119,12 +138,7 @@ async def move_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     sticker_bytes = bytes(await file.download_as_bytearray())
     input_sticker = InputSticker(sticker_bytes, emoji_list)
 
-    try:
-        user_set = await save_sticker(update, context, input_sticker, create_new_pack)
-    except TelegramError as e:
-        logger.error(f'Error moving sticker {sticker.file_id} for user {user.user_id} ({user.username})',
-                     exc_info=e)
-        user_set = False
+    user_set = await save_sticker(update, context, input_sticker, create_new_pack)
 
     await update.effective_chat.send_action(ChatAction.TYPING)
     if user_set:
@@ -162,14 +176,17 @@ async def delete_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 
-my_sticker_conversation = ConversationHandler(
-    entry_points=[MessageHandler(personal_sticker_filter, start_my_sticker_conversation)],
-    states={
-        ACTION_SELECTED: [CallbackQueryHandler(sticker_action_selected)],
-        MOVE_STICKER: [CallbackQueryHandler(move_sticker)],
-        CHANGE_EMOJI: [MessageHandler(filters.TEXT, change_sticker_emoji)],
-        DELETE_STICKER: [CallbackQueryHandler(delete_sticker)],
-    },
-    fallbacks=[CommandHandler('cancel', cancel_command)],
-    per_user=True
-)
+try:
+    my_sticker_conversation = ConversationHandler(
+        entry_points=[MessageHandler(personal_sticker_filter, start_my_sticker_conversation)],
+        states={
+            ACTION_SELECTED: [CallbackQueryHandler(sticker_action_selected)],
+            MOVE_STICKER: [CallbackQueryHandler(move_sticker)],
+            CHANGE_EMOJI: [MessageHandler(filters.TEXT, change_sticker_emoji)],
+            DELETE_STICKER: [CallbackQueryHandler(delete_sticker)],
+        },
+        fallbacks=[CommandHandler('cancel', cancel_command)],
+        per_user=True
+    )
+except Exception as e:
+    logger.error('Error creating my sticker conversation', exc_info=e)

@@ -40,7 +40,11 @@
         "invalid_emoji": "Invalid emoji, try again (or send /cancel to abort)",
         "emoji_not_changed": "Failed to change emoji, try again later",
         "set_not_renamed": "Failed to rename the set to {new_name}",
-        "takes_time_warning": "This might take a while, please be patient"
+        "takes_time_warning": "This might take a while, please be patient",
+        "some_telegram_error": "Something went wrong, try again later",
+        "invoice_generation": "Failed to send you an invoice, try again later",
+        "pre_checkout_query_failed": "Failed to process your payment, try again later",
+        "sticker_not_saved": "Failed to save sticker, try again later"
     },
     "sets": {
         "summary_message": "Set: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\nStickers: {sticker_count}/50",

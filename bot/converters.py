@@ -36,11 +36,11 @@ def convert_video(file_path: str) -> str | None:
             r=30,  # Set frame rate to 30 FPS
             an=None,  # Remove audio
             t=3,  # Limit the duration to 3 seconds
-        )
+         )
          .run(capture_stdout=True, capture_stderr=True)
          )
     except ffmpeg.Error as e:
-        logger.error(f'Failed to process {file_path}', e.stderr)
+        logger.error(f'Failed to convert {file_path} with ffmpeg', e.stdout, e.stderr)
         return None
 
     os.remove(file_path)
@@ -51,11 +51,15 @@ def convert_video(file_path: str) -> str | None:
 async def convert_tgs(tgs_path: str) -> str | None:
     webm_filename = tempfile.mktemp(suffix='.webm')
 
-    process = await create_subprocess_exec(TGS_CONVERTER_PATH, tgs_path, webm_filename)
-    await process.wait()
+    try:
+        process = await create_subprocess_exec(TGS_CONVERTER_PATH, tgs_path, webm_filename)
+        await process.wait()
+    except OSError as e:
+        logger.error(f'Failed to convert TGS {tgs_path}', e)
+        return None
 
     if process.returncode != 0:
-        logger.error(f'Failed to convert TGS {tgs_path}')
+        logger.error(f'Failed to convert TGS {tgs_path}', process.stdout, process.stderr)
         return None
 
     os.remove(tgs_path)

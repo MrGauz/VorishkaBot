@@ -4,7 +4,7 @@ import re
 import tempfile
 
 from telegram import Update, InputSticker
-from telegram.constants import ChatAction
+from telegram.constants import ChatAction, StickerLimit
 from telegram.ext import ContextTypes
 
 from bot.converters import convert_video
@@ -46,7 +46,8 @@ async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         await update.effective_chat.send_action(ChatAction.UPLOAD_PHOTO)
     else:
         await update.effective_chat.send_action(ChatAction.UPLOAD_VIDEO)
-    emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX).sub('', update.effective_message.caption or '')[:20]
+    emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX)
+                       .sub('', update.effective_message.caption or '')[:StickerLimit.MAX_STICKER_EMOJI]
                        or DEFAULT_STICKER_EMOJI)
     filename = tempfile.mktemp(suffix='.' + document.mime_type.split('/')[1])
     file = await document.get_file()
@@ -62,8 +63,10 @@ async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     input_sticker = InputSticker(sticker=open(sticker_path, 'rb'), emoji_list=emoji_list)
     user_set = await save_sticker(update, context, input_sticker)
 
-    await update.effective_chat.send_action(ChatAction.TYPING)
-    await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
-                                                placeholders={'set_name': user_set.name, 'set_title': user_set.title}))
+    if user_set:
+        await update.effective_chat.send_action(ChatAction.TYPING)
+        await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
+                                                    placeholders={'set_name': user_set.name,
+                                                                  'set_title': user_set.title}))
 
-    # TODO: sticker summary message
+        # TODO: sticker summary message

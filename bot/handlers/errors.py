@@ -15,10 +15,15 @@ from locales import _
 logger = logging.getLogger(__name__)
 
 
-async def update_error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def update_error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Log the error and send a telegram message to notify the developer."""
     # Log the error before we do anything else, so we can see it even if something breaks.
-    logger.error(msg='Exception while handling an update:', exc_info=context.error)
+    logger.error(msg=f'Exception while handling an update\nupdate={json.dumps(update.to_dict())}',
+                 exc_info=context.error)
+
+    # Try contacting the user about the error.
+    user = store_user(update)
+    await update.effective_user.send_message(_('errors.some_telegram_error', user.lang_code))
 
     if not DEBUG:
         # traceback.format_exception returns the usual python message about an exception, but as a
@@ -43,7 +48,7 @@ async def update_error_handler(update: object, context: ContextTypes.DEFAULT_TYP
             logger.critical(f"Couldn't send error message to admin\nupdate={json.dumps(update.to_dict())}", exc_info=e)
 
 
-async def message_error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def unsupported_update_error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = store_user(update)
     try:
         await update.effective_chat.send_action(ChatAction.TYPING)

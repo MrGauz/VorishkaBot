@@ -2,7 +2,7 @@ import logging
 from warnings import filterwarnings
 
 from telegram import Update
-from telegram.constants import ChatAction
+from telegram.constants import ChatAction, StickerLimit
 from telegram.error import TelegramError, BadRequest
 from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, filters, \
     ContextTypes
@@ -26,8 +26,9 @@ async def start_my_sets_command(update: Update, context: ContextTypes.DEFAULT_TY
     user = store_user(update)
     context.user_data.clear()
 
-    keyboard = await get_set_list_keyboard(user, update.effective_chat)
+    keyboard = await get_set_list_keyboard(user)
     if not keyboard:
+        await update.effective_message.reply_text(_('errors.no_sets', user.lang_code))
         return ConversationHandler.END
 
     await update.message.reply_text(_('sets.choose_to_rename', user.lang_code), reply_markup=keyboard)
@@ -86,7 +87,7 @@ async def set_action_selected(update: Update, context: ContextTypes.DEFAULT_TYPE
 async def rename_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
-    text = update.effective_message.text[:64]
+    text = update.effective_message.text[:StickerLimit.MAX_NAME_AND_TITLE]
     set_name = context.user_data['selected_set']
 
     if text == '/' + ActionTypes.CANCEL:

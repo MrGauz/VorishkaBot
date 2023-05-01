@@ -26,7 +26,6 @@ class ActionTypes(CharEnum):
 
 
 class SetTypes(CharEnum):
-    # TODO: custom emoji can be of each of the sticker types
     VIDEO = 'video'
     EMOJI = 'custom_emoji'
 

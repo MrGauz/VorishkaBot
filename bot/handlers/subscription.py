@@ -1,9 +1,11 @@
+import json
 import logging
 from datetime import datetime
 from warnings import filterwarnings
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, LabeledPrice
 from telegram.constants import ChatAction
+from telegram.error import TelegramError
 from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandler, ContextTypes
 from telegram.warnings import PTBUserWarning
 
@@ -49,19 +51,23 @@ async def generate_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query.data != ActionTypes.SUBSCRIBE_365:
         return await cancel_command(update, context)
 
-    await update.effective_message.reply_invoice(
-        title=_('subscription.invoice_title', user.lang_code),
-        description=_('subscription.invoice_description', user.lang_code),
-        payload=ActionTypes.SUBSCRIBE_365.value,
-        provider_token=PAYMENT_PROVIDER_TOKEN,
-        currency=PAYMENT_CURRENCY,
-        prices=[
-            LabeledPrice(label=_('subscription.invoice_title', user.lang_code), amount=SUBSCRIPTION_365_PRICE),
-        ],
-        photo_url='https://gauz.net/zhopa.jpg',  # TODO: replace
-        photo_width=800,  # TODO: replace
-        photo_height=800,  # TODO: replace
-    )
+    try:
+        await update.effective_message.reply_invoice(
+            title=_('subscription.invoice_title', user.lang_code),
+            description=_('subscription.invoice_description', user.lang_code),
+            payload=ActionTypes.SUBSCRIBE_365.value,
+            provider_token=PAYMENT_PROVIDER_TOKEN,
+            currency=PAYMENT_CURRENCY,
+            prices=[
+                LabeledPrice(label=_('subscription.invoice_title', user.lang_code), amount=SUBSCRIPTION_365_PRICE),
+            ],
+            photo_url='https://gauz.net/zhopa.jpg',  # TODO: replace
+            photo_width=800,  # TODO: replace
+            photo_height=800,  # TODO: replace
+        )
+    except TelegramError as e:
+        logger.critical(f'Failed to generate invoice: {e}\nupdate={json.dumps(update.to_dict())}', exc_info=e)
+        await update.effective_message.reply_text(_('errors.invoice_generation', user.lang_code))
 
     return ConversationHandler.END
 
@@ -72,7 +78,11 @@ async def pre_checkout_query(update: Update, context: ContextTypes.DEFAULT_TYPE)
         return await update.pre_checkout_query.answer(ok=False,
                                                       error_message=_('subscription.deny_precheckout', user.lang_code))
 
-    await update.pre_checkout_query.answer(ok=True)
+    try:
+        await update.pre_checkout_query.answer(ok=True)
+    except TelegramError as e:
+        logger.critical(f'Failed to approve pre_checkout_query: {e}\nupdate={json.dumps(update.to_dict())}', exc_info=e)
+        await update.effective_message.reply_text(_('errors.pre_checkout_query_failed', user.lang_code))
 
 
 async def successful_payment(update: Update, context: ContextTypes.DEFAULT_TYPE):

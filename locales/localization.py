@@ -22,12 +22,11 @@ def translate(message_id: str, lang_code: str, placeholders=None) -> str:
     except (KeyError, TypeError) as e:
         if lang_code != DEFAULT_LANG:
             # Try falling back to default language
-            # TODO: uncomment
+            # TODO: uncomment after translated
             #logger.warning(f'Could not find translation for {message_id} in {lang_code}', exc_info=e)
             return translate(message_id, DEFAULT_LANG, placeholders)
 
         logger.error(f'Could not find translation for {message_id} in default {lang_code}', exc_info=e)
-        # TODO: return something else to display to the user
         return message_id
 
 

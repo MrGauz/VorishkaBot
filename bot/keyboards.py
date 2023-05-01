@@ -1,17 +1,14 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Chat
 
 from database.models import Set, SetTypes, User, ActionTypes
-from settings import ANIMATED_SET_EMOJI, EMOJI_SET_EMOJI
+from settings import VIDEO_SET_EMOJI, EMOJI_SET_EMOJI
 from locales import _
 
 
-async def get_set_list_keyboard(user: User, chat: Chat, show_new=False,
-                                hide_name: str = None) -> InlineKeyboardMarkup | None:
+async def get_set_list_keyboard(user: User, show_new=False, hide_name: str = None) -> InlineKeyboardMarkup | None:
     sets = Set.select().where(Set.user == user).order_by(Set.set_type.desc())
 
     if not sets:
-        # TODO: move to calling methods
-        await chat.send_message(_('errors.no_sets', user.lang_code))
         return None
 
     buttons = []
@@ -21,8 +18,8 @@ async def get_set_list_keyboard(user: User, chat: Chat, show_new=False,
         match telegram_set.set_type:
             case SetTypes.EMOJI:
                 emoji = EMOJI_SET_EMOJI
-            case SetTypes.ANIMATED | SetTypes.VIDEO | _:
-                emoji = ANIMATED_SET_EMOJI
+            case SetTypes.VIDEO | _:
+                emoji = VIDEO_SET_EMOJI
         if telegram_set.name == hide_name:
             continue
         buttons.append([InlineKeyboardButton(f'{emoji} {telegram_set.title}', callback_data=telegram_set.name)])

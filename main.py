@@ -1,26 +1,12 @@
-from telegram import __version__ as TG_VER
-
-try:
-    from telegram import __version_info__
-except ImportError:
-    __version_info__ = (0, 0, 0, 0, 0)
-
-if __version_info__ < (20, 0, 0, 'alpha', 1):
-    raise RuntimeError(
-        f'This example is not compatible with your current PTB version {TG_VER}. To view the '
-        f'{TG_VER} version of this example, '
-        f'visit https://docs.python-telegram-bot.org/en/v{TG_VER}/examples.html'
-    )
-
+from asyncio import get_event_loop
 from warnings import filterwarnings
 import logging
 from datetime import time
-from asyncio import get_event_loop
 from telegram.ext import Application, MessageHandler, filters, CommandHandler, PicklePersistence, Defaults, \
     PreCheckoutQueryHandler
 from telegram.constants import ParseMode
 
-from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT, CONTEXT_DATA_PATH
+from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT, CONTEXT_DATA_PATH, DEBUG
 from database.utils import create_tables
 
 from bot.bot import set_bot_commands, set_bot_description, set_bot_about
@@ -34,7 +20,7 @@ from bot.handlers.animated_stickers import from_animated_sticker
 from bot.handlers.documents import from_document
 from bot.handlers.subscription import subscription_command, pre_checkout_query, successful_payment, \
     subscription_reminder
-from bot.handlers.errors import update_error_handler, message_error_handler, group_chat_error_handler
+from bot.handlers.errors import update_error_handler, unsupported_update_error_handler, group_chat_error_handler
 
 filterwarnings(action='ignore', category=DeprecationWarning)
 
@@ -55,10 +41,12 @@ def main() -> None:
         .build()
 
     # Fill out bot's profile in supported languages
-    loop = get_event_loop()
-    loop.run_until_complete(set_bot_commands(application.bot))
-    loop.run_until_complete(set_bot_description(application.bot))
-    loop.run_until_complete(set_bot_about(application.bot))
+    if not DEBUG:
+        # TODO: test if works with parallelism
+        loop = get_event_loop()
+        loop.run_until_complete(set_bot_commands(application.bot))
+        loop.run_until_complete(set_bot_description(application.bot))
+        loop.run_until_complete(set_bot_about(application.bot))
 
     # Ignore all updates from non-private chats
     application.add_handler(MessageHandler(~ filters.ChatType.PRIVATE, group_chat_error_handler))
@@ -84,7 +72,7 @@ def main() -> None:
     application.add_handler(MessageHandler(filters.SUCCESSFUL_PAYMENT, successful_payment))
 
     # Catch-all for the rest
-    application.add_handler(MessageHandler(filters.ALL, message_error_handler))
+    application.add_handler(MessageHandler(filters.ALL, unsupported_update_error_handler))
     application.add_error_handler(update_error_handler)
 
     # Schedule subscription renewal reminders
@@ -96,4 +84,8 @@ def main() -> None:
 
 
 if __name__ == '__main__':
+    # TODO: parallel requests
+    #loop = get_event_loop()
+    #loop.run_until_complete(main())
+    #asyncio.run(main())
     main()

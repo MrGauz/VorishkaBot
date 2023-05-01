@@ -4,7 +4,7 @@ import re
 import tempfile
 
 from telegram import Update, InputSticker
-from telegram.constants import ChatAction
+from telegram.constants import ChatAction, StickerLimit
 from telegram.ext import ContextTypes
 
 from bot.converters import convert_video
@@ -32,8 +32,10 @@ async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
     await update.effective_chat.send_action(ChatAction.TYPING)
     user_set = await save_sticker(update, context, input_sticker)
-    await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
-                                                placeholders={'set_name': user_set.name, 'set_title': user_set.title}))
+    if user_set:
+        await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
+                                                    placeholders={'set_name': user_set.name,
+                                                                  'set_title': user_set.title}))
     # TODO: show sticker summary
 
 
@@ -46,7 +48,8 @@ async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     mp4_filename = tempfile.mktemp(suffix='.mp4')
-    emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX).sub('', update.effective_message.caption or '')
+    emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX)
+                       .sub('', update.effective_message.caption or '')[:StickerLimit.MAX_STICKER_EMOJI]
                        or DEFAULT_STICKER_EMOJI)
 
     if update.effective_message.video:
@@ -77,8 +80,10 @@ async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     input_sticker = InputSticker(sticker=open(sticker_path, 'rb'), emoji_list=emoji_list)
     user_set = await save_sticker(update, context, input_sticker)
 
-    await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
-                                                placeholders={'set_name': user_set.name, 'set_title': user_set.title}))
+    if user_set:
+        await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
+                                                    placeholders={'set_name': user_set.name,
+                                                                  'set_title': user_set.title}))
 
     os.remove(sticker_path)
     # TODO: show sticker summary

@@ -14,6 +14,12 @@ from settings import EMOJI_ONLY_REGEX, DEFAULT_STICKER_EMOJI
 
 
 async def from_animated_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Handler for converting an animated sticker to a video sticker and saving it.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
 

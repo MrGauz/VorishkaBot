@@ -17,6 +17,12 @@ logger = logging.getLogger(__name__)
 
 
 async def from_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Handler for converting a static sticker to a video sticker and saving it.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     user = store_user(update)
     webp_filename = tempfile.mktemp(suffix='.webp')
     emoji_list = re.compile(EMOJI_ONLY_REGEX).sub('', update.effective_message.sticker.emoji) or DEFAULT_STICKER_EMOJI
@@ -50,6 +56,12 @@ async def from_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 
 async def from_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Handler for converting a photo to a video sticker and saving it.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.UPLOAD_PHOTO)
     user = store_user(update)
     png_filename = tempfile.mktemp(suffix='.png')

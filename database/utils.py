@@ -9,6 +9,9 @@ logger = logging.getLogger(__name__)
 
 
 def create_tables():
+    """
+    Create the database tables if they don't exist.
+    """
     if db.is_closed():
         db.connect()
 
@@ -18,6 +21,11 @@ def create_tables():
 
 
 def store_user(update: Update) -> User:
+    """
+    Store the user in the database if they don't exist, or update their information if they do.
+    :param update: Update object containing information about the incoming update.
+    :return: The user object.
+    """
     user = User.get_or_none(User.user_id == update.effective_user.id)
 
     if user is None:

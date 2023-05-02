@@ -22,6 +22,12 @@ SET_SELECTED, ACTION_SELECTED, RENAME_SET, DELETE_SET = range(4)
 
 
 async def start_my_sets_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handler for the start of the 'my_sets' command.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     context.user_data.clear()
@@ -31,12 +37,18 @@ async def start_my_sets_command(update: Update, context: ContextTypes.DEFAULT_TY
         await update.effective_message.reply_text(_('errors.no_sets', user.lang_code))
         return ConversationHandler.END
 
-    await update.message.reply_text(_('sets.choose_to_rename', user.lang_code), reply_markup=keyboard)
+    await update.message.reply_text(_('sets.my_sets_list', user.lang_code), reply_markup=keyboard)
 
     return SET_SELECTED
 
 
 async def set_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handler for selecting a sticker set.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     user = store_user(update)
     query = update.callback_query
     context.user_data['selected_set'] = query.data
@@ -60,6 +72,12 @@ async def set_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def set_action_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handler for selecting an action for a sticker set.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     user = store_user(update)
     query = update.callback_query
     context.user_data['selected_action'] = query.data
@@ -85,6 +103,12 @@ async def set_action_selected(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 
 async def rename_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handler for renaming a sticker set.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     text = update.effective_message.text[:StickerLimit.MAX_NAME_AND_TITLE]
@@ -114,6 +138,12 @@ async def rename_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def delete_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handler for deleting a sticker set.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     query = update.callback_query

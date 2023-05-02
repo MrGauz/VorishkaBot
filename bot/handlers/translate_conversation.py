@@ -16,6 +16,12 @@ LANGUAGE_CHOICE = 0
 
 
 async def start_translate_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Starts the 'translate' conversation.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     await context.bot.send_message(
@@ -30,6 +36,12 @@ async def start_translate_command(update: Update, context: ContextTypes.DEFAULT_
 
 
 async def language_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handler for selecting a language.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     user = store_user(update)
     query = update.callback_query
     await query.answer()

@@ -23,6 +23,12 @@ SUBSCRIBE = range(1)
 
 
 async def start_subscription_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Starts the 'subscription' command.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     context.user_data.clear()
@@ -44,6 +50,12 @@ async def start_subscription_command(update: Update, context: ContextTypes.DEFAU
 
 
 async def generate_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Generates an invoice for subscription.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     query = update.callback_query
@@ -73,6 +85,12 @@ async def generate_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def pre_checkout_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handles the pre-checkout query.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     user = store_user(update)
     if update.pre_checkout_query.invoice_payload != ActionTypes.SUBSCRIBE_365:
         return await update.pre_checkout_query.answer(ok=False,
@@ -86,6 +104,12 @@ async def pre_checkout_query(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 
 async def successful_payment(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handles successful payment.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     payment_info = update.effective_message.successful_payment
@@ -105,6 +129,11 @@ async def successful_payment(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 
 async def subscription_reminder(context: ContextTypes.DEFAULT_TYPE):
+    """
+    Sends a subscription expiration reminder to users.
+
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     users = User.select().where(User.subscription_end_date_utc is not None)
     for user in list(users):
         end_date = user.subscription_end_date_utc

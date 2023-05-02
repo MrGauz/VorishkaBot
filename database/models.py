@@ -8,13 +8,16 @@ from database.connection import db
 
 class CharEnum(str, Enum):
     """A custom Enum subclass that inherits from both str and Enum,
-    so that the enum members are automatically converted to strings."""
+    so that the enum members are automatically converted to string."""
 
     def _generate_next_value_(name, start, count, last_values):
         return name
 
 
 class ActionTypes(CharEnum):
+    """
+    Enum representing various action types that can be performed in the bot.
+    """
     RENAME_SET = 'rename_set'
     DELETE_SET = 'delete_set'
     CHANGE_EMOJI = 'change_emoji'
@@ -26,11 +29,17 @@ class ActionTypes(CharEnum):
 
 
 class SetTypes(CharEnum):
+    """
+    Enum representing various sticker set types.
+    """
     VIDEO = 'video'
     EMOJI = 'custom_emoji'
 
 
 class User(Model):
+    """
+    Model representing a Telegram user.
+    """
     user_id = BigIntegerField(unique=True, null=False)
     username = CharField(max_length=32, null=True)
     first_name = CharField(max_length=256, null=False)
@@ -45,10 +54,17 @@ class User(Model):
         database = db
 
     def is_subscribed(self) -> bool:
+        """
+        Checks if user has an active subscription.
+        :return: True if user has an active subscription, False otherwise.
+        """
         return self.subscription_end_date_utc is not None and self.subscription_end_date_utc > datetime.utcnow()
 
 
 class Set(Model):
+    """
+    Model representing a sticker set.
+    """
     set_type = CharField(choices=SetTypes, null=False)
     user = ForeignKeyField(User, on_delete='CASCADE', backref='sets', null=False)
     name = CharField(max_length=256, null=False)
@@ -61,6 +77,9 @@ class Set(Model):
 
 
 class Transaction(Model):
+    """
+    Model representing a transaction.
+    """
     user = ForeignKeyField(User, on_delete='CASCADE', backref='transactions', null=False)
     invoice_type = CharField(max_length=100, null=False)
     currency = CharField(max_length=5, null=False)

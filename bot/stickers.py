@@ -18,6 +18,16 @@ logger = logging.getLogger(__name__)
 
 async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input_sticker: InputSticker,
                        create_new=False) -> Set | None:
+    """
+    Save a sticker to the user's sticker set. If there is no space in the user's existing sets or
+    if create_new is True, it creates a new set.
+
+    :param update: Telegram Update object.
+    :param context: Telegram bot context.
+    :param input_sticker: The sticker to be saved.
+    :param create_new: If True, always create a new sticker set.
+    :return: The Set object for the set to which the sticker was saved, or None if the save failed.
+    """
     user = store_user(update)
     new_set_title = _('bot.default_video_set_name', user.lang_code)
 

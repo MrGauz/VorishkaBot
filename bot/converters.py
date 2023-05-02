@@ -10,6 +10,12 @@ logger = logging.getLogger(__name__)
 
 
 async def convert_video(file_path: str) -> str | None:
+    """
+    Convert a media file to a WebM 3-second video sticker.
+
+    :param file_path: The path of the file to be converted.
+    :return: The path of the converted WebM file, or None if the conversion failed.
+    """
     webm_filename = tempfile.mktemp(suffix='.webm')
 
     # Get video metadata
@@ -48,6 +54,12 @@ async def convert_video(file_path: str) -> str | None:
 
 
 async def convert_tgs(tgs_path: str) -> str | None:
+    """
+    Convert a TGS animation file to a WebM video sticker.
+
+    :param tgs_path: The path of the TGS file to be converted.
+    :return: The path of the converted WebM file, or None if the conversion failed.
+    """
     webm_filename = tempfile.mktemp(suffix='.webm')
 
     try:

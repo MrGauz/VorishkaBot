@@ -17,6 +17,12 @@ logger = logging.getLogger(__name__)
 
 
 async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handler for converting a video sticker to a video sticker and saving it.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     user = store_user(update)
 
     if not user.is_subscribed():
@@ -40,6 +46,12 @@ async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 
 async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handler for converting a video to a video sticker and saving it.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     user = store_user(update)
 
     if not user.is_subscribed():

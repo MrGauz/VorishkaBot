@@ -7,18 +7,37 @@ from locales import _
 
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Handler for the /start command.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     await update.message.reply_text(_('bot.start_command', user.lang_code))
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Handler for the /help command.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     await update.message.reply_text(_('bot.help_command', user.lang_code))
 
 
 async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handler for the /cancel command.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    :return: The conversation handler end state.
+    """
     await update.effective_chat.send_action(ChatAction.TYPING)
 
     user = store_user(update)

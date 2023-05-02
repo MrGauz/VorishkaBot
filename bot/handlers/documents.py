@@ -20,6 +20,12 @@ supported_video_formats = ('image/gif', 'video/mp4', 'video/webm', 'video/quickt
 
 
 async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Handler for converting a document to a video sticker and saving it.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     document = update.effective_message.document

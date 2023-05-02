@@ -27,6 +27,12 @@ ACTION_SELECTED, CHANGE_EMOJI, MOVE_STICKER, DELETE_STICKER = range(4)
 
 
 async def start_my_sticker_conversation(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handler for the start of the 'my_sticker' conversation.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.CHOOSE_STICKER)
     user = store_user(update)
     sticker = update.effective_message.sticker
@@ -43,23 +49,13 @@ async def start_my_sticker_conversation(update: Update, context: ContextTypes.DE
     return ACTION_SELECTED
 
 
-async def custom_entry_point(update: Update, context: ContextTypes.DEFAULT_TYPE, sticker: Sticker):
-    await update.effective_chat.send_action(ChatAction.CHOOSE_STICKER)
-    user = store_user(update)
-    context.user_data.clear()
-    context.user_data['selected_sticker'] = sticker.to_json()
-
-    user_set = Set.get(Set.user_id == user.id, Set.name == sticker.set_name)
-    actions_keyboard = get_sticker_actions_keyboard(user)
-    await update.effective_message.reply_text(
-        _('stickers.summary_message', user.lang_code,
-          placeholders={'emoji': sticker.emoji, 'set_name': user_set.name, 'set_title': user_set.title}),
-        reply_markup=actions_keyboard)
-
-    return ACTION_SELECTED
-
-
 async def sticker_action_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handler for selecting an action for a sticker.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     query = update.callback_query
@@ -93,6 +89,12 @@ async def sticker_action_selected(update: Update, context: ContextTypes.DEFAULT_
 
 
 async def change_sticker_emoji(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handler for changing the emoji(s) associated with a sticker.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     text = update.effective_message.text
@@ -123,6 +125,12 @@ async def change_sticker_emoji(update: Update, context: ContextTypes.DEFAULT_TYP
 
 
 async def move_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handler for moving a sticker to a different set.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.CHOOSE_STICKER)
     user = store_user(update)
     query = update.callback_query
@@ -151,6 +159,12 @@ async def move_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def delete_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Handler for deleting a sticker.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     await update.effective_chat.send_action(ChatAction.CHOOSE_STICKER)
     user = store_user(update)
     query = update.callback_query

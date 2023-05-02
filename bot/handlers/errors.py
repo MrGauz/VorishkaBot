@@ -16,7 +16,12 @@ logger = logging.getLogger(__name__)
 
 
 async def update_error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Log the error and send a telegram message to notify the developer."""
+    """
+    Handler for logging an error and sending a Telegram message to notify the developer.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     # Log the error before we do anything else, so we can see it even if something breaks.
     logger.error(msg=f'Exception while handling an update\nupdate={json.dumps(update.to_dict())}',
                  exc_info=context.error)
@@ -49,6 +54,12 @@ async def update_error_handler(update: Update, context: ContextTypes.DEFAULT_TYP
 
 
 async def unsupported_update_error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Handler for sending an error message for unsupported updates.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     user = store_user(update)
     try:
         await update.effective_chat.send_action(ChatAction.TYPING)
@@ -58,6 +69,12 @@ async def unsupported_update_error_handler(update: Update, context: ContextTypes
 
 
 async def group_chat_error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Handler for sending an error message for group chats.
+
+    :param update: Update object containing information about the incoming update.
+    :param context: Callback context which contains information about the current state of the bot.
+    """
     try:
         await update.effective_chat.send_action(ChatAction.TYPING)
         await update.effective_message.reply_text(_('errors.no_group_chats', DEFAULT_LANG))

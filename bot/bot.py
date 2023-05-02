@@ -8,6 +8,11 @@ from locales import _
 
 
 async def set_bot_commands(bot: BT):
+    """
+    Set bot commands for every language.
+
+    :param bot: Bot object.
+    """
     for lang_code in list(ALL_LANGUAGES.keys()):
         await bot.set_my_commands([
             BotCommand(command='my_sets', description=_('bot.my_sets_desc', lang_code)),
@@ -18,18 +23,38 @@ async def set_bot_commands(bot: BT):
 
 
 async def set_bot_description(bot: BT):
+    """
+    Set bot description for every language.
+
+    :param bot: Bot object.
+    """
     for lang_code in list(ALL_LANGUAGES.keys()):
         await bot.set_my_description(_('bot.description', lang_code), language_code=lang_code)
 
 
 async def set_bot_about(bot: BT):
+    """
+    Set bot short description for every language.
+
+    :param bot: Bot object.
+    """
     for lang_code in list(ALL_LANGUAGES.keys()):
         await bot.set_my_short_description(_('bot.about', lang_code, placeholders={'bot_username': bot.username}),
                                            language_code=lang_code)
 
 
 class PersonalStickerFilter(MessageFilter):
+    """
+    Custom filter class to check if a message contains a sticker from a user's personal set.
+    """
+
     def filter(self, message):
+        """
+        Check if a message contains a sticker from a user's personal set.
+
+        :param message: Message object to be checked.
+        :return: True if the message contains a personal sticker, False otherwise.
+        """
         if not message.sticker:
             return False
 

@@ -48,6 +48,7 @@
         "sticker_not_saved": "I'm sorry, I couldn't save the sticker. Please try again later."
     },
     "sets": {
+        "my_sets_list": "Here are your sets:",
         "summary_message": "Set: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\nStickers saved: {sticker_count}/50",
         "choose_new_name": "Choose a new name for your set (or send /cancel to abort):",
         "renamed": "I renamed the set to <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>.",

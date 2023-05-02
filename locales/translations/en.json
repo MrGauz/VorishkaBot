@@ -10,6 +10,7 @@
         "start_command": "Let's go for it!",
         "help_command": "Help!",
         "cancel_command": "Don't worry, I stopped",
+        "choose_language": "Choose your language:",
         "language_changed": "Alrighty, English it is."
     },
     "keyboards": {

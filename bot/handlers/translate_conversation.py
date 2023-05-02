@@ -20,7 +20,7 @@ async def start_translate_command(update: Update, context: ContextTypes.DEFAULT_
     user = store_user(update)
     await context.bot.send_message(
         update.effective_user.id,
-        'Choose language',
+        _('bot.choose_language', user.lang_code),
         reply_markup=InlineKeyboardMarkup([
             [InlineKeyboardButton(v, callback_data=k) for k, v in ALL_LANGUAGES.items()],
             [InlineKeyboardButton(_('keyboards.cancel', user.lang_code), callback_data='cancel')]

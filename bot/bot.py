@@ -20,12 +20,12 @@ async def set_bot_commands(bot: BT):
 async def set_bot_description(bot: BT):
     for lang_code in list(ALL_LANGUAGES.keys()):
         await bot.set_my_description(_('bot.description', lang_code), language_code=lang_code)
-        await bot.set_my_short_description('А так?', language_code=lang_code)
 
 
 async def set_bot_about(bot: BT):
     for lang_code in list(ALL_LANGUAGES.keys()):
-        await bot.set_my_short_description(_('bot.about', lang_code), language_code=lang_code)
+        await bot.set_my_short_description(_('bot.about', lang_code, placeholders={'bot_username': bot.username}),
+                                           language_code=lang_code)
 
 
 class PersonalStickerFilter(MessageFilter):

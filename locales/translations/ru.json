@@ -17,7 +17,7 @@
         "cancel": "Отмена",
         "rename_set": "Переименовать стикерпак",
         "delete_set": "Удалить стикерпак",
-        "delete_set_no": "Нет",
+        "delete_set_no": "Назад",
         "delete_set_nope": "Нет, не нужно",
         "delete_set_yes": "Да, удаляем",
         "subscribe": "Получить PROписку",
@@ -49,7 +49,6 @@
     },
     "sets": {
         "summary_message": "Стикерпак: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\nСтикеров сохранено: {sticker_count}/50",
-        "choose_to_rename": "Выбери стикерпак, который хочешь переименовать:",
         "choose_new_name": "Выбери новое название для этого стикерпака (или выполни команду /cancel чтобы отменить действие):",
         "renamed": "Я переименовал стикерпак на <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>",
         "confirm_delete": "Точно удаляем стикерпак <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>? Это действие нельзя отменить потом.",

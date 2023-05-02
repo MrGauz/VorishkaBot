@@ -10,6 +10,7 @@
         "start_command": "Погнали",
         "help_command": "Ой леле!",
         "cancel_command": "Не переживай, усе на паузі",
+        "choose_language": "Якою мовою будемо спілкуватися?",
         "language_changed": "Домовились, говоритимемо українською."
     },
     "keyboards": {

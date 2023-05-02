@@ -10,6 +10,7 @@
         "start_command": "Погнали",
         "help_command": "Всё сломалось",
         "cancel_command": "Не переживай, я всё отменил",
+        "choose_language": "На каком языке я должен говорить?",
         "language_changed": "Договорились, русский так русский."
     },
     "keyboards": {

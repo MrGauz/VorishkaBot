@@ -47,6 +47,7 @@ async def language_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
 
     await update.effective_chat.send_action(ChatAction.TYPING)
+    await update.effective_message.delete()
     if query.data == 'cancel':
         await update.effective_message.reply_text(_('bot.cancel_command', user.lang_code))
         return ConversationHandler.END

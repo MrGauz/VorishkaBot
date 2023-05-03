@@ -19,11 +19,11 @@ PAYMENT_CURRENCY = os.getenv('PAYMENT_CURRENCY') or 'UAH'
 SUBSCRIPTION_365_PRICE = int(os.environ['SUBSCRIPTION_365_PRICE'])
 
 # Database
-DB_NAME = os.getenv('MYSQL_NAME') or 'vorishka_bot'
-DB_HOST = os.getenv('MYSQL_HOST') or 'mysql'
-DB_PORT = int(os.getenv('MYSQL_PORT') or 3306)
-DB_USER = os.getenv('MYSQL_USER') or 'vorishka_bot'
-DB_PASS = os.getenv('MYSQL_PASS') or 'vorishka_bot'
+DB_NAME = 'vorishka_bot'
+DB_HOST = 'localhost'
+DB_PORT = 3306
+DB_USER = 'vorishka_bot'
+DB_PASS = os.getenv('MYSQL_PASSWORD') or 'vorishka_bot'
 
 # Logging
 LOG_FORMAT = '%(asctime)s - %(levelname)s - %(name)s - %(message)s'

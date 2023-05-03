@@ -15,8 +15,8 @@ RUN apt-get update \
     # Install .NET 7.0 runtime
     && apt-get install -y curl libunwind8 gettext \
     && curl -SL https://dotnetcli.azureedge.net/dotnet/Runtime/7.0.3/dotnet-runtime-7.0.3-linux-x64.tar.gz --output dotnet.tar.gz \
-    && sudo mkdir -p /opt/dotnet && sudo tar zxf dotnet.tar.gz -C /opt/dotnet \
-    && sudo ln -s /opt/dotnet/dotnet /usr/local/bin \
+    && mkdir -p /opt/dotnet && tar zxf dotnet.tar.gz -C /opt/dotnet \
+    && ln -s /opt/dotnet/dotnet /usr/local/bin \
     && rm -rf dotnet.tar.gz \
     # Install other dependencies
     && apt-get install --no-install-recommends -y \

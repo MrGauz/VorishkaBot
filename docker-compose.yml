@@ -5,33 +5,55 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: vorishka_bot
+    image: vorishka_bot
+    container_name: vorishka_bot_app
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=vorishka_bot
-      - MYSQL_USER=vorishka_bot
-      - MYSQL_PASSWORD=vorishka_bot
-    env_file:
-      - .env
+      MYSQL_DATABASE: vorishka_bot
+      MYSQL_USER: vorishka_bot
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    env_file: .env
     depends_on:
       - mysql
+  #  networks:
+  #    - vorishka_bot_network
 
   mysql:
     image: mysql
     container_name: vorishka_bot_mysql
     restart: always
-    volumes:
-      - vorishka_bot_mysql_data:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=vorishka_bot
-      - MYSQL_USER=vorishka_bot
-      - MYSQL_PASSWORD=vorishka_bot
-    env_file:
-      - .env
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: vorishka_bot
+      MYSQL_USER: vorishka_bot
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    env_file: .env
     ports:
       - "3306:3306"
+    volumes:
+      - vorishka_bot_mysql_data:/var/lib/mysql
+    #command: ['--bind-address=0.0.0.0']
+    #networks:
+    #  - vorishka_bot_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: vorishka_bot_pma
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    env_file: .env
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    #networks:
+    #  - vorishka_bot_network
+
+#networks:
+#  vorishka_bot_network:
 
 volumes:
   vorishka_bot_mysql_data:

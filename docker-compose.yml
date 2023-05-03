@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  vorishka_bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vorishka_bot
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=vorishka_bot
+      - MYSQL_USER=vorishka_bot
+      - MYSQL_PASSWORD=vorishka_bot
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql
+    container_name: vorishka_bot_mysql
+    restart: always
+    volumes:
+      - vorishka_bot_mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=vorishka_bot
+      - MYSQL_USER=vorishka_bot
+      - MYSQL_PASSWORD=vorishka_bot
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+
+volumes:
+  vorishka_bot_mysql_data:

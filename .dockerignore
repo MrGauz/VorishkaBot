@@ -1,0 +1,9 @@
+.git/
+.idea/
+venv/
+converter/
+*__pycache__/*
+.gitignore
+context_data
+.env.example
+README.md

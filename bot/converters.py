@@ -63,7 +63,7 @@ async def convert_tgs(tgs_path: str) -> str | None:
     webm_filename = tempfile.mktemp(suffix='.webm')
 
     try:
-        process = await create_subprocess_exec(TGS_CONVERTER_PATH, tgs_path, webm_filename)
+        process = await create_subprocess_exec('dotnet', TGS_CONVERTER_PATH, tgs_path, webm_filename)
         await process.wait()
     except OSError as e:
         logger.error(f'Failed to convert TGS {tgs_path}', e)

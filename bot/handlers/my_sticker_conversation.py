@@ -173,6 +173,7 @@ async def delete_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query.data != ActionTypes.DELETE_STICKER:
         return await cancel_command(update, context)
 
+    # TODO: check if this was the last sticker in the pack and delete it from db
     sticker_id = Sticker.de_json(json.loads(context.user_data['selected_sticker']), context.bot).file_id
     try:
         result = await context.bot.delete_sticker_from_set(sticker_id)

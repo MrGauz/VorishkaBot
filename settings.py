@@ -19,14 +19,11 @@ PAYMENT_CURRENCY = os.getenv('PAYMENT_CURRENCY') or 'UAH'
 SUBSCRIPTION_365_PRICE = int(os.environ['SUBSCRIPTION_365_PRICE'])
 
 # Database
-if DEBUG:
-    DB_NAME = os.getenv('SQLITE_PATH') or 'db.sqlite'
-else:
-    DB_NAME = os.getenv('MYSQL_NAME') or 'vorishka_bot'
-DB_HOST = os.getenv('MYSQL_HOST') or 'localhost'
+DB_NAME = os.getenv('MYSQL_NAME') or 'vorishka_bot'
+DB_HOST = os.getenv('MYSQL_HOST') or 'mysql'
 DB_PORT = int(os.getenv('MYSQL_PORT') or 3306)
 DB_USER = os.getenv('MYSQL_USER') or 'vorishka_bot'
-DB_PASS = os.getenv('MYSQL_PASS')
+DB_PASS = os.getenv('MYSQL_PASS') or 'vorishka_bot'
 
 # Logging
 LOG_FORMAT = '%(asctime)s - %(levelname)s - %(name)s - %(message)s'
@@ -49,5 +46,4 @@ EMOJI_ONLY_REGEX = '[^\U0001F000-\U0001F999]+'
 MAX_FILE_SIZE = 20971520  # 20 MB
 
 # TGS to WEBM converter
-# TODO: dockerize
-TGS_CONVERTER_PATH = 'C:\\Users\\gauz\\Coding\\VorishkaBot2.0\\converter\\SkottieSkiaSharp\\bin\\Debug\\net7.0\\SkottieSkiaSharp.exe'
+TGS_CONVERTER_PATH = '/converter/TgsConverter.dll'

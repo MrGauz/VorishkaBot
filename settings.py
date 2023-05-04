@@ -45,4 +45,6 @@ EMOJI_SET_EMOJI = u'\U0001F47D'
 MAX_FILE_SIZE = 20971520  # 20 MB
 
 # TGS to WEBM converter
-TGS_CONVERTER_PATH = '/converter/TgsConverter.dll'
+TGS_CONVERTER_PATH = os.getenv('TGS_CONVERTER_PATH') or '/converter/TgsConverter.dll'
+if not os.path.isfile(TGS_CONVERTER_PATH):
+    raise OSError(f'TGS converter not found at {TGS_CONVERTER_PATH}')

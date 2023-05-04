@@ -16,7 +16,7 @@ from settings import DEFAULT_STICKER_EMOJI, MAX_FILE_SIZE
 logger = logging.getLogger(__name__)
 
 
-async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
     Handler for converting a video sticker to a video sticker and saving it.
 
@@ -33,7 +33,7 @@ async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE)
     await update.effective_chat.send_action(ChatAction.UPLOAD_VIDEO)
     file = await update.effective_message.sticker.get_file()
     sticker_bytes = bytes(await file.download_as_bytearray())
-    emoji = update.effective_message.sticker.emoji
+    emoji = tuple(emojis.get(update.effective_message.sticker.emoji)) or DEFAULT_STICKER_EMOJI
     input_sticker = InputSticker(sticker=sticker_bytes, emoji_list=emoji)
 
     await update.effective_chat.send_action(ChatAction.TYPING)
@@ -42,10 +42,10 @@ async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE)
         await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
                                                     placeholders={'set_name': user_set.name,
                                                                   'set_title': user_set.title,
-                                                                  'emoji': emoji}))
+                                                                  'emoji': ''.join(emoji)}))
 
 
-async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
     Handler for converting a video to a video sticker and saving it.
 

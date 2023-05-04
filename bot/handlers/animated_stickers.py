@@ -1,6 +1,7 @@
 import os
 import tempfile
 
+import emojis
 from telegram import Update, InputSticker
 from telegram.constants import ChatAction
 from telegram.ext import ContextTypes
@@ -9,6 +10,7 @@ from bot.converters import convert_tgs
 from bot.stickers import save_sticker
 from locales import _
 from database.utils import store_user
+from settings import DEFAULT_STICKER_EMOJI
 
 
 async def from_animated_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -29,7 +31,7 @@ async def from_animated_sticker(update: Update, context: ContextTypes.DEFAULT_TY
 
     await update.effective_chat.send_action(ChatAction.UPLOAD_VIDEO)
     tgs_filename = tempfile.mktemp(suffix='.tgs')
-    emoji = update.effective_message.sticker.emoji
+    emoji = tuple(emojis.get(update.effective_message.sticker.emoji)) or DEFAULT_STICKER_EMOJI
     file = await update.message.sticker.get_file()
     await file.download_to_drive(tgs_filename)
 
@@ -47,6 +49,6 @@ async def from_animated_sticker(update: Update, context: ContextTypes.DEFAULT_TY
         await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
                                                     placeholders={'set_name': user_set.name,
                                                                   'set_title': user_set.title,
-                                                                  'emoji': emoji}))
+                                                                  'emoji': ''.join(emoji)}))
 
     os.remove(sticker_path)

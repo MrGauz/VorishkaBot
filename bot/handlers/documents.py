@@ -73,4 +73,4 @@ async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
                                                     placeholders={'set_name': user_set.name,
                                                                   'set_title': user_set.title,
-                                                                  'emoji': emoji}))
+                                                                  'emoji': ''.join(emoji)}))

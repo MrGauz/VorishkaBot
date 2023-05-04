@@ -25,7 +25,6 @@ async def from_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE
     """
     user = store_user(update)
     webp_filename = tempfile.mktemp(suffix='.webp')
-    emoji = update.effective_message.sticker.emoji or DEFAULT_STICKER_EMOJI
 
     sticker = update.effective_message.sticker
     if sticker.file_size > MAX_FILE_SIZE:
@@ -38,6 +37,7 @@ async def from_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE
     await file.download_to_drive(webp_filename)
 
     sticker_path = await convert_video(webp_filename)
+    emoji = tuple(emojis.get(update.effective_message.sticker.emoji)) or DEFAULT_STICKER_EMOJI
     await update.effective_chat.send_action(ChatAction.TYPING)
     if sticker_path is None:
         await update.effective_message.reply_text(_('errors.ffmpeg_failed', user.lang_code))
@@ -50,7 +50,7 @@ async def from_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE
         await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
                                                     placeholders={'set_name': user_set.name,
                                                                   'set_title': user_set.title,
-                                                                  'emoji': emoji}))
+                                                                  'emoji': ''.join(emoji)}))
 
     os.remove(sticker_path)
 

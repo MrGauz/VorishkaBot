@@ -16,6 +16,41 @@ from settings import DEFAULT_VIDEO_SET_NAME
 logger = logging.getLogger(__name__)
 
 
+async def save_sticker_to_set(update: Update, context: ContextTypes.DEFAULT_TYPE, input_sticker: InputSticker,
+                              set_name: str) -> Set | None:
+    """
+    Save a sticker to the specified set.
+
+    :param update: Telegram Update object.
+    :param context: Telegram bot context.
+    :param input_sticker: The sticker to be saved.
+    :param set_name: The name of the set to which the sticker should be saved.
+    :return: The Set object for the set to which the sticker was saved, or None if the save failed.
+    """
+    user = store_user(update)
+
+    found_set = None
+    for user_set in Set.select().where(Set.user == user, Set.set_type == SetTypes.VIDEO, Set.name == set_name):
+        telegram_set = await context.bot.get_sticker_set(user_set.name)
+        if len(telegram_set.stickers) < 50:
+            found_set = user_set
+            break
+
+    if found_set is None:
+        return None
+
+    result = await context.bot.add_sticker_to_set(
+        user_id=user.user_id,
+        name=found_set.name,
+        sticker=input_sticker
+    )
+
+    if not result:
+        return None
+
+    return found_set
+
+
 async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input_sticker: InputSticker,
                        create_new=False) -> Set | None:
     """
@@ -25,11 +60,10 @@ async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input
     :param update: Telegram Update object.
     :param context: Telegram bot context.
     :param input_sticker: The sticker to be saved.
-    :param create_new: If True, always create a new sticker set.
+    :param create_new: (optional) If True, always create a new sticker set.
     :return: The Set object for the set to which the sticker was saved, or None if the save failed.
     """
     user = store_user(update)
-    new_set_title = _('bot.default_video_set_name', user.lang_code)
 
     chosen_set = None
     if not create_new:
@@ -40,8 +74,10 @@ async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input
                 break
 
     if chosen_set is None:
+        # Create new set
         random_str = ''.join(random.choice(string.ascii_lowercase) for i in range(10))
         name = DEFAULT_VIDEO_SET_NAME % (random_str, context.bot.username)
+        new_set_title = _('bot.default_video_set_name', user.lang_code)
 
         try:
             await context.bot.create_new_sticker_set(
@@ -60,6 +96,7 @@ async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input
             return None
 
     else:
+        # Add sticker to the existing set
         try:
             await context.bot.add_sticker_to_set(
                 user_id=user.user_id,

@@ -13,7 +13,7 @@ from telegram.warnings import PTBUserWarning
 from bot.bot import personal_sticker_filter
 from bot.handlers.commands import cancel_command
 from bot.keyboards import get_delete_confirm_keyboard, get_sticker_actions_keyboard, get_set_list_keyboard
-from bot.stickers import save_sticker
+from bot.stickers import save_sticker, save_sticker_to_set
 from database.models import Set, ActionTypes
 from database.utils import store_user
 from locales import _
@@ -140,13 +140,17 @@ async def move_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return await cancel_command(update, context)
 
     create_new_pack = query.data == ActionTypes.NEW_SET
+
     sticker = Sticker.de_json(json.loads(context.user_data['selected_sticker']), context.bot)
-    emoji_list = tuple(emojis.get(sticker.emoji))[:StickerLimit.MAX_STICKER_EMOJI] or DEFAULT_STICKER_EMOJI
+    emoji = tuple(emojis.get(sticker.emoji))[:StickerLimit.MAX_STICKER_EMOJI] or DEFAULT_STICKER_EMOJI
     file = await sticker.get_file()
     sticker_bytes = bytes(await file.download_as_bytearray())
-    input_sticker = InputSticker(sticker_bytes, emoji_list)
+    input_sticker = InputSticker(sticker_bytes, emoji)
 
-    user_set = await save_sticker(update, context, input_sticker, create_new_pack)
+    if create_new_pack:
+        user_set = await save_sticker(update, context, input_sticker, create_new_pack)
+    else:
+        user_set = await save_sticker_to_set(update, context, input_sticker, query.data)
 
     await update.effective_chat.send_action(ChatAction.TYPING)
     if user_set:
@@ -156,6 +160,9 @@ async def move_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
               placeholders={'set_name': user_set.name, 'set_title': user_set.title}))
     else:
         await update.effective_message.edit_text(_('errors.sticker_not_moved', user.lang_code))
+
+    context.user_data.clear()
+    return ConversationHandler.END
 
 
 async def delete_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):

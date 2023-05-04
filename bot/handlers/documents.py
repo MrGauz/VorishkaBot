@@ -1,8 +1,8 @@
 import json
 import logging
-import re
 import tempfile
 
+import emojis
 from telegram import Update, InputSticker
 from telegram.constants import ChatAction, StickerLimit
 from telegram.ext import ContextTypes
@@ -11,7 +11,7 @@ from bot.converters import convert_video
 from bot.stickers import save_sticker
 from database.utils import store_user
 from locales import _
-from settings import EMOJI_ONLY_REGEX, DEFAULT_STICKER_EMOJI, MAX_FILE_SIZE
+from settings import DEFAULT_STICKER_EMOJI, MAX_FILE_SIZE
 
 logger = logging.getLogger(__name__)
 
@@ -52,9 +52,8 @@ async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         await update.effective_chat.send_action(ChatAction.UPLOAD_PHOTO)
     else:
         await update.effective_chat.send_action(ChatAction.UPLOAD_VIDEO)
-    emoji_list = tuple(re.compile(EMOJI_ONLY_REGEX)
-                       .sub('', update.effective_message.caption or '')[:StickerLimit.MAX_STICKER_EMOJI]
-                       or DEFAULT_STICKER_EMOJI)
+    emoji = tuple(emojis.get(update.effective_message.caption or ''))[
+                 :StickerLimit.MAX_STICKER_EMOJI] or DEFAULT_STICKER_EMOJI
     filename = tempfile.mktemp(suffix='.' + document.mime_type.split('/')[1])
     file = await document.get_file()
 
@@ -66,7 +65,7 @@ async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         await update.effective_message.reply_text(_('errors.ffmpeg_failed', user.lang_code))
         return
 
-    input_sticker = InputSticker(sticker=open(sticker_path, 'rb'), emoji_list=emoji_list)
+    input_sticker = InputSticker(sticker=open(sticker_path, 'rb'), emoji_list=emoji)
     user_set = await save_sticker(update, context, input_sticker)
 
     if user_set:
@@ -74,4 +73,4 @@ async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         await update.effective_message.reply_text(_('stickers.new_saved', user.lang_code,
                                                     placeholders={'set_name': user_set.name,
                                                                   'set_title': user_set.title,
-                                                                  'emoji': emoji_list}))
+                                                                  'emoji': emoji}))

@@ -15,8 +15,6 @@ services:
     env_file: .env
     depends_on:
       - mysql
-  #  networks:
-  #    - vorishka_bot_network
 
   mysql:
     image: mysql
@@ -32,9 +30,6 @@ services:
       - "3306:3306"
     volumes:
       - vorishka_bot_mysql_data:/var/lib/mysql
-    #command: ['--bind-address=0.0.0.0']
-    #networks:
-    #  - vorishka_bot_network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -49,11 +44,6 @@ services:
       - "8080:80"
     depends_on:
       - mysql
-    #networks:
-    #  - vorishka_bot_network
-
-#networks:
-#  vorishka_bot_network:
 
 volumes:
   vorishka_bot_mysql_data:

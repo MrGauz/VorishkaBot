@@ -1,8 +1,8 @@
 import json
 import logging
-import re
 from warnings import filterwarnings
 
+import emojis
 from telegram import Update, Sticker, InputSticker
 from telegram.constants import ChatAction, StickerLimit
 from telegram.error import TelegramError, BadRequest
@@ -17,7 +17,7 @@ from bot.stickers import save_sticker
 from database.models import Set, ActionTypes
 from database.utils import store_user
 from locales import _
-from settings import EMOJI_ONLY_REGEX, DEFAULT_STICKER_EMOJI
+from settings import DEFAULT_STICKER_EMOJI
 
 filterwarnings(action='ignore', message=r'.*CallbackQueryHandler', category=PTBUserWarning)
 
@@ -102,7 +102,7 @@ async def change_sticker_emoji(update: Update, context: ContextTypes.DEFAULT_TYP
     if text == '/' + ActionTypes.CANCEL:
         return await cancel_command(update, context)
 
-    emoji = tuple(set(re.compile(EMOJI_ONLY_REGEX).sub('', text)[:StickerLimit.MAX_STICKER_EMOJI]))
+    emoji = tuple(emojis.get(text))[:StickerLimit.MAX_STICKER_EMOJI] or DEFAULT_STICKER_EMOJI
     if not emoji:
         await update.effective_message.reply_text(_('errors.invalid_emoji', user.lang_code))
         return CHANGE_EMOJI
@@ -141,7 +141,7 @@ async def move_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     create_new_pack = query.data == ActionTypes.NEW_SET
     sticker = Sticker.de_json(json.loads(context.user_data['selected_sticker']), context.bot)
-    emoji_list = re.compile(EMOJI_ONLY_REGEX).sub('', sticker.emoji) or DEFAULT_STICKER_EMOJI
+    emoji_list = tuple(emojis.get(sticker.emoji))[:StickerLimit.MAX_STICKER_EMOJI] or DEFAULT_STICKER_EMOJI
     file = await sticker.get_file()
     sticker_bytes = bytes(await file.download_as_bytearray())
     input_sticker = InputSticker(sticker_bytes, emoji_list)

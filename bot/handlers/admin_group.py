@@ -105,7 +105,7 @@ async def broadcast_message(update: Update, context: ContextTypes.DEFAULT_TYPE) 
             await context.bot.forward_message(user.user_id, context.chat_data['broadcast_message_chat_id'],
                                               context.chat_data['broadcast_message_id'])
 
-    await update.effective_chat.send_message('Broadcast finished')
+    await update.effective_chat.send_message(f'Broadcast finished, message was sent to {User.select().count()} users')
     context.chat_data.clear()
     return ConversationHandler.END
 

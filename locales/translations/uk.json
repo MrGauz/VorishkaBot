@@ -48,6 +48,7 @@
         "sticker_not_saved": "Вибач, у мене не вийшло зберегти стікер. Будь ласка, спробуй ще раз."
     },
     "sets": {
+        "my_sets_list": "Твої стікерпаки:",
         "summary_message": "Стікерпак: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\nСтікерів збережено: {sticker_count}/50",
         "choose_new_name": "Обери нову назву для цього стікерпаку (або надішли команду /cancel аби перервати дію):",
         "renamed": "Я перейменував стікерпак на <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>",

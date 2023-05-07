@@ -73,6 +73,7 @@
         "payment_success": "Спасибо за покупку! Твоя PROписка активна до {date}.",
         "deny_precheckout": "Я не знаю, какого чёрта ты тут делаешь, но я тебе это не продам.",
         "renewal_reminder": "Твоя PROписка закончится через {days_left} дней. Пришли мне команду /subscription чтобы продлить PROписку.",
-        "voucher_activated": "TODO"
+        "voucher_activated": "TODO",
+        "voucher_already_used": "TODO"
     }
 }

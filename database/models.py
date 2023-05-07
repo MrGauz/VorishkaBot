@@ -26,6 +26,7 @@ class ActionTypes(CharEnum):
     DELETE_STICKER = 'delete_sticker'
     SUBSCRIBE_365 = 'subscribe_365'
     CANCEL = 'cancel'
+    BROADCAST = 'broadcast'
 
 
 class SetTypes(CharEnum):

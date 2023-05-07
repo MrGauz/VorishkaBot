@@ -9,7 +9,7 @@ from telegram.error import TelegramError
 from telegram.ext import ContextTypes
 
 from database.utils import store_user
-from settings import ADMIN_ID, DEBUG, DEFAULT_LANG
+from settings import ADMIN_GROUP_ID, DEBUG, DEFAULT_LANG
 from locales import _
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ async def update_error_handler(update: Update, context: ContextTypes.DEFAULT_TYP
 
     # Try contacting the user about the error.
     user = store_user(update)
-    await update.effective_user.send_message(_('errors.some_telegram_error', user.lang_code))
+    await update.effective_chat.send_message(_('errors.some_telegram_error', user.lang_code))
 
     if not DEBUG:
         # traceback.format_exception returns the usual python message about an exception, but as a
@@ -48,7 +48,7 @@ async def update_error_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         # Finally, send the message
         try:
             await update.effective_chat.send_action(ChatAction.TYPING)
-            await context.bot.send_message(chat_id=ADMIN_ID, text=message[:4095])
+            await context.bot.send_message(chat_id=ADMIN_GROUP_ID, text=message[:4095])
         except TelegramError as e:
             logger.critical(f"Couldn't send error message to admin\nupdate={json.dumps(update.to_dict())}", exc_info=e)
 

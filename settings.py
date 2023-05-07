@@ -9,7 +9,7 @@ DEBUG = os.getenv('DEBUG').lower() == 'true'
 
 # Telegram
 TELEGRAM_BOT_TOKEN = os.environ['TELEGRAM_BOT_TOKEN']
-ADMIN_ID = os.environ['ADMIN_ID']
+ADMIN_GROUP_ID = int(os.environ['ADMIN_GROUP_ID'])
 CONTEXT_DATA_PATH = 'context_data'
 
 # Payments

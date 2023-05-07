@@ -6,11 +6,14 @@ from telegram.ext import Application, MessageHandler, filters, CommandHandler, P
     PreCheckoutQueryHandler
 from telegram.constants import ParseMode
 
+from bot.handlers.admin_group import add_voucher_command, list_vouchers_command, show_admin_help_message, \
+    broadcast_command
 from bot.handlers.vouchers import use_voucher
+from bot.message_filters import voucher_message_filter, admin_group_filter
 from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT, CONTEXT_DATA_PATH, DEBUG
 from database.utils import create_tables
 
-from bot.bot import set_bot_commands, set_bot_description, set_bot_about, voucher_message_filter
+from bot.bot import set_bot_commands, set_bot_description, set_bot_about
 from bot.handlers.commands import start_command, help_command
 from bot.handlers.translate_conversation import translate_command
 from bot.handlers.my_sets_conversation import my_sets_command
@@ -50,7 +53,13 @@ def main() -> None:
         loop.run_until_complete(set_bot_about(application.bot))
 
     # Ignore all updates from non-private chats
-    application.add_handler(MessageHandler(~ filters.ChatType.PRIVATE, group_chat_error_handler))
+    application.add_handler(MessageHandler(~filters.ChatType.PRIVATE & ~admin_group_filter, group_chat_error_handler))
+
+    # Admin commands
+    application.add_handler(CommandHandler('add_voucher', add_voucher_command, filters=admin_group_filter))
+    application.add_handler(CommandHandler('list_vouchers', list_vouchers_command, filters=admin_group_filter))
+    application.add_handler(broadcast_command)
+    application.add_handler(MessageHandler(admin_group_filter, show_admin_help_message))
 
     # Command handlers
     application.add_handler(CommandHandler('start', start_command))
@@ -89,8 +98,8 @@ def main() -> None:
 
 if __name__ == '__main__':
     # TODO: parallel requests
-    #loop = get_event_loop()
-    #loop.run_until_complete(main())
-    #asyncio.run(main())
+    # loop = get_event_loop()
+    # loop.run_until_complete(main())
+    # asyncio.run(main())
     # updater - dispatcher
     main()

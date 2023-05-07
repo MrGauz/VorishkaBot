@@ -10,9 +10,9 @@ from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandl
     ContextTypes
 from telegram.warnings import PTBUserWarning
 
-from bot.bot import personal_sticker_filter
 from bot.handlers.commands import cancel_command
 from bot.keyboards import get_delete_confirm_keyboard, get_sticker_actions_keyboard, get_set_list_keyboard
+from bot.message_filters import personal_sticker_filter
 from bot.stickers import save_sticker, save_sticker_to_set
 from database.models import Set, ActionTypes
 from database.utils import store_user

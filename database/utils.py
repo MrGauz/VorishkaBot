@@ -3,7 +3,7 @@ import logging
 from telegram import Update
 
 from database.connection import db
-from database.models import User, Set, Transaction
+from database.models import User, Set, Transaction, Voucher
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ def create_tables():
     if db.is_closed():
         db.connect()
 
-    db.create_tables([User, Set, Transaction])
+    db.create_tables([User, Set, Transaction, Voucher])
 
     db.close()
 

@@ -6,10 +6,11 @@ from telegram.ext import Application, MessageHandler, filters, CommandHandler, P
     PreCheckoutQueryHandler
 from telegram.constants import ParseMode
 
+from bot.handlers.vouchers import use_voucher
 from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT, CONTEXT_DATA_PATH, DEBUG
 from database.utils import create_tables
 
-from bot.bot import set_bot_commands, set_bot_description, set_bot_about
+from bot.bot import set_bot_commands, set_bot_description, set_bot_about, voucher_message_filter
 from bot.handlers.commands import start_command, help_command
 from bot.handlers.translate_conversation import translate_command
 from bot.handlers.my_sets_conversation import my_sets_command
@@ -65,6 +66,9 @@ def main() -> None:
     application.add_handler(MessageHandler(filters.VIDEO | filters.ANIMATION, from_video))
     application.add_handler(MessageHandler(filters.Document.VIDEO | filters.Document.IMAGE, from_document))
     application.add_handler(MessageHandler(filters.Sticker.ANIMATED, from_animated_sticker))
+
+    # Vouchers handler
+    application.add_handler(MessageHandler(voucher_message_filter, use_voucher))
 
     # Payments handlers
     application.add_handler(subscription_command)

@@ -78,7 +78,7 @@ class Set(Model):
 
 class Transaction(Model):
     """
-    Model representing a transaction.
+    Model representing a payment transaction.
     """
     user = ForeignKeyField(User, on_delete='CASCADE', backref='transactions', null=False)
     invoice_type = CharField(max_length=100, null=False)
@@ -90,4 +90,19 @@ class Transaction(Model):
 
     class Meta:
         table_name = 'transactions'
+        database = db
+
+
+class Voucher(Model):
+    """
+    Model representing a voucher.
+    """
+    codeword = CharField(max_length=100, unique=True, null=False)
+    additional_days = IntegerField(null=False)
+    created_at_utc = DateTimeField(default=datetime.utcnow)
+    used_at_utc = DateTimeField(null=True, default=None)
+    used_by = ForeignKeyField(User, on_delete='CASCADE', backref='vouchers', null=True)
+
+    class Meta:
+        table_name = 'vouchers'
         database = db

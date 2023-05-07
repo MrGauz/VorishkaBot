@@ -72,6 +72,7 @@
         "status": "Твоя PROписка діє до {date}. Натисни кнопку нижче, аби отримати додати до неї ще 365 днів.",
         "payment_success": "Дякую за покупку! Твоя PROписка активна до {date}.",
         "deny_precheckout": "Я не знаю, якого дідька ти тут робиш, але я тобі це не продам.",
-        "renewal_reminder": "Твоя PROписка скінчиться через {days_left} дні. Надішли мені команду /subscription аби продовжити PROписку."
+        "renewal_reminder": "Твоя PROписка скінчиться через {days_left} дні. Надішли мені команду /subscription аби продовжити PROписку.",
+        "voucher_activated": "TODO"
     }
 }

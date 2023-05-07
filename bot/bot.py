@@ -4,7 +4,7 @@ from telegram import BotCommand
 from telegram._bot import BT
 from telegram.ext.filters import MessageFilter
 
-from database.models import Set, User
+from database.models import Set, User, Voucher
 from settings import ALL_LANGUAGES
 from locales import _
 
@@ -74,3 +74,28 @@ class PersonalStickerFilter(MessageFilter):
 
 
 personal_sticker_filter = PersonalStickerFilter()
+
+
+class VoucherMessageFilter(MessageFilter):
+    """
+    Custom filter class to check if a message contains a sticker from a user's personal set.
+    """
+
+    def filter(self, message):
+        """
+        Check if a message contains a sticker from a user's personal set.
+
+        :param message: Message object to be checked.
+        :return: True if the message contains a personal sticker, False otherwise.
+        """
+        if not message.text:
+            return False
+
+        voucher = Voucher.get_or_none(Voucher.codeword == message.text)
+        if voucher is None:
+            return False
+
+        return True
+
+
+voucher_message_filter = VoucherMessageFilter()

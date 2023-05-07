@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS tgs_converter_build
 WORKDIR /source
 COPY ./tgs_converter .
 
-RUN dotnet publish -c Release -o /converter
+RUN dotnet publish -c Release -r linux-x64 --self-contained true -o /converter
 
 # Telegram bot running in python
 FROM python:3.10-slim-buster
@@ -28,7 +28,9 @@ RUN apt-get update \
 
 WORKDIR /app
 COPY . /app
-COPY --from=tgs_converter_build /converter ./converter
+
+COPY --from=tgs_converter_build /converter /converter
+RUN chmod +x /converter/TgsConverter.dll
 
 RUN pip3 install -r requirements.txt
 

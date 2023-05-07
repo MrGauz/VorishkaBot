@@ -9,9 +9,11 @@ services:
     container_name: vorishka_bot_app
     restart: always
     environment:
+      MYSQL_HOST: mysql
       MYSQL_DATABASE: vorishka_bot
       MYSQL_USER: vorishka_bot
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TGS_CONVERTER_PATH: /converter/TgsConverter.dll
     env_file: .env
     depends_on:
       - mysql

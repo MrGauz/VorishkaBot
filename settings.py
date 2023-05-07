@@ -20,7 +20,7 @@ SUBSCRIPTION_365_PRICE = int(os.environ['SUBSCRIPTION_365_PRICE'])
 
 # Database
 DB_NAME = 'vorishka_bot'
-DB_HOST = 'localhost'
+DB_HOST = os.getenv('MYSQL_HOST') or 'mysql'
 DB_PORT = 3306
 DB_USER = 'vorishka_bot'
 DB_PASS = os.getenv('MYSQL_PASSWORD') or 'vorishka_bot'

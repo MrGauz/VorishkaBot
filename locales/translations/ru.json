@@ -45,25 +45,31 @@
         "some_telegram_error": "Что-то тут не так. Пожалуйста, попробуй ещё раз.",
         "invoice_generation": "??? Я не смог выставить счёт. Пожалуйста, попробуй ещё раз.",
         "pre_checkout_query_failed": "Извини, у меня не получается обработать платёжь. Пожалуйста, попробуй ещё раз.",
-        "sticker_not_saved": "Извини, у меня не получилось сохранить стикер. Пожалуйста, попробуй ещё раз."
+        "sticker_not_saved": "Извини, у меня не получилось сохранить стикер. Пожалуйста, попробуй ещё раз.",
+        "move_set_full": "TODO"
     },
     "sets": {
         "my_sets_list": "Вот твои стикерпаки:",
+        "first_set_created": "TODO",
+        "new_set_created": "TODO",
         "summary_message": "Стикерпак: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\nСтикеров сохранено: {sticker_count}/50",
         "choose_new_name": "Выбери новое название для этого стикерпака (или выполни команду /cancel чтобы отменить действие):",
         "renamed": "Я переименовал стикерпак на <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>",
         "confirm_delete": "Точно удаляем стикерпак <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>? Это действие нельзя отменить потом.",
-        "deleted": "Договорились, я удалил стикерпак {set_title}."
+        "deleted": "Договорились, я удалил стикерпак {set_title}.",
+        "full_warning": "TODO"
     },
     "stickers": {
         "summary_message": "Эмодзи: {emoji}\nстикерпак: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "new_saved": "Я сохранил стикер в стикерпак <a href='https://t.me/addstickers/{set_name}'>{set_title}</a> с этим эмодзи: {emoji}. Если хочешь что-то поменять, просто пришли мне этот стикер.",
+        "first_ever_sticker_saved": "TODO",
         "choose_new_emoji": "Выбери новый эмодзи для этого стикера (или выполни команду /cancel чтобы отменить действие).",
         "emoji_changed": "Я поменял эмодзи на {new_emoji}",
         "choose_set_to_move": "Выбери стикерпак в который нужно подвинуть стикер:",
         "moved": "Я подвинул стикер в стикерпак <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "confirm_delete": "Точно удаляем стикер?",
-        "deleted": "Договорились, я удалил стикер."
+        "deleted": "Договорились, я удалил стикер.",
+        "last_sticker_deleted": "TODO"
     },
     "subscription": {
         "invoice_title": "PROписка",

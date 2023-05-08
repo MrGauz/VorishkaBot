@@ -180,12 +180,12 @@ async def delete_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query.data != ActionTypes.DELETE_STICKER:
         return await cancel_command(update, context)
 
-    # TODO: check if this was the last sticker in the pack and delete it from db
-    sticker_id = Sticker.de_json(json.loads(context.user_data['selected_sticker']), context.bot).file_id
+    sticker = Sticker.de_json(json.loads(context.user_data['selected_sticker']), context.bot)
+    sticker_set = await context.bot.get_sticker_set(sticker.set_name)
     try:
-        result = await context.bot.delete_sticker_from_set(sticker_id)
-    except BadRequest as e:
-        logger.error(f'Error deleting sticker {sticker_id} for user {user.user_id} ({user.username})', exc_info=e)
+        result = await context.bot.delete_sticker_from_set(sticker.file_id)
+    except BadRequest as ex:
+        logger.error(f'Error deleting sticker {sticker.file_id} for user {user.user_id} ({user.username})', exc_info=ex)
         result = False
 
     await update.effective_chat.send_action(ChatAction.TYPING)
@@ -193,6 +193,12 @@ async def delete_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.effective_message.edit_text(_('stickers.deleted', user.lang_code))
     else:
         await update.effective_message.edit_text(_('errors.sticker_not_deleted', user.lang_code))
+
+    # Last sticker in set was deleted
+    if result and len(sticker_set.stickers) == 1:
+        Set.delete().where(Set.name == sticker.set_name).execute()
+        await update.effective_message.reply_text(_('stickers.last_sticker_deleted', user.lang_code,
+                                                    placeholders={'set_title': sticker_set.title}))
 
     context.user_data.clear()
     return ConversationHandler.END

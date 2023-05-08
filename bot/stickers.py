@@ -35,6 +35,8 @@ async def save_sticker_to_set(update: Update, context: ContextTypes.DEFAULT_TYPE
         if len(telegram_set.stickers) < 50:
             found_set = user_set
             break
+        else:
+            await update.effective_message.reply_text(_('error.move_set_full', user.lang_code))
 
     if found_set is None:
         return None
@@ -70,6 +72,10 @@ async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input
         for user_set in Set.select().where(Set.user == user, Set.set_type == SetTypes.VIDEO):
             telegram_set = await context.bot.get_sticker_set(user_set.name)
             if len(telegram_set.stickers) < 50:
+                # Warn if the set will be full after adding the sticker
+                if len(telegram_set.stickers) == 49:
+                    await update.effective_message.reply_text(_('sets.full_warning', user.lang_code))
+
                 chosen_set = user_set
                 break
 
@@ -94,6 +100,16 @@ async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input
                          exc_info=e)
             await update.effective_chat.send_message(_('errors.sticker_not_saved', user.lang_code))
             return None
+
+        # First ever sticker saved
+        if Set.select().where(Set.user == user).count() == 1:
+            await update.effective_chat.send_message(_('sets.first_set_created', user.lang_code,
+                                                       placeholders={'set_name': name, 'set_title': new_set_title}))
+
+        # New sticker set created
+        if Set.select().where(Set.user == user).count() > 1:
+            await update.effective_chat.send_message(_('sets.new_set_created', user.lang_code,
+                                                       placeholders={'set_name': name, 'set_title': new_set_title}))
 
     else:
         # Add sticker to the existing set

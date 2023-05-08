@@ -45,25 +45,31 @@
         "some_telegram_error": "Тут щось пороблено, будь ласка, спробуй знов трохи пізніше.",
         "invoice_generation": "??? Я не зміг виставити тобі рахунок. Будь ласка, спробуй ще раз пізніше.",
         "pre_checkout_query_failed": "Вибач, у мене не виходить обробити платіж. Будь ласка, спробуй ще раз.",
-        "sticker_not_saved": "Вибач, у мене не вийшло зберегти стікер. Будь ласка, спробуй ще раз."
+        "sticker_not_saved": "Вибач, у мене не вийшло зберегти стікер. Будь ласка, спробуй ще раз.",
+        "move_set_full": "TODO"
     },
     "sets": {
         "my_sets_list": "Твої стікерпаки:",
+        "first_set_created": "TODO",
+        "new_set_created": "TODO",
         "summary_message": "Стікерпак: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\nСтікерів збережено: {sticker_count}/50",
         "choose_new_name": "Обери нову назву для цього стікерпаку (або надішли команду /cancel аби перервати дію):",
         "renamed": "Я перейменував стікерпак на <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>",
         "confirm_delete": "Точно? Видаляємо стікерпак <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>? Цю дію потім не відмінити.",
-        "deleted": "Домовились, я видалив стікерпак {set_title}."
+        "deleted": "Домовились, я видалив стікерпак {set_title}.",
+        "full_warning": "TODO"
     },
     "stickers": {
         "summary_message": "Емодзі: {emoji}\nСтікерпак: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "new_saved": "Я зберіг стікер до стікерпаку <a href='https://t.me/addstickers/{set_name}'>{set_title}</a> із цим емодзі: {emoji}. Якщо хочеш щось змінити, просто надішли мені цей стікер знов.",
+        "first_ever_sticker_saved": "TODO",
         "choose_new_emoji": "Обери новий емодзі для цього стікеру (або надішли команду /cancel аби перервати дію):",
         "emoji_changed": "Я змінив емодзі на {new_emoji}",
         "choose_set_to_move": "Обери стікерпак у котрий треба посунути стікер:",
         "moved": "Я посунув стікер до стікерпаку <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "confirm_delete": "Точно видаляємо стікер?",
-        "deleted": "Домовились, я видалив стікер."
+        "deleted": "Домовились, я видалив стікер.",
+        "last_sticker_deleted": "TODO"
     },
     "subscription": {
         "invoice_title": "PROписка",

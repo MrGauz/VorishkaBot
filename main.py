@@ -46,10 +46,11 @@ def main() -> None:
         .build()
 
     # Log errors and higher to the admin group
-    logger = logging.getLogger()
-    handler = AdminGroupHandler(application.bot)
-    handler.setLevel(logging.ERROR)
-    logger.addHandler(handler)
+    if not DEBUG:
+        logger = logging.getLogger()
+        handler = AdminGroupHandler(application.bot)
+        handler.setLevel(logging.ERROR)
+        logger.addHandler(handler)
 
     # Fill out bot's profile in supported languages
     if not DEBUG:

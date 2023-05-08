@@ -1,6 +1,7 @@
 from asyncio import get_event_loop
 from warnings import filterwarnings
 import logging
+from logging.config import dictConfig
 from datetime import time
 from telegram.ext import Application, MessageHandler, filters, CommandHandler, PicklePersistence, Defaults, \
     PreCheckoutQueryHandler
@@ -28,8 +29,6 @@ from bot.handlers.errors import update_error_handler, unsupported_update_error_h
 
 filterwarnings(action='ignore', category=DeprecationWarning)
 
-logging.basicConfig(format=LOG_FORMAT, level=LOG_LEVEL)
-logger = logging.getLogger(__name__)
 
 
 def main() -> None:
@@ -47,10 +46,10 @@ def main() -> None:
     # Fill out bot's profile in supported languages
     if not DEBUG:
         # TODO: test if works with parallelism
-        loop = get_event_loop()
-        loop.run_until_complete(set_bot_commands(application.bot))
-        loop.run_until_complete(set_bot_description(application.bot))
-        loop.run_until_complete(set_bot_about(application.bot))
+        event_loop = get_event_loop()
+        event_loop.run_until_complete(set_bot_commands(application.bot))
+        event_loop.run_until_complete(set_bot_description(application.bot))
+        event_loop.run_until_complete(set_bot_about(application.bot))
 
     # Ignore all updates from non-private chats
     application.add_handler(MessageHandler(~filters.ChatType.PRIVATE & ~admin_group_filter, group_chat_error_handler))
@@ -91,6 +90,24 @@ def main() -> None:
     # Schedule subscription renewal reminders
     application.job_queue.run_daily(subscription_reminder, time=time(16, 20))
 
+    # Initialize logging
+    logging_config = {
+        'version': 1,
+        'formatters': {
+            'default': {'format': LOG_FORMAT},
+            'admin_chat': {'format': '%(name)s - %(message)s'},
+        },
+        'handlers': {
+            'console': {'class': 'logging.StreamHandler', 'formatter': 'default', 'level': LOG_LEVEL},
+            'admin_chat': {'class': 'loggers.AdminGroupHandler', 'formatter': 'admin_chat', 'bot': application.bot,
+                           'level': logging.ERROR},
+        },
+        'loggers': {
+            '': {'handlers': ['console', 'admin_chat'], 'level': LOG_LEVEL},
+        },
+    }
+    dictConfig(logging_config)
+
     # Start receiving
     # TODO: test parallel requests with webhooks
     application.run_polling()
@@ -102,4 +119,11 @@ if __name__ == '__main__':
     # loop.run_until_complete(main())
     # asyncio.run(main())
     # updater - dispatcher
+
+    # main_loop = asyncio.new_event_loop()
+    # asyncio.set_event_loop(main_loop)
+    # thread = Thread(target=main_loop.run_until_complete, args=(main(),))
+    # thread.start()
+    # thread.join()
+
     main()

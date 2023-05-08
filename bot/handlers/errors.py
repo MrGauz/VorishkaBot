@@ -23,8 +23,8 @@ async def update_error_handler(update: Update, context: ContextTypes.DEFAULT_TYP
     :param context: Callback context which contains information about the current state of the bot.
     """
     # Log the error before we do anything else, so we can see it even if something breaks.
-    logger.error(msg=f'Exception while handling an update\nupdate={json.dumps(update.to_dict())}',
-                 exc_info=context.error)
+    logger.exception(msg=f'Exception while handling an update\nupdate={json.dumps(update.to_dict())}',
+                     exc_info=context.error)
 
     # Try contacting the user about the error.
     user = store_user(update)
@@ -65,7 +65,7 @@ async def unsupported_update_error_handler(update: Update, context: ContextTypes
         await update.effective_chat.send_action(ChatAction.TYPING)
         await update.effective_message.reply_text(_('errors.unsupported_update', user.lang_code))
     except TelegramError as e:
-        logger.error(f'Error sending message error message\nupdate={json.dumps(update.to_dict())}', exc_info=e)
+        logger.warning(f'Error sending message error message\nupdate={json.dumps(update.to_dict())}', exc_info=e)
 
 
 async def group_chat_error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -79,4 +79,4 @@ async def group_chat_error_handler(update: Update, context: ContextTypes.DEFAULT
         await update.effective_chat.send_action(ChatAction.TYPING)
         await update.effective_message.reply_text(_('errors.no_group_chats', DEFAULT_LANG))
     except TelegramError as e:
-        logger.error(f'Error sending group chat error message\nupdate={json.dumps(update.to_dict())}', exc_info=e)
+        logger.warning(f'Error sending group chat error message\nupdate={json.dumps(update.to_dict())}', exc_info=e)

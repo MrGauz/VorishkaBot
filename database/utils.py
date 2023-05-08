@@ -5,8 +5,6 @@ from telegram import Update
 from database.connection import db
 from database.models import User, Set, Transaction, Voucher
 
-logger = logging.getLogger(__name__)
-
 
 def create_tables():
     """
@@ -26,6 +24,7 @@ def store_user(update: Update) -> User:
     :param update: Update object containing information about the incoming update.
     :return: The user object.
     """
+    logger = logging.getLogger(__name__)
     user = User.get_or_none(User.user_id == update.effective_user.id)
 
     if user is None:

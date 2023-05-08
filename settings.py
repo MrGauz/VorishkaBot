@@ -30,7 +30,21 @@ LOGS_PATH = os.getenv('LOG_PATH') or 'logs'
 if not os.path.isdir(LOGS_PATH):
     os.mkdir(LOGS_PATH)
 LOG_FORMAT = '%(asctime)s - %(levelname)s - %(name)s - %(message)s'
-LOG_LEVEL = logging.DEBUG
+LOG_LEVEL = logging.INFO
+LOGGING_CONFIG = {
+    'version': 1,
+    'formatters': {
+        'default': {'format': LOG_FORMAT},
+    },
+    'handlers': {
+        'console': {'class': 'logging.StreamHandler', 'formatter': 'default', 'level': LOG_LEVEL},
+        'file': {'class': 'logging.handlers.RotatingFileHandler', 'formatter': 'default',
+                 'filename': f'{LOGS_PATH}/bot.log', 'maxBytes': 1048576, 'level': LOG_LEVEL},
+    },
+    'loggers': {
+        '': {'handlers': ['console', 'file'], 'level': LOG_LEVEL},
+    },
+}
 
 # Translations
 ALL_LANGUAGES = {'en': '\U0001F1EC\U0001F1E7', 'ru': '\U0001F1F7\U0001F1FA', 'uk': '\U0001F1FA\U0001F1E6'}

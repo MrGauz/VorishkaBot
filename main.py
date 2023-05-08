@@ -1,6 +1,6 @@
+import logging
 from asyncio import get_event_loop
 from warnings import filterwarnings
-import logging
 from logging.config import dictConfig
 from datetime import time
 from telegram.ext import Application, MessageHandler, filters, CommandHandler, PicklePersistence, Defaults, \
@@ -11,11 +11,12 @@ from bot.handlers.admin_group import add_voucher_command, list_vouchers_command,
     broadcast_command
 from bot.handlers.vouchers import use_voucher
 from bot.message_filters import voucher_message_filter, admin_group_filter
-from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT, CONTEXT_DATA_PATH, DEBUG, LOGS_PATH
+from loggers import AdminGroupHandler
+from settings import TELEGRAM_BOT_TOKEN, CONTEXT_DATA_PATH, DEBUG, LOGGING_CONFIG
 from database.utils import create_tables
 
 from bot.bot import setup_bot
-from bot.handlers.commands import start_command, help_command
+from bot.handlers.commands import start_command, help_command, error_command
 from bot.handlers.translate_conversation import translate_command
 from bot.handlers.my_sets_conversation import my_sets_command
 from bot.handlers.my_sticker_conversation import my_sticker_conversation
@@ -28,6 +29,8 @@ from bot.handlers.subscription import subscription_command, pre_checkout_query, 
 from bot.handlers.errors import update_error_handler, unsupported_update_error_handler, group_chat_error_handler
 
 filterwarnings(action='ignore', category=DeprecationWarning)
+
+dictConfig(LOGGING_CONFIG)
 
 
 def main() -> None:
@@ -42,24 +45,11 @@ def main() -> None:
         .defaults(Defaults(parse_mode=ParseMode.HTML)) \
         .build()
 
-    # Initialize logging
-    logging_config = {
-        'version': 1,
-        'formatters': {
-            'default': {'format': LOG_FORMAT},
-        },
-        'handlers': {
-            'console': {'class': 'logging.StreamHandler', 'formatter': 'default', 'level': LOG_LEVEL},
-            'file': {'class': 'logging.handlers.RotatingFileHandler', 'formatter': 'default',
-                     'filename': f'{LOGS_PATH}/bot.log', 'maxBytes': 1048576, 'level': LOG_LEVEL},
-            'admin_chat': {'class': 'loggers.AdminGroupHandler', 'formatter': 'default', 'bot': application.bot,
-                           'level': logging.ERROR},
-        },
-        'loggers': {
-            '': {'handlers': ['console', 'file', 'admin_chat'], 'level': LOG_LEVEL},
-        },
-    }
-    dictConfig(logging_config)
+    # Log errors and higher to the admin group
+    logger = logging.getLogger()
+    handler = AdminGroupHandler(application.bot)
+    handler.setLevel(logging.ERROR)
+    logger.addHandler(handler)
 
     # Fill out bot's profile in supported languages
     if not DEBUG:
@@ -80,6 +70,7 @@ def main() -> None:
     # Command handlers
     application.add_handler(CommandHandler('start', start_command))
     application.add_handler(CommandHandler('help', help_command))
+    application.add_handler(CommandHandler('error', error_command))  # TODO: remove after tests
     application.add_handler(translate_command)
     application.add_handler(my_sets_command)
 

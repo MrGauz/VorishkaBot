@@ -1,3 +1,5 @@
+import logging
+
 from telegram import Update
 from telegram.constants import ChatAction
 from telegram.ext import ContextTypes, ConversationHandler
@@ -49,3 +51,12 @@ async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.effective_message.reply_text(_('bot.cancel_command', user.lang_code), reply_markup=None)
 
     return ConversationHandler.END
+
+
+# TODO: remove after testing
+async def error_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    try:
+        raise RuntimeError('Test error')
+    except RuntimeError as e:
+        logger = logging.getLogger(__name__)
+        logger.error("Some error happened", exc_info=e)

@@ -11,7 +11,7 @@ from bot.handlers.admin_group import add_voucher_command, list_vouchers_command,
     broadcast_command
 from bot.handlers.vouchers import use_voucher
 from bot.message_filters import voucher_message_filter, admin_group_filter
-from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT, CONTEXT_DATA_PATH, DEBUG
+from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT, CONTEXT_DATA_PATH, DEBUG, LOGS_PATH
 from database.utils import create_tables
 
 from bot.bot import set_bot_commands, set_bot_description, set_bot_about
@@ -28,7 +28,6 @@ from bot.handlers.subscription import subscription_command, pre_checkout_query, 
 from bot.handlers.errors import update_error_handler, unsupported_update_error_handler, group_chat_error_handler
 
 filterwarnings(action='ignore', category=DeprecationWarning)
-
 
 
 def main() -> None:
@@ -95,15 +94,16 @@ def main() -> None:
         'version': 1,
         'formatters': {
             'default': {'format': LOG_FORMAT},
-            'admin_chat': {'format': '%(name)s - %(message)s'},
         },
         'handlers': {
             'console': {'class': 'logging.StreamHandler', 'formatter': 'default', 'level': LOG_LEVEL},
-            'admin_chat': {'class': 'loggers.AdminGroupHandler', 'formatter': 'admin_chat', 'bot': application.bot,
+            'file': {'class': 'logging.handlers.RotatingFileHandler', 'formatter': 'default',
+                     'filename': f'{LOGS_PATH}/bot.log', 'maxBytes': 1048576, 'level': LOG_LEVEL},
+            'admin_chat': {'class': 'loggers.AdminGroupHandler', 'formatter': 'default', 'bot': application.bot,
                            'level': logging.ERROR},
         },
         'loggers': {
-            '': {'handlers': ['console', 'admin_chat'], 'level': LOG_LEVEL},
+            '': {'handlers': ['console', 'file', 'admin_chat'], 'level': LOG_LEVEL},
         },
     }
     dictConfig(logging_config)

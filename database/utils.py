@@ -1,5 +1,3 @@
-import logging
-
 from telegram import Update
 
 from database.connection import db
@@ -24,11 +22,9 @@ def store_user(update: Update) -> User:
     :param update: Update object containing information about the incoming update.
     :return: The user object.
     """
-    logger = logging.getLogger(__name__)
     user = User.get_or_none(User.user_id == update.effective_user.id)
 
     if user is None:
-        logger.info(f'Creating new user @{update.effective_user.username} ({update.effective_user.id})')
         user = User()
         user.user_id = update.effective_user.id
         user.lang_code = update.effective_user.language_code

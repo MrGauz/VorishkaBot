@@ -26,6 +26,9 @@ DB_USER = 'vorishka_bot'
 DB_PASS = os.getenv('MYSQL_PASSWORD') or 'vorishka_bot'
 
 # Logging
+LOGS_PATH = os.getenv('LOG_PATH') or 'logs'
+if not os.path.isdir(LOGS_PATH):
+    os.mkdir(LOGS_PATH)
 LOG_FORMAT = '%(asctime)s - %(levelname)s - %(name)s - %(message)s'
 LOG_LEVEL = logging.INFO
 

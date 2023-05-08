@@ -14,7 +14,10 @@ services:
       MYSQL_USER: vorishka_bot
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       TGS_CONVERTER_PATH: /converter/TgsConverter.dll
+      LOG_PATH: /vorishka_bot_logs
     env_file: .env
+    volumes:
+      - ${DOCKER_PERSISTENCE_PATH}/vorishka_bot_logs:/vorishka_bot_logs
     depends_on:
       - mysql
 
@@ -31,7 +34,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - vorishka_bot_mysql_data:/var/lib/mysql
+      - ${DOCKER_PERSISTENCE_PATH}/vorishka_bot_mysql_data:/var/lib/mysql
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -46,6 +49,3 @@ services:
       - "8080:80"
     depends_on:
       - mysql
-
-volumes:
-  vorishka_bot_mysql_data:

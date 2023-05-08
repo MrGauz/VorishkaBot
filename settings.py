@@ -30,7 +30,7 @@ LOGS_PATH = os.getenv('LOG_PATH') or 'logs'
 if not os.path.isdir(LOGS_PATH):
     os.mkdir(LOGS_PATH)
 LOG_FORMAT = '%(asctime)s - %(levelname)s - %(name)s - %(message)s'
-LOG_LEVEL = logging.INFO
+LOG_LEVEL = logging.DEBUG
 
 # Translations
 ALL_LANGUAGES = {'en': '\U0001F1EC\U0001F1E7', 'ru': '\U0001F1F7\U0001F1FA', 'uk': '\U0001F1FA\U0001F1E6'}

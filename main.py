@@ -14,7 +14,7 @@ from bot.message_filters import voucher_message_filter, admin_group_filter
 from settings import TELEGRAM_BOT_TOKEN, LOG_LEVEL, LOG_FORMAT, CONTEXT_DATA_PATH, DEBUG, LOGS_PATH
 from database.utils import create_tables
 
-from bot.bot import set_bot_commands, set_bot_description, set_bot_about
+from bot.bot import setup_bot
 from bot.handlers.commands import start_command, help_command
 from bot.handlers.translate_conversation import translate_command
 from bot.handlers.my_sets_conversation import my_sets_command
@@ -42,22 +42,40 @@ def main() -> None:
         .defaults(Defaults(parse_mode=ParseMode.HTML)) \
         .build()
 
+    # Initialize logging
+    logging_config = {
+        'version': 1,
+        'formatters': {
+            'default': {'format': LOG_FORMAT},
+        },
+        'handlers': {
+            'console': {'class': 'logging.StreamHandler', 'formatter': 'default', 'level': LOG_LEVEL},
+            'file': {'class': 'logging.handlers.RotatingFileHandler', 'formatter': 'default',
+                     'filename': f'{LOGS_PATH}/bot.log', 'maxBytes': 1048576, 'level': LOG_LEVEL},
+            'admin_chat': {'class': 'loggers.AdminGroupHandler', 'formatter': 'default', 'bot': application.bot,
+                           'level': logging.ERROR},
+        },
+        'loggers': {
+            '': {'handlers': ['console', 'file', 'admin_chat'], 'level': LOG_LEVEL},
+        },
+    }
+    dictConfig(logging_config)
+
     # Fill out bot's profile in supported languages
     if not DEBUG:
         # TODO: test if works with parallelism
         event_loop = get_event_loop()
-        event_loop.run_until_complete(set_bot_commands(application.bot))
-        event_loop.run_until_complete(set_bot_description(application.bot))
-        event_loop.run_until_complete(set_bot_about(application.bot))
+        task = event_loop.create_task(setup_bot(application.bot))
+        task.add_done_callback(lambda fut: fut.result())
 
-    # Ignore all updates from non-private chats
-    application.add_handler(MessageHandler(~filters.ChatType.PRIVATE & ~admin_group_filter, group_chat_error_handler))
-
-    # Admin commands
+    # Admin commands (only work in the ADMIN_GROUP_ID)
     application.add_handler(CommandHandler('add_voucher', add_voucher_command, filters=admin_group_filter))
     application.add_handler(CommandHandler('list_vouchers', list_vouchers_command, filters=admin_group_filter))
     application.add_handler(broadcast_command)
     application.add_handler(MessageHandler(admin_group_filter, show_admin_help_message))
+
+    # Ignore all updates from non-private chats
+    application.add_handler(MessageHandler(~filters.ChatType.PRIVATE, group_chat_error_handler))
 
     # Command handlers
     application.add_handler(CommandHandler('start', start_command))
@@ -88,25 +106,6 @@ def main() -> None:
 
     # Schedule subscription renewal reminders
     application.job_queue.run_daily(subscription_reminder, time=time(16, 20))
-
-    # Initialize logging
-    logging_config = {
-        'version': 1,
-        'formatters': {
-            'default': {'format': LOG_FORMAT},
-        },
-        'handlers': {
-            'console': {'class': 'logging.StreamHandler', 'formatter': 'default', 'level': LOG_LEVEL},
-            'file': {'class': 'logging.handlers.RotatingFileHandler', 'formatter': 'default',
-                     'filename': f'{LOGS_PATH}/bot.log', 'maxBytes': 1048576, 'level': LOG_LEVEL},
-            'admin_chat': {'class': 'loggers.AdminGroupHandler', 'formatter': 'default', 'bot': application.bot,
-                           'level': logging.ERROR},
-        },
-        'loggers': {
-            '': {'handlers': ['console', 'file', 'admin_chat'], 'level': LOG_LEVEL},
-        },
-    }
-    dictConfig(logging_config)
 
     # Start receiving
     # TODO: test parallel requests with webhooks

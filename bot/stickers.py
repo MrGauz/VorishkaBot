@@ -8,8 +8,8 @@ from telegram.constants import StickerFormat
 from telegram.error import TelegramError
 from telegram.ext import ContextTypes
 
-from database.models import Set, SetTypes
-from database.utils import store_user
+from database.models import Set, SetTypes, AnalyticsTypes
+from database.utils import store_user, new_analytics_event
 from locales import _
 from settings import DEFAULT_VIDEO_SET_NAME
 
@@ -63,7 +63,7 @@ async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input
     :param context: Telegram bot context.
     :param input_sticker: The sticker to be saved.
     :param create_new: (optional) If True, always create a new sticker set.
-    :return: The Set object for the set to which the sticker was saved, or None if the save failed.
+    :return: A Set object for the set to which the sticker was saved, or None if the save failed.
     """
     user = store_user(update)
 
@@ -84,6 +84,10 @@ async def save_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE, input
         random_str = ''.join(random.choice(string.ascii_lowercase) for i in range(10))
         name = DEFAULT_VIDEO_SET_NAME % (random_str, context.bot.username)
         new_set_title = _('bot.default_video_set_name', user.lang_code)
+        if create_new:
+            new_analytics_event(AnalyticsTypes.NEW_SET_EXPLICIT, update, user)
+        else:
+            new_analytics_event(AnalyticsTypes.NEW_SET_IMPLICIT, update, user)
 
         try:
             await context.bot.create_new_sticker_set(

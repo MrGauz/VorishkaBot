@@ -9,7 +9,8 @@ from telegram.ext import ContextTypes
 
 from bot.converters import convert_video
 from bot.stickers import save_sticker
-from database.utils import store_user
+from database.models import AnalyticsTypes
+from database.utils import store_user, new_analytics_event
 from locales import _
 from settings import DEFAULT_STICKER_EMOJI, MAX_FILE_SIZE
 
@@ -33,6 +34,7 @@ async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     # Subscription check
     if not user.is_subscribed() and document.mime_type in supported_video_formats:
         await update.effective_message.reply_text(_('errors.not_subscribed', user.lang_code))
+        new_analytics_event(AnalyticsTypes.NOT_SUBSCRIBED_ERROR, update, user)
         return
 
     # Filter out unsupported file types
@@ -53,7 +55,7 @@ async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     else:
         await update.effective_chat.send_action(ChatAction.UPLOAD_VIDEO)
     emoji = tuple(emojis.get(update.effective_message.caption or ''))[
-                 :StickerLimit.MAX_STICKER_EMOJI] or DEFAULT_STICKER_EMOJI
+            :StickerLimit.MAX_STICKER_EMOJI] or DEFAULT_STICKER_EMOJI
     filename = tempfile.mktemp(suffix='.' + document.mime_type.split('/')[1])
     file = await document.get_file()
 
@@ -74,3 +76,4 @@ async def from_document(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
                                                     placeholders={'set_name': user_set.name,
                                                                   'set_title': user_set.title,
                                                                   'emoji': ''.join(emoji)}))
+        new_analytics_event(AnalyticsTypes.NEW_STICKER_FROM_FILE, update, user)

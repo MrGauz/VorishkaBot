@@ -4,7 +4,8 @@ from telegram import Update
 from telegram.constants import ChatAction
 from telegram.ext import ContextTypes, ConversationHandler
 
-from database.utils import store_user
+from database.models import AnalyticsTypes
+from database.utils import store_user, new_analytics_event
 from locales import _
 
 
@@ -30,6 +31,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     await update.effective_chat.send_action(ChatAction.TYPING)
     user = store_user(update)
     await update.message.reply_text(_('bot.help_command', user.lang_code))
+    new_analytics_event(AnalyticsTypes.HELP_COMMAND, update, user)
 
 
 async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE):

@@ -14,8 +14,8 @@ from bot.handlers.commands import cancel_command
 from bot.keyboards import get_delete_confirm_keyboard, get_sticker_actions_keyboard, get_set_list_keyboard
 from bot.message_filters import personal_sticker_filter
 from bot.stickers import save_sticker, save_sticker_to_set
-from database.models import Set, ActionTypes
-from database.utils import store_user
+from database.models import Set, ActionTypes, AnalyticsTypes
+from database.utils import store_user, new_analytics_event
 from locales import _
 from settings import DEFAULT_STICKER_EMOJI
 
@@ -118,6 +118,7 @@ async def change_sticker_emoji(update: Update, context: ContextTypes.DEFAULT_TYP
     if result:
         await update.effective_message.reply_text(_('stickers.emoji_changed', user.lang_code,
                                                     placeholders={'new_emoji': ''.join(emoji)}))
+        new_analytics_event(AnalyticsTypes.STICKER_EMOJI_CHANGED, update, user)
     else:
         await update.effective_message.reply_text(_('errors.emoji_not_changed', user.lang_code))
 
@@ -158,6 +159,7 @@ async def move_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.effective_message.edit_text(
             _('stickers.moved', user.lang_code,
               placeholders={'set_name': user_set.name, 'set_title': user_set.title}))
+        new_analytics_event(AnalyticsTypes.STICKER_MOVED, update, user)
     else:
         await update.effective_message.edit_text(_('errors.sticker_not_moved', user.lang_code))
 
@@ -191,6 +193,7 @@ async def delete_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_chat.send_action(ChatAction.TYPING)
     if result:
         await update.effective_message.edit_text(_('stickers.deleted', user.lang_code))
+        new_analytics_event(AnalyticsTypes.STICKER_DELETED, update, user)
     else:
         await update.effective_message.edit_text(_('errors.sticker_not_deleted', user.lang_code))
 
@@ -199,6 +202,7 @@ async def delete_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
         Set.delete().where(Set.name == sticker.set_name).execute()
         await update.effective_message.reply_text(_('stickers.last_sticker_deleted', user.lang_code,
                                                     placeholders={'set_title': sticker_set.title}))
+        new_analytics_event(AnalyticsTypes.SET_DELETED_IMPLICIT, update, user)
 
     context.user_data.clear()
     return ConversationHandler.END

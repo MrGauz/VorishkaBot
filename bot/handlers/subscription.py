@@ -10,8 +10,8 @@ from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandl
 from telegram.warnings import PTBUserWarning
 
 from bot.handlers.commands import cancel_command
-from database.models import ActionTypes, Transaction, User
-from database.utils import store_user
+from database.models import ActionTypes, Transaction, User, AnalyticsTypes
+from database.utils import store_user, new_analytics_event
 from locales import _
 from settings import PAYMENT_PROVIDER_TOKEN, PAYMENT_CURRENCY, SUBSCRIPTION_365_PRICE
 
@@ -45,6 +45,7 @@ async def start_subscription_command(update: Update, context: ContextTypes.DEFAU
     ])
 
     await update.message.reply_text(reply_message, reply_markup=keyboard)
+    new_analytics_event(AnalyticsTypes.SUBSCRIBE_COMMAND, update, user)
 
     return SUBSCRIBE
 
@@ -77,6 +78,7 @@ async def generate_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE):
             photo_width=800,  # TODO: replace
             photo_height=800,  # TODO: replace
         )
+        new_analytics_event(AnalyticsTypes.INVOICE_GENERATED, update, user)
     except TelegramError as e:
         logger.critical(f'Failed to generate invoice: {e}\nupdate={json.dumps(update.to_dict())}', exc_info=e)
         await update.effective_message.reply_text(_('errors.invoice_generation', user.lang_code))
@@ -126,6 +128,7 @@ async def successful_payment(update: Update, context: ContextTypes.DEFAULT_TYPE)
     await update.effective_message.reply_text(
         _('subscription.payment_success', user.lang_code,
           placeholders={'date': user.subscription_end_date_utc.strftime('%d/%m/%Y')}))
+    new_analytics_event(AnalyticsTypes.USER_SUBSCRIBED, update, user)
 
 
 async def subscription_reminder(context: ContextTypes.DEFAULT_TYPE):

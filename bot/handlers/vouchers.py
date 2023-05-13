@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from database.models import Voucher
-from database.utils import store_user
+from database.models import Voucher, AnalyticsTypes
+from database.utils import store_user, new_analytics_event
 from locales import _
 
 
@@ -34,3 +34,4 @@ async def use_voucher(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
     await update.effective_message.reply_text(_('subscription.voucher_activated', user.lang_code,
                                                 placeholders={'days': voucher.additional_days}))
+    new_analytics_event(AnalyticsTypes.VOUCHER_USED, update, user)

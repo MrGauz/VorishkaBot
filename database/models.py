@@ -2,6 +2,7 @@ from datetime import datetime
 from enum import Enum
 
 from peewee import Model, BigIntegerField, CharField, BooleanField, DateTimeField, ForeignKeyField, IntegerField
+from playhouse.mysql_ext import JSONField
 
 from database.connection import db
 
@@ -27,6 +28,32 @@ class ActionTypes(CharEnum):
     SUBSCRIBE_365 = 'subscribe_365'
     CANCEL = 'cancel'
     BROADCAST = 'broadcast'
+
+
+class AnalyticsTypes(CharEnum):
+    NEW_USER = 'new_user'
+    VOUCHER_USED = 'voucher_used'
+    LANGUAGE_CHANGED = 'language_changed'
+    NOT_SUBSCRIBED_ERROR = 'not_subscribed_error'
+    GROUP_CHAT_ERROR = 'group_chat_error'
+    HELP_COMMAND = 'help_command'
+    SUBSCRIBE_COMMAND = 'subscribe_command'
+    INVOICE_GENERATED = 'invoice_generated'
+    USER_SUBSCRIBED = 'user_subscribed'
+    NEW_SET_EXPLICIT = 'new_set_explicit'
+    NEW_SET_IMPLICIT = 'new_set_implicit'
+    NEW_STICKER_FROM_STATIC_STICKER = 'new_sticker_from_static_sticker'
+    NEW_STICKER_FROM_VIDEO_STICKER = 'new_sticker_from_video_sticker'
+    NEW_STICKER_FROM_ANIMATED_STICKER = 'new_sticker_from_animated_sticker'
+    NEW_STICKER_FROM_PHOTO = 'new_sticker_from_photo'
+    NEW_STICKER_FROM_VIDEO = 'new_sticker_from_video'
+    NEW_STICKER_FROM_FILE = 'new_sticker_from_file'
+    STICKER_EMOJI_CHANGED = 'sticker_emoji_changed'
+    STICKER_DELETED = 'sticker_deleted'
+    STICKER_MOVED = 'sticker_moved'
+    SET_RENAMED = 'set_renamed'
+    SET_DELETED_EXPLICIT = 'set_deleted_explicit'
+    SET_DELETED_IMPLICIT = 'set_deleted_implicit'
 
 
 class SetTypes(CharEnum):
@@ -106,4 +133,18 @@ class Voucher(Model):
 
     class Meta:
         table_name = 'vouchers'
+        database = db
+
+
+class Analytics(Model):
+    """
+    Model representing an analytics event.
+    """
+    action_type = CharField(choices=AnalyticsTypes, null=False)
+    user = ForeignKeyField(User, on_delete='CASCADE', backref='analytics', null=False)
+    update = JSONField()
+    created_at_utc = DateTimeField(default=datetime.utcnow)
+
+    class Meta:
+        table_name = 'analytics'
         database = db

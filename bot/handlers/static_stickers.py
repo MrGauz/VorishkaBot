@@ -9,7 +9,8 @@ from telegram.ext import ContextTypes
 
 from bot.converters import convert_video
 from bot.stickers import save_sticker
-from database.utils import store_user
+from database.models import AnalyticsTypes
+from database.utils import store_user, new_analytics_event
 from settings import DEFAULT_STICKER_EMOJI, MAX_FILE_SIZE
 from locales import _
 
@@ -51,6 +52,7 @@ async def from_static_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE
                                                     placeholders={'set_name': user_set.name,
                                                                   'set_title': user_set.title,
                                                                   'emoji': ''.join(emoji)}))
+        new_analytics_event(AnalyticsTypes.NEW_STICKER_FROM_STATIC_STICKER, update, user)
 
     os.remove(sticker_path)
 
@@ -90,5 +92,6 @@ async def from_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
                                                     placeholders={'set_name': user_set.name,
                                                                   'set_title': user_set.title,
                                                                   'emoji': ''.join(emoji)}))
+        new_analytics_event(AnalyticsTypes.NEW_STICKER_FROM_PHOTO, update, user)
 
     os.remove(sticker_path)

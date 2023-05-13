@@ -8,7 +8,8 @@ from telegram.constants import ChatAction, StickerLimit
 from telegram.ext import ContextTypes
 
 from bot.converters import convert_video
-from database.utils import store_user
+from database.models import AnalyticsTypes
+from database.utils import store_user, new_analytics_event
 from bot.stickers import save_sticker
 from locales import _
 from settings import DEFAULT_STICKER_EMOJI, MAX_FILE_SIZE
@@ -28,6 +29,7 @@ async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE)
     if not user.is_subscribed():
         await update.effective_chat.send_action(ChatAction.TYPING)
         await update.effective_message.reply_text(_('errors.not_subscribed', user.lang_code))
+        new_analytics_event(AnalyticsTypes.NOT_SUBSCRIBED_ERROR, update, user)
         return
 
     await update.effective_chat.send_action(ChatAction.UPLOAD_VIDEO)
@@ -43,6 +45,7 @@ async def from_video_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE)
                                                     placeholders={'set_name': user_set.name,
                                                                   'set_title': user_set.title,
                                                                   'emoji': ''.join(emoji)}))
+        new_analytics_event(AnalyticsTypes.NEW_STICKER_FROM_VIDEO_STICKER, update, user)
 
 
 async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -57,6 +60,7 @@ async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     if not user.is_subscribed():
         await update.effective_chat.send_action(ChatAction.TYPING)
         await update.effective_message.reply_text(_('errors.not_subscribed', user.lang_code))
+        new_analytics_event(AnalyticsTypes.NOT_SUBSCRIBED_ERROR, update, user)
         return
 
     mp4_filename = tempfile.mktemp(suffix='.mp4')
@@ -96,5 +100,6 @@ async def from_video(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
                                                     placeholders={'set_name': user_set.name,
                                                                   'set_title': user_set.title,
                                                                   'emoji': ''.join(emoji)}))
+        new_analytics_event(AnalyticsTypes.NEW_STICKER_FROM_VIDEO, update, user)
 
     os.remove(sticker_path)

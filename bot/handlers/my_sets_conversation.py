@@ -10,8 +10,8 @@ from telegram.warnings import PTBUserWarning
 
 from bot.handlers.commands import cancel_command
 from bot.keyboards import get_set_list_keyboard, get_set_actions_keyboard, get_delete_confirm_keyboard
-from database.models import Set, ActionTypes
-from database.utils import store_user
+from database.models import Set, ActionTypes, AnalyticsTypes
+from database.utils import store_user, new_analytics_event
 from locales import _
 
 filterwarnings(action='ignore', message=r'.*CallbackQueryHandler', category=PTBUserWarning)
@@ -130,6 +130,7 @@ async def rename_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
         sticker_set = Set.get(Set.name == set_name)
         sticker_set.title = text.strip()
         sticker_set.save()
+        new_analytics_event(AnalyticsTypes.SET_RENAMED, update, user)
     else:
         await update.effective_message.reply_text(_('errors.set_not_renamed', user.lang_code, {'new_name': text}))
 
@@ -163,6 +164,7 @@ async def delete_set(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.effective_message.edit_text(_('sets.deleted', user.lang_code,
                                                    placeholders={'set_title': telegram_set.title}))
         telegram_set.delete_instance()
+        new_analytics_event(AnalyticsTypes.SET_DELETED_EXPLICIT, update, user)
     else:
         await update.effective_message.edit_text(_('errors.set_not_deleted', user.lang_code,
                                                    placeholders={'set_title': telegram_set.title}))

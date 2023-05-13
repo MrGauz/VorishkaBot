@@ -6,7 +6,8 @@ from telegram.ext import ConversationHandler, CommandHandler, ContextTypes, Call
 from telegram.warnings import PTBUserWarning
 
 from bot.handlers.commands import cancel_command
-from database.utils import store_user
+from database.models import AnalyticsTypes
+from database.utils import store_user, new_analytics_event
 from locales import _
 from settings import ALL_LANGUAGES
 
@@ -55,6 +56,7 @@ async def language_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user.lang_code = query.data
     user.save()
     await update.effective_message.reply_text(_('bot.language_changed', query.data))
+    new_analytics_event(AnalyticsTypes.LANGUAGE_CHANGED, update, user)
 
     return ConversationHandler.END
 

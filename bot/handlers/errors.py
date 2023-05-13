@@ -8,7 +8,8 @@ from telegram.constants import ChatAction
 from telegram.error import TelegramError
 from telegram.ext import ContextTypes
 
-from database.utils import store_user
+from database.models import AnalyticsTypes
+from database.utils import store_user, new_analytics_event
 from settings import ADMIN_GROUP_ID, DEBUG, DEFAULT_LANG
 from locales import _
 
@@ -75,8 +76,10 @@ async def group_chat_error_handler(update: Update, context: ContextTypes.DEFAULT
     :param update: Update object containing information about the incoming update.
     :param context: Callback context which contains information about the current state of the bot.
     """
+    user = store_user(update)
     try:
         await update.effective_chat.send_action(ChatAction.TYPING)
         await update.effective_message.reply_text(_('errors.no_group_chats', DEFAULT_LANG))
     except TelegramError as e:
         logger.warning(f'Error sending group chat error message\nupdate={json.dumps(update.to_dict())}', exc_info=e)
+    new_analytics_event(AnalyticsTypes.GROUP_CHAT_ERROR, update, user)

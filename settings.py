@@ -11,6 +11,7 @@ DEBUG = os.getenv('DEBUG').lower() == 'true'
 TELEGRAM_BOT_TOKEN = os.environ['TELEGRAM_BOT_TOKEN']
 ADMIN_GROUP_ID = int(os.environ['ADMIN_GROUP_ID'])
 CONTEXT_DATA_PATH = 'context_data'
+CONCURRENT_THREADS = int(os.getenv('CONCURRENT_THREADS') or 3)
 
 # Payments
 PAYMENT_PROVIDER_TOKEN = os.environ['PAYMENT_PROVIDER_TOKEN']

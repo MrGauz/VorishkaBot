@@ -12,7 +12,7 @@ from bot.handlers.admin_group import add_voucher_command, list_vouchers_command,
 from bot.handlers.vouchers import use_voucher
 from bot.message_filters import voucher_message_filter, admin_group_filter
 from loggers import AdminGroupHandler
-from settings import TELEGRAM_BOT_TOKEN, CONTEXT_DATA_PATH, DEBUG, LOGGING_CONFIG
+from settings import TELEGRAM_BOT_TOKEN, CONTEXT_DATA_PATH, DEBUG, LOGGING_CONFIG, CONCURRENT_THREADS
 from database.utils import create_tables
 
 from bot.bot import setup_bot
@@ -43,6 +43,7 @@ def main() -> None:
         .token(TELEGRAM_BOT_TOKEN) \
         .persistence(persistence) \
         .defaults(Defaults(parse_mode=ParseMode.HTML)) \
+        .concurrent_updates(CONCURRENT_THREADS) \
         .build()
 
     # Log errors and higher to the admin group

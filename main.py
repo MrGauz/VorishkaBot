@@ -55,7 +55,6 @@ def main() -> None:
 
     # Fill out bot's profile in supported languages
     if not DEBUG:
-        # TODO: test if works with parallelism
         event_loop = get_event_loop()
         task = event_loop.create_task(setup_bot(application.bot))
         task.add_done_callback(lambda fut: fut.result())
@@ -101,21 +100,8 @@ def main() -> None:
     application.job_queue.run_daily(subscription_reminder, time=time(16, 20))
 
     # Start receiving
-    # TODO: test parallel requests with webhooks
     application.run_polling()
 
 
 if __name__ == '__main__':
-    # TODO: parallel requests
-    # loop = get_event_loop()
-    # loop.run_until_complete(main())
-    # asyncio.run(main())
-    # updater - dispatcher
-
-    # main_loop = asyncio.new_event_loop()
-    # asyncio.set_event_loop(main_loop)
-    # thread = Thread(target=main_loop.run_until_complete, args=(main(),))
-    # thread.start()
-    # thread.join()
-
     main()

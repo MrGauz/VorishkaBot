@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Terms and Conditions — Sticker Snatcher</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 py-10">
+<div class="container mx-auto px-4">
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 id="title" class="text-2xl font-bold mb-4"></h2>
+        <div id="tnc" class="prose"></div>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const lang = urlParams.get('lang') || 'en';
+        const title = document.getElementById("title");
+        const tnc = document.getElementById("tnc");
+
+        switch (lang) {
+            case 'ru':
+                document.title = "Условия использования — Воришка стикеров";
+                title.innerHTML = "Условия использования";
+                tnc.innerHTML =
+                    '<h1 class="text-l mb-1 font-bold">1. Введение</h1>' +
+                    '<p class="mb-3">Добро пожаловать в <a href="https://t.me/VorishkaStickersBot" class="font-medium">Воришку стикеров</a>. Этот документ — наши "Условия использования" — создан для того, чтобы помочь вам понять правила использования наших услуг. Пожалуйста, ознакомьтесь с ними внимательно.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">2. Услуги</h1>' +
+                    '<p class="mb-3">Воришка стикеров предлагает вам платформу для управления своими индивидуальными наборами стикеров. Услуга предоставляется на условиях "as is".</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">3. Платные услуги</h1>' +
+                    '<p class="mb-3">Мы предлагаем дополнительные премиум-возможности в рамках бота. При покупке любых товаров или услуг у нашего бота, вы соглашаетесь с нашими Условиями.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">4. Условия оплаты</h1>' +
+                    '<p class="mb-3">Премиум-доступ становится активным сразу после обработки вашего платежа. Мы, как владельцы бота, не имеем доступа к вашим платежным данным и не несем ответственности за стабильность работы платежного провайдера. Возврат средств не предусмотрен, но у вас есть право отменить покупку в течение 7 дней и получить полный возврат. Ваш премиум-доступ нельзя передать или продать. Вы можете пополнять срок вашего доступа в любое время, но необходимо следить за его достаточностью для использования премиум-возможностей.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">5. Контент пользователя</h1>' +
+                    '<p class="mb-3">Вы единственно ответственны за контент, который вы загружаете через нашего бота. Мы не сохраняем или не храним медиафайлы после их преобразования в стикеры.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">6. Конфиденциальность</h1>' +
+                    '<p class="mb-3">Мы собираем и храним базовую информацию профиля, такую как ID пользователя и его имя, чтобы отслеживать покупки и управлять настройками, включая языковые предпочтения. Мы также анализируем модели использования, чтобы улучшать наши услуги. Медиафайлы, загруженные вами для создания стикеров, после обработки не сохраняются. Мы не передаем вашу информацию третьим сторонам. Вы имеете право запросить доступ, исправление или удаление ваших персональных данных. Если у вас возникли вопросы по поводу ваших личных данных, пишите на наш электронный адрес: <a href="mailto:vorishka@pognali.agency" class="font-medium">vorishka@pognali.agency</a>.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">7. Изменения в Условиях</h1>' +
+                    '<p class="mb-3">Мы имеем право изменять эти Условия в любой момент. В этом случае, мы уведомляем вас обо всех изменениях через нашего бота или другими способами за 30 или более дней.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">8. Споры и контакты</h1>' +
+                    '<p class="mb-3">Все возникающие споры следует решать через обращение к владельцу бота. Если у вас есть вопросы по поводу этих Условий, свяжитесь с нами по адресу <a href="mailto:vorishka@pognali.agency" class="font-medium">vorishka@pognali.agency</a>.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">9. Прекращение услуг</h1>' +
+                    '<p class="mb-3">Мы имеем право в любой момент приостановить или прекратить ваш доступ к сервису по любой причине с уведомлением вас об этом. В случае прекращения доступа, неиспользованные дни премиального сервиса будут возвращены в пропорциональном порядке. Все наборы стикеров, которые вы создали через наш сервис, остаются вашей собственностью в аккаунте Telegram и не подлежат блокировке.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">10. Ограничение ответственности</h1>' +
+                    '<p class="mb-3">Вне зависимости от обстоятельств, мы не несем ответственности за любые косвенные, случайные, специальные, возникающие или штрафные убытки, возникшие в результате использования или невозможности использования наших услуг.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">11. Применимое законодательство</h1>' +
+                    '<p class="mb-3">Эти Условия регулируются в соответствии с законодательством Украины. Все споры, возникающие в рамках этих Условий, подлежат рассмотрению исключительно в судах Украины.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">12. Соглашение</h1>' +
+                    '<p class="mb-3">При использовании наших услуг вы соглашаетесь с этими Условиями. Если вы не согласны с данными Условиями, то вам следует отказаться от использования Воришки стикеров.</p>';
+                break;
+            case 'uk':
+                document.title = "Умови використання — Злодюжка стікерів";
+                title.innerHTML = "Умови використання";
+                tnc.innerHTML =
+                    '<h1 class="text-l mb-1 font-bold">1. Вступ</h1>' +
+                    '<p class="mb-3">Ласкаво просимо до <a href="https://t.me/VorishkaStickersBot" class="font-medium">Злодюжки стікерів</a>. Цей документ — наші "Умови використання" — створений для того, щоб допомогти вам зрозуміти правила використання наших послуг. Будь ласка, уважно ознайомтеся з ними.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">2. Послуги</h1>' +
+                    '<p class="mb-3">Злодюжка стікерів пропонує вам платформу для керування своїми індивідуальними наборами стікерів. Послуга надається на умовах "as is".</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">3. Платні послуги</h1>' +
+                    '<p class="mb-3">Ми пропонуємо додаткові преміум-можливості в рамках бота. При купівлі будь-яких товарів або послуг у нашого бота, ви погоджуєтеся з нашими Умовами.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">4. Умови оплати</h1>' +
+                    '<p class="mb-3">Преміум-доступ стає активним відразу після обробки вашого платежу. Ми, як власники бота, не маємо доступу до ваших платіжних даних і не несемо відповідальності за стабільність роботи платіжного провайдера. Возврат коштів не передбачено, але у вас є право скасувати покупку протягом 7 днів і отримати повне відшкодування. Ваш преміум-доступ не можна передати або продати. Ви можете поповнювати строк вашого доступу в будь-який час, але необхідно слідкувати за його достатністю для використання преміум-можливостей.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">5. Контент користувача</h1>' +
+                    '<p class="mb-3">Лише ви відповідальний за контент, який ви завантажуєте через нашого бота. Ми не зберігаємо або не зберігаємо медіафайли після їх перетворення в стікери.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">6. Конфіденційність</h1>' +
+                    '<p class="mb-3">Ми збираємо і зберігаємо базову інформацію профілю, таку як ID користувача та його ім\'я, щоб відстежувати покупки та керувати налаштуваннями, включаючи уподобання мови. Ми також аналізуємо моделі використання, щоб поліпшити наші послуги. Медіафайли, завантажені вами для створення стікерів, після обробки не зберігаються. Ми не передаємо вашу інформацію третім сторонам. Ви маєте право запросити доступ, виправлення або видалення ваших персональних даних. Якщо у вас виникли питання щодо ваших особистих даних, пишіть на нашу електронну адресу: <a href="mailto:vorishka@pognali.agency" class="font-medium">vorishka@pognali.agency</a>.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">7. Зміни в Умовах</h1>' +
+                    '<p class="mb-3">Ми маємо право змінювати ці Умови в будь-який час. У такому випадку, ми повідомляємо вас про всі зміни через нашого бота або іншими способами за 30 або більше днів.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">8. Суперечки та контакти</h1>' +
+                    '<p class="mb-3">Усі виникаючі суперечки слід вирішувати через звернення до власника бота. Якщо у вас є питання щодо цих Умов, зв\'яжіться з нами за адресою <a href="mailto:vorishka@pognali.agency" class="font-medium">vorishka@pognali.agency</a>.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">9. Припинення послуг</h1>' +
+                    '<p class="mb-3">Ми маємо право в будь-який час призупинити або припинити ваш доступ до сервісу з будь-якої причини з повідомленням вас про це. У випадку припинення доступу, нескористані дні преміального сервісу будуть повернуті в пропорційному порядку. Усі набори стікерів, які ви створили через наш сервіс, залишаються вашою власністю в аккаунті Telegram і не підлягають блокуванню.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">10. Обмеження відповідальності</h1>' +
+                    '<p class="mb-3">Незалежно від обставин, ми не несемо відповідальності за будь-які непрямі, випадкові, спеціальні, виникаючі або штрафні збитки, що виникли в результаті використання або неможливості використання наших послуг.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">11. Застосовне законодавство</h1>' +
+                    '<p class="mb-3">Ці Умови регулюються відповідно до законодавства України. Усі суперечки, що виникають в рамках цих Умов, підлягають розгляду виключно в судах України.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">12. Угода</h1>' +
+                    '<p class="mb-3">Використовуючи наші послуги, ви погоджуєтеся з цими Умовами. Якщо ви не згодні з цими Умовами, то вам слід відмовитися від використання Злодюжки стікерів.</p>';
+                break;
+            case 'en':
+            default:
+                document.title = "Terms and Conditions — Sticker Snatcher";
+                title.innerHTML = "Terms and Conditions";
+                tnc.innerHTML =
+                    '<h1 class="text-l mb-1 font-bold">1. Introduction</h1>' +
+                    '<p class="mb-3">Welcome to <a href="https://t.me/VorishkaStickersBot" class="font-medium">Sticker Snatcher</a>. This document, our Terms and Conditions (the "Terms"), is meant to help you understand the rules that govern your use of our services. Please read them carefully.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">2. Services</h1>' +
+                    '<p class="mb-3">Sticker Snatcher provides a platform that allows you to manage your personal sticker sets. The service is provided on an "as is" basis.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">3. Paid Services</h1>' +
+                    '<p class="mb-3">We offer additional premium features inside the bot. By purchasing any goods or services from our bot, you accept these Terms.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">4. Payment Terms</h1>' +
+                    '<p class="mb-3">Your premium access begins as soon as your payment is processed. We, as the owner of the bot, do not have access to your payment data, and we are not responsible for the stability of the payment provider. The fee is not refundable. However, you have the right to cancel within 7 days of your initial purchase and receive a full refund. Your access cannot be transferred or sold. You can top up your access duration at any time, but you must ensure that you maintain sufficient duration to use the premium features.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">5. User Content</h1>' +
+                    '<p class="mb-3">You are solely responsible for the content you upload through our services. We do not retain or store the media after it has been processed into a sticker.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">6. Privacy</h1>' +
+                    '<p class="mb-3">We collect and store basic profile information, such as your user ID, and username, to identify users, track their purchases, and manage settings like language preferences. We also monitor usage patterns to analyze how our bot is used, and use this information to improve our services. Media files you upload to create stickers are not stored after they have been processed. We do not share any information with third parties. You have the right to request access to, correct, or delete your personal data. For any requests related to your personal data, please email us at <a href="mailto:vorishka@pognali.agency" class="font-medium">vorishka@pognali.agency</a>.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">7. Changes to the Terms</h1>' +
+                    '<p class="mb-3">We reserve the right to change these Terms at any time. We will always provide a 30 days notice of any changes through our bot or by other means.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">8. Disputes and Contact</h1>' +
+                    '<p class="mb-3">All possible disputes should be resolved by contacting the owner of the bot. If you have any questions about these Terms, please contact us at <a href="mailto:vorishka@pognali.agency" class="font-medium">vorishka@pognali.agency</a>.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">9. Termination</h1>' +
+                    '<p class="mb-3">We reserve the right to suspend or terminate your access to the service at any time, with or without cause, and with notice. In the event of termination, any unused days of premium service will be refunded on a prorated basis. Regardless of the status of your access to our service, any sticker sets you have created through our service remain the property of your Telegram account, and your access to these will be unaffected.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">10. Limitation of Liability</h1>' +
+                    '<p class="mb-3">In no event will we be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use or inability to use our services.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">11. Governing Law</h1>' +
+                    '<p class="mb-3">These Terms are governed by the applicable laws of Ukraine. All and any disputes under this Terms shall be settled exclusively in the courts of Ukraine.</p>' +
+
+                    '<h1 class="text-l mb-1 font-bold">12. Agreement</h1>' +
+                    '<p class="mb-3">By using our services, you are agreeing to these Terms. If you do not agree to these Terms, you may not use Sticker Snatcher.</p>';
+                break;
+        }
+    };
+</script>
+</body>
+</html>

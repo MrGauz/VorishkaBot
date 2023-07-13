@@ -1,0 +1,10 @@
+.git/
+.idea/
+venv/
+converter/
+logs/
+*__pycache__/*
+.gitignore
+context_data
+.env.example
+README.md

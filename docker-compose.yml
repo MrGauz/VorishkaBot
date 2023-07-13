@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  vorishka_bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: vorishka_bot
+    container_name: vorishka_bot_app
+    restart: always
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_DATABASE: vorishka_bot
+      MYSQL_USER: vorishka_bot
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TGS_CONVERTER_PATH: /converter/TgsConverter.dll
+      LOG_PATH: /vorishka_bot_logs
+      CONCURRENT_THREADS: 7
+    env_file: .env
+    volumes:
+      - ${DOCKER_PERSISTENCE_PATH}/vorishka_bot_logs:/vorishka_bot_logs
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql
+    container_name: vorishka_bot_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: vorishka_bot
+      MYSQL_USER: vorishka_bot
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    env_file: .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - ${DOCKER_PERSISTENCE_PATH}/vorishka_bot_mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: vorishka_bot_pma
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    env_file: .env
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql

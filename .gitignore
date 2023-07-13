@@ -1,11 +1,5 @@
-.vs
-.idea
-
-bin
-obj
-Properties
-*.sln
-*.user
-
+.idea/
+venv/
+logs/
 .env
-.env.debug
+context_data

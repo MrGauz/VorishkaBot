@@ -1,30 +1,13 @@
-# VorishkaBot aka Воришка стикеров
+# VorishkaBot2.0
 
-> 🤖 Here's [a link to the bot](https://t.me/VorishkaStickersBot). It talks to you in Russian.
+> 🦺 This project is currently under construction. The stable version is available [here](https://github.com/MrGauz/VorishkaBot/tree/1.0).
 
-This Telegram bot saves your favorite stickers to one pack, so you don't have to spend half a day searching for your favorite meme among dozens of sticker packs you've saved. An upgraded version of pinned "Favourite stickers" if you will.
+## Running the bot
 
-**What can the chatbot do?**
-- ✅ Save static stickers
-- ✅ Make stickers from images
+1. Install the dependencies with ``pip install -r requirements.txt``
+2. Create a ``.env`` file (see [``.env.example``](./.env.example)) and fill in the values
+3. Run the bot with ``python3 main.py``
 
-**What can't the chatbot do?**
-- ❌ Save animated stickers
-- ❌ Delete stickers from a sticker pack or change their order
+## License
 
-## ⚒️ Run it yourself
-1. Clone this repository:
-   - ``git clone https://github.com/MrGauz/VorishkaBot.git``
-2. Create ``.env`` with the config (make a copy of ``.env.example`` and populate it)
-3. Install [.NET 6.0 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
-4. Install [ffmpeg](https://www.ffmpeg.org/download.html) for converting images
-    - Make sure ``ffmpeg`` is added to PATH
-5. Install [ImageMagick](https://imagemagick.org/script/download.php)
-    - Make sure ``magick`` (Win) or ``convert`` (*nix) is added to PATH
-6. Install [pngquant](https://pngquant.org/)
-    - Make sure ``pngquant`` is added to PATH
-7. Build the project; compiled code can be found in ``bin/Release/net6.0/``:
-   - ``dotnet build -c Release``
-   - Make sure .env was copied to the folder with compiled code.
-8. Run your bot:
-   - ``dotnet bin/Release/net6.0/BirthdaysBot.dll``
+This work is licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). 

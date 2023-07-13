@@ -1,8 +1,8 @@
 # VorishkaBot2.0
 
-## Running the bot
+> 🦺 This project is currently under construction. The stable version is available [here](https://github.com/MrGauz/VorishkaBot/tree/1.0).
 
-> You will need to have Python and pip installed.
+## Running the bot
 
 1. Install the dependencies with ``pip install -r requirements.txt``
 2. Create a ``.env`` file (see [``.env.example``](./.env.example)) and fill in the values

@@ -9,7 +9,7 @@
         "default_video_set_name": "My stickers",
         "start_command": "Let's go for it!",
         "help_command": "Is there anybody here to listen to my story...",
-        "cancel_command": "No worries, I stopped.",
+        "cancel_command": "Alrighty.",
         "choose_language": "What language should I speak?",
         "language_changed": "Alrighty, English it is."
     },
@@ -30,7 +30,7 @@
         "unsupported_update": "??? Sorry, I can't process whatever this is.",
         "ffmpeg_failed": "??? Task failed successfully.",
         "no_sets": "You haven't got any. Yet.\n\nSend me an image or a sticker and I'll create a sticket set for you.",
-        "no_group_chats": "Sorry, I'd like it to stay between us. <a href='TODO: bot link'>Send me a dm</a>.",
+        "no_group_chats": "Sorry, I'd like it to stay between us. <a href='https://t.me/VorishkaStickersBot'>Send me a dm</a>.",
         "unknown_document_type": "Sorry, I can't process this document type yet.",
         "file_too_big": "Sorry, this file is too big (max 20 MB).",
         "not_subscribed": "You don't have an active PROscription. Run /subscription to get one.",
@@ -60,7 +60,7 @@
         "full_warning": "This is the last sticker I'm saving here, the set is full now. You can delete some unused stickers to make room for new ones. Otherwise, I will create a new one the next time."
     },
     "stickers": {
-        "summary_message": "Set: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\nEmoji: {emoji}",
+        "summary_message": "Emoji: {emoji}\nSet: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "new_saved": "Job done.\n\nHere's the info about the sticker:\n\u00B7 Sticket set: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\n\u00B7 Emoji: \" {emoji} \".\n\nIf you'd like to change anything, just send me the sticker again.",
         "first_ever_sticker_saved": "Congratulations, you've just created your first sticker set! It's called <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>. Save it to your favourites and send it to your friends.",
         "choose_new_emoji": "Choose a new emoji for this sticker (or send /cancel to abort):",

@@ -46,30 +46,30 @@
         "invoice_generation": "??? Я не смог выставить счёт. Пожалуйста, попробуй ещё раз.",
         "pre_checkout_query_failed": "Извини, у меня не получается обработать платёжь. Пожалуйста, попробуй ещё раз.",
         "sticker_not_saved": "Извини, у меня не получилось сохранить стикер. Пожалуйста, попробуй ещё раз.",
-        "move_set_full": "TODO"
+        "move_set_full": "Извини, но место в этом стикерпаке закончилось место. Пожалуйста, выбери другой."
     },
     "sets": {
         "my_sets_list": "Вот твои стикерпаки:",
-        "first_set_created": "TODO",
-        "new_set_created": "TODO",
+        "first_set_created": "Поздравляю с первым стикерпаком. Он называется <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
+        "new_set_created": "У тебя появился ещё один стикерпак. Он называется <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>.",
         "summary_message": "Стикерпак: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\nСтикеров сохранено: {sticker_count}/50",
         "choose_new_name": "Выбери новое название для этого стикерпака (или выполни команду /cancel чтобы отменить действие):",
         "renamed": "Я переименовал стикерпак на <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>.",
         "confirm_delete": "Точно удаляем стикерпак <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>? Это действие нельзя отменить потом.",
         "deleted": "Договорились, я удалил стикерпак {set_title}.",
-        "full_warning": "TODO"
+        "full_warning": "Я сохраняю последний стикер в этот стикерпак: тут закончилось место. Для следующего стикера я сделаю новый стикерпак. Или, если хочешь, можешь удалить парочку старых, чтобы расчистить место."
     },
     "stickers": {
         "summary_message": "Эмодзи: {emoji}\nстикерпак: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "new_saved": "Я сохранил стикер в стикерпак <a href='https://t.me/addstickers/{set_name}'>{set_title}</a> с этим эмодзи: {emoji}. Если хочешь что-то поменять, просто пришли мне этот стикер.",
-        "first_ever_sticker_saved": "TODO",
+        "first_ever_sticker_saved": "Поздравляю с первым стикерпаком. Он называется <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>.",
         "choose_new_emoji": "Выбери новый эмодзи для этого стикера (или выполни команду /cancel чтобы отменить действие).",
         "emoji_changed": "Я поменял эмодзи на {new_emoji}",
         "choose_set_to_move": "Выбери стикерпак в который нужно подвинуть стикер:",
         "moved": "Я подвинул стикер в стикерпак <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "confirm_delete": "Точно удаляем стикер?",
         "deleted": "Договорились, я удалил стикер.",
-        "last_sticker_deleted": "TODO"
+        "last_sticker_deleted": "Так как это был последний стикер в стикерпаке {set_title}, я удалил и сам стикерпак."
     },
     "subscription": {
         "invoice_title": "PROписка",
@@ -79,7 +79,7 @@
         "payment_success": "Спасибо за покупку! Твоя PROписка активна до {date}.",
         "deny_precheckout": "Я не знаю, какого чёрта ты тут делаешь, но я тебе это не продам.",
         "renewal_reminder": "Твоя PROписка закончится через {days_left} дней. Пришли мне команду /subscription чтобы продлить PROписку.",
-        "voucher_activated": "TODO",
-        "voucher_already_used": "TODO"
+        "voucher_activated": "Поздравляю, твоя PROписка увеличилась на {days} дней. Воспользуйтся командой /subscription чтобы узнать больше.",
+        "voucher_already_used": "Поздравляю с найденой пасхалкой. Однако, её уже нашли до тебя."
     }
 }

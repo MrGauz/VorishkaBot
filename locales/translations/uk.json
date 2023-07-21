@@ -30,46 +30,46 @@
         "unsupported_update": "??? Вибач, я не розумію, що то є.",
         "ffmpeg_failed": "??? Вибач, щось пішло не так.",
         "no_sets": "У тебе ще немає стікерпаків. Будь ласка, надішли мені стікер, аби я міг створити для тебе пак.",
-        "no_group_chats": "Вибач, я люблю розмову по душам. <a href='https://t.me/VorishkaStickersBot'>Надішли мені приватне повідомлення</a>.",
+        "no_group_chats": "Вибач, я люблю розмову тет-а-тет. <a href='https://t.me/VorishkaStickersBot'>Надішли мені приватне повідомлення</a>.",
         "unknown_document_type": "Вибач, я не вмію у такий тип документів.",
         "file_too_big": "Вибач, проте файл завеликий (max 20 MB).",
         "not_subscribed": "У тебе ще немає активної PROписки. Наділши мені команду /subscription аби отримати її.",
         "tgs_converter_failed": "??? Вибач, щось пішло не так.",
-        "sticker_not_moved": "Вибач, я не зміг посунути стікер. Будь ласка, спробуй ще раз.",
-        "sticker_not_deleted": "Вибач, я не зміг видалити стікер. Будь ласка, спробуй ще раз.",
-        "set_not_deleted": "Вибач, я не зміг видалити стікерпак {set_title}. Будь ласка, спробуй ще раз.",
-        "invalid_emoji": "Хм, вигладає наче якийсь неправильний емодзі. Будь ласка, спробуй ще раз (або надішли мені команду /cancel щоби перервати дію).",
-        "emoji_not_changed": "Вибач, я не зміг змінити емодзі. Будь ласка, спробуй ще раз.",
+        "sticker_not_moved": "Вибач, я не зміг посунути стікер. Спробуй, будь ласка, ще раз.",
+        "sticker_not_deleted": "Вибач, я не зміг видалити стікер. Спробуй, будь ласка, ще раз.",
+        "set_not_deleted": "Вибач, я не зміг видалити стікерпак {set_title}.  Спробуй, Будь ласка, ще раз.",
+        "invalid_emoji": "Хм, вигладає наче якийсь неправильний емодзі. Спробуй, будь ласка, ще раз (або надішли мені команду /cancel щоби перервати дію).",
+        "emoji_not_changed": "Вибач, я не зміг змінити емодзі. Спробуй, будь ласка, ще раз.",
         "set_not_renamed": "Вибач, я не зміг змінити назву стікерпаку {new_name}.",
         "takes_time_warning": "Я займуся цим, проте це може тривати хвильку чи дві. Я відмельдуюся, коли буду готовий.",
         "some_telegram_error": "Тут щось пороблено, будь ласка, спробуй знов трохи пізніше.",
-        "invoice_generation": "??? Я не зміг виставити тобі рахунок. Будь ласка, спробуй ще раз пізніше.",
-        "pre_checkout_query_failed": "Вибач, у мене не виходить обробити платіж. Будь ласка, спробуй ще раз.",
-        "sticker_not_saved": "Вибач, у мене не вийшло зберегти стікер. Будь ласка, спробуй ще раз.",
-        "move_set_full": "TODO"
+        "invoice_generation": "??? Я не зміг виставити тобі рахунок. Будь ласка, Спробуй ще раз пізніше.",
+        "pre_checkout_query_failed": "Вибач, у мене не виходить обробити платіж. Спробуй, будь ласка, ще раз.",
+        "sticker_not_saved": "Вибач, у мене не вийшло зберегти стікер. Спробуй, будь ласка, ще раз.",
+        "move_set_full": "Вибач, у стікерпаці не залишилося місця. Обери, будь ласка, новий."
     },
     "sets": {
         "my_sets_list": "Твої стікерпаки:",
-        "first_set_created": "TODO",
-        "new_set_created": "TODO",
+        "first_set_created": "Вітаю з першим стікерпаком. Він зветься <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>.",
+        "new_set_created": "Тепер у тебе є ще один стікерпак. Він зветься <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>.",
         "summary_message": "Стікерпак: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\nСтікерів збережено: {sticker_count}/50",
         "choose_new_name": "Обери нову назву для цього стікерпаку (або надішли команду /cancel аби перервати дію):",
         "renamed": "Я перейменував стікерпак на <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>",
         "confirm_delete": "Точно? Видаляємо стікерпак <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>? Цю дію потім не відмінити.",
         "deleted": "Домовились, я видалив стікерпак {set_title}.",
-        "full_warning": "TODO"
+        "full_warning": "Це останній стікер у цьому паці – більше нема місця. Наступний стікер я збережу у новий стікерпак. Або, ящо хочеш, повидаляй старі стікери, аби звільнити трохи місця."
     },
     "stickers": {
         "summary_message": "Емодзі: {emoji}\nСтікерпак: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "new_saved": "Я зберіг стікер до стікерпаку <a href='https://t.me/addstickers/{set_name}'>{set_title}</a> із цим емодзі: {emoji}. Якщо хочеш щось змінити, просто надішли мені цей стікер знов.",
-        "first_ever_sticker_saved": "TODO",
+        "first_ever_sticker_saved": "Вітаю з першим стікерпаком. Він зветься <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>.",
         "choose_new_emoji": "Обери новий емодзі для цього стікеру (або надішли команду /cancel аби перервати дію):",
         "emoji_changed": "Я змінив емодзі на {new_emoji}",
         "choose_set_to_move": "Обери стікерпак у котрий треба посунути стікер:",
         "moved": "Я посунув стікер до стікерпаку <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "confirm_delete": "Точно видаляємо стікер?",
         "deleted": "Домовились, я видалив стікер.",
-        "last_sticker_deleted": "TODO"
+        "last_sticker_deleted": "Так як це був останній стікер у {set_title} паці, я видалив і стікерпак."
     },
     "subscription": {
         "invoice_title": "PROписка",
@@ -79,7 +79,7 @@
         "payment_success": "Дякую за покупку! Твоя PROписка активна до {date}.",
         "deny_precheckout": "Я не знаю, якого дідька ти тут робиш, але я тобі це не продам.",
         "renewal_reminder": "Твоя PROписка скінчиться через {days_left} дні. Надішли мені команду /subscription аби продовжити PROписку.",
-        "voucher_activated": "TODO",
-        "voucher_already_used": "TODO"
+        "voucher_activated": "Твоя PROписка продовжилася на {days} днів. Скористайся командою /subscription якщо хочеш дізнатися більше.",
+        "voucher_already_used": "Чудово, кайф, пасхалка знайдена. Лиш не тобою вперше. Нею більше не можна скористатися."
     }
 }

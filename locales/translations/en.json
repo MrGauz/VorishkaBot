@@ -44,14 +44,14 @@
         "takes_time_warning": "I'm on it, but it might take a while. I'll let you know when I'm done.",
         "some_telegram_error": "Something went wrong, try again later.",
         "invoice_generation": "??? Failed to send you an invoice, try again later.",
-        "pre_checkout_query_failed": "I'm sorry, I couldn't process your payment. Please try again later.",
+        "pre_checkout_query_failed": "Sorry, I couldn't process your payment. Please try again later.",
         "sticker_not_saved": "I'm sorry, I couldn't save the sticker. Please try again later.",
         "move_set_full": "Sorry, this set is full. Please choose another one."
     },
     "sets": {
         "my_sets_list": "Here are your sets:",
-        "first_set_created": "Congratulations, you've just created your first sticker set! It's called <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>. Save it to your favourites and send it to your friends.",
-        "new_set_created": "Congratulations, you've just created a new sticker set! It's called <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>. Save it to your favourites and send it to your friends.",
+        "first_set_created": "Congratulations, you've just created your first sticker set! It's called <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>..",
+        "new_set_created": "Congratulations, you've just created a new sticker set! It's called <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>.",
         "summary_message": "Set: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\nStickers saved: {sticker_count}/50",
         "choose_new_name": "Choose a new name for your set (or send /cancel to abort):",
         "renamed": "I renamed the set to <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>.",
@@ -62,7 +62,7 @@
     "stickers": {
         "summary_message": "Emoji: {emoji}\nSet: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "new_saved": "Job done.\n\nHere's the info about the sticker:\n\u00B7 Sticket set: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\n\u00B7 Emoji: \" {emoji} \".\n\nIf you'd like to change anything, just send me the sticker again.",
-        "first_ever_sticker_saved": "Congratulations, you've just created your first sticker set! It's called <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>. Save it to your favourites and send it to your friends.",
+        "first_ever_sticker_saved": "Congratulations, you've just created your first sticker set! It's called <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>.",
         "choose_new_emoji": "Choose a new emoji for this sticker (or send /cancel to abort):",
         "emoji_changed": "I changed the emoji to {new_emoji}",
         "choose_set_to_move": "Choose a set to move the sticker to:",
@@ -80,6 +80,6 @@
         "deny_precheckout": "I don't know how you got here, but you can't buy this.",
         "renewal_reminder": "Your PROscription ends in {days_left} days. Run /subscription to renew it.",
         "voucher_activated": "Congratulations, your PROscription is prolonged by {days} days. Use /subscription to learn more.",
-        "voucher_already_used": "Good job, you've found an easter egg. But this one was already found and used by someone else."
+        "voucher_already_used": "Good job, you've found an easter egg. But this one was already found by someone else."
     }
 }

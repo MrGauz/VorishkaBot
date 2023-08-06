@@ -154,6 +154,7 @@ async def move_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_set = await save_sticker_to_set(update, context, input_sticker, query.data)
 
     await update.effective_chat.send_action(ChatAction.TYPING)
+    sticker_set = await context.bot.get_sticker_set(sticker.set_name)
     if user_set:
         await context.bot.delete_sticker_from_set(sticker.file_id)
         await update.effective_message.edit_text(
@@ -162,6 +163,13 @@ async def move_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
         new_analytics_event(AnalyticsTypes.STICKER_MOVED, update, user)
     else:
         await update.effective_message.edit_text(_('errors.sticker_not_moved', user.lang_code))
+
+    # Last sticker in set was deleted
+    if user_set and len(sticker_set.stickers) == 1:
+        Set.delete().where(Set.name == sticker.set_name).execute()
+        await update.effective_message.reply_text(_('stickers.last_sticker_deleted', user.lang_code,
+                                                    placeholders={'set_title': sticker_set.title}))
+        new_analytics_event(AnalyticsTypes.SET_DELETED_IMPLICIT, update, user)
 
     context.user_data.clear()
     return ConversationHandler.END

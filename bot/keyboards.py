@@ -62,7 +62,6 @@ def get_delete_confirm_keyboard(user: User, is_sticker=False) -> InlineKeyboardM
     delete_action = ActionTypes.DELETE_STICKER if is_sticker else ActionTypes.DELETE_SET
     return InlineKeyboardMarkup([
         [InlineKeyboardButton(_('keyboards.delete_set_no', user.lang_code), callback_data=ActionTypes.CANCEL)],
-        [InlineKeyboardButton(_('keyboards.delete_set_nope', user.lang_code), callback_data=ActionTypes.CANCEL)],
         [InlineKeyboardButton(_('keyboards.delete_set_yes', user.lang_code), callback_data=delete_action)]
     ])
 

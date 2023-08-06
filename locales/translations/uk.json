@@ -1,7 +1,7 @@
 {
     "bot": {
         "description": "Вітаю! Я допоможу тобі привести улюблені стікери в порядок. Тицьни кнопку нижче і я детальніше розповім тобі, що вмію.",
-        "about": "Я допоможу тобі привести улюблені стікери до ладу. Будь ласка, напиши @mrGauz або @danielbilyk якщо я поламався.\nTODO: channel link {bot_username}",
+        "about": "Я допоможу тобі привести улюблені стікери до ладу. Будь ласка, напиши @mrGauz або @danielbilyk якщо я поламався.",
         "my_sets_desc": "Керувати стікерпаками",
         "subscription_desc": "Керувати PROпискою",
         "translate_desc": "Змінити мову",
@@ -17,8 +17,7 @@
         "cancel": "Відміна",
         "rename_set": "Перейменувати стікерпак",
         "delete_set": "Видалити стікерпак",
-        "delete_set_no": "Назад",
-        "delete_set_nope": "Ні, не треба",
+        "delete_set_no": "Ні, не треба",
         "delete_set_yes": "Так, видаляємо",
         "subscribe": "Отримати PROписку",
         "change_emoji": "Змінити емодзі",
@@ -56,20 +55,19 @@
         "choose_new_name": "Обери нову назву для цього стікерпаку (або надішли команду /cancel аби перервати дію):",
         "renamed": "Я перейменував стікерпак на <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>",
         "confirm_delete": "Точно? Видаляємо стікерпак <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>? Цю дію потім не відмінити.",
-        "deleted": "Домовились, я видалив стікерпак {set_title}.",
+        "deleted": "Домовились, я видалив стікерпак \"{set_title}\".",
         "full_warning": "Це останній стікер у цьому паці – більше нема місця. Наступний стікер я збережу у новий стікерпак. Або, ящо хочеш, повидаляй старі стікери, аби звільнити трохи місця."
     },
     "stickers": {
         "summary_message": "Емодзі: {emoji}\nСтікерпак: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "new_saved": "Я зберіг стікер до стікерпаку <a href='https://t.me/addstickers/{set_name}'>{set_title}</a> із цим емодзі: {emoji}. Якщо хочеш щось змінити, просто надішли мені цей стікер знов.",
-        "first_ever_sticker_saved": "Вітаю з першим стікерпаком. Він зветься <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>.",
         "choose_new_emoji": "Обери новий емодзі для цього стікеру (або надішли команду /cancel аби перервати дію):",
         "emoji_changed": "Я змінив емодзі на {new_emoji}",
         "choose_set_to_move": "Обери стікерпак у котрий треба посунути стікер:",
         "moved": "Я посунув стікер до стікерпаку <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "confirm_delete": "Точно видаляємо стікер?",
         "deleted": "Домовились, я видалив стікер.",
-        "last_sticker_deleted": "Так як це був останній стікер у {set_title} паці, я видалив і стікерпак."
+        "last_sticker_deleted": "Так як це був останній стікер у \"{set_title}\" паці, я видалив і стікерпак."
     },
     "subscription": {
         "invoice_title": "PROписка",

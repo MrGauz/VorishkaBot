@@ -74,9 +74,9 @@ async def generate_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE):
             prices=[
                 LabeledPrice(label=_('subscription.invoice_title', user.lang_code), amount=SUBSCRIPTION_365_PRICE),
             ],
-            photo_url='https://gauz.net/zhopa.jpg',  # TODO: replace
-            photo_width=800,  # TODO: replace
-            photo_height=800,  # TODO: replace
+            photo_url='https://pognali.agency/vorishka/paid_bot.jpg',
+            photo_width=1000,
+            photo_height=600,
         )
         new_analytics_event(AnalyticsTypes.INVOICE_GENERATED, update, user)
     except TelegramError as e:

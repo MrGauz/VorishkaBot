@@ -1,23 +1,24 @@
 {
     "bot": {
-        "description": "Hey ho! I'll help you manage your favourite stickers. Click a button below to start, and I will explain everything I can do in great detail.",
-        "about": "I will help you manage your stickers. Please drop @mrGauz or @danielbilyk a line in case I misbehave.",
+        "description": "Hey! I will help you manage your stickers.\n\nAs far as I'm aware, I'm the only Telegram sticker-managing bot which can save both static and animated stickers into one single stickerpack for your convenience.\n\nPlease tap a button below to start, and I will tell you more about what I'm useful for.",
+        "about": "I will help you manage your stickers. Please drop @mrGauz or @danielbilyk a line in case I misbehave.\nIf you want to know a bit more, please have a look at the channel: https://t.me/vorishkachannel",
         "my_sets_desc": "Manage your sets",
         "subscription_desc": "Manage your PROscription",
         "translate_desc": "Change language",
         "help_decs": "Get some help",
         "default_video_set_name": "My stickers",
-        "start_command": "Let's go for it!",
-        "help_command": "Is there anybody here to listen to my story...",
-        "cancel_command": "Alrighty.",
+        "start_command": "Alrighty, thanks for being here.\n\nFirst things first, send me a picture or a Telegram sticker, and I'll save it into your personal stickerpack for you.\n\nApart from it, here's an overview of what I can do.\n\uD83E\uDD16 In the <i>free</i> version:\u00B7 Save <i>still</i> images and Telegram stickers into personal stickerpack.\n\u00B7 Assign emoji to stickers.\n\u00B7 Create, rename and delete as many stickerpacks as you want.\n\u00B7 Move your stickers between them.\n\uD83D\uDC7E In the <i>paid</i> version (available via /subscription):\n\u00B7 Everything included in the free version.\n\u00B7 But with animated stickers and videos too.\n\nAs far as I'm aware, I'm the only Telegram sticker-managing bot which can save both static and animated stickers into one single stickerpack for your convenience. But you might not need it now, so, as said, just send me a picture or a Telegram sticker, and you'll be good to go.",
+        "help_command": "You got lost or need a hand. That happens to all of us. Here's what's I can do:\n\u00B7 I save pictures and other Telegram stickers to your personal stickerpack.\n\u00B7 In the free version, I support still pictures and stickers.\n\u00B7 In the paid version – animated stickers, gifs, and videos (up to 3 seconds).\n\u00B7 To move or delete a sticker, or to change its emoji, send me the sticker from your personal stickerpack.\n\nHere's what the commands do:\n\u00B7 via /my_sets command you can manage your stickerpacks, such as rename or delete them, or create a new one.\n\u00B7 via /subscription you can manage your PROscription: obtain it, or add more extra days to it.\n\u00B7 via /translate you can change the language I'll be talking to you in.\n\nIn case you need further assistance, please contact @danielbilyk or @MrGauz.",
+        "cancel_command": "Action canceled.",
         "choose_language": "What language should I speak?",
         "language_changed": "Alrighty, English it is."
     },
     "keyboards": {
-        "cancel": "Cancel",
+        "cancel": "Cancel action",
         "rename_set": "Rename set",
         "delete_set": "Delete set",
-        "delete_set_no": "Nope, nevermind",
+        "delete_set_no": "Back",
+        "delete_set_nope": "Nope, nevermind",
         "delete_set_yes": "Yes, I want it gone",
         "subscribe": "Get PROscription",
         "change_emoji": "Change emoji",
@@ -43,41 +44,42 @@
         "takes_time_warning": "I'm on it, but it might take a while. I'll let you know when I'm done.",
         "some_telegram_error": "Something went wrong, try again later.",
         "invoice_generation": "??? Failed to send you an invoice, try again later.",
-        "pre_checkout_query_failed": "Sorry, I couldn't process your payment. Please try again later.",
+        "pre_checkout_query_failed": "I'm sorry, I couldn't process your payment. Please try again later.",
         "sticker_not_saved": "I'm sorry, I couldn't save the sticker. Please try again later.",
         "move_set_full": "Sorry, this set is full. Please choose another one."
     },
     "sets": {
         "my_sets_list": "Here are your sets:",
-        "first_set_created": "Congratulations, you've just created your first sticker set! It's called <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>.",
-        "new_set_created": "Congratulations, you've just created a new sticker set! It's called <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>.",
+        "first_set_created": "Congratulations, you've just created your first sticker set! It's called <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>. Save it to your favourites and send it to your friends.",
+        "new_set_created": "Congratulations, you've just created a new sticker set! It's called <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>. Save it to your favourites and send it to your friends.",
         "summary_message": "Set: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\nStickers saved: {sticker_count}/50",
         "choose_new_name": "Choose a new name for your set (or send /cancel to abort):",
         "renamed": "I renamed the set to <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>.",
-        "confirm_delete": "Are you sure you want to delete <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>? There's no going back after it.",
-        "deleted": "Alrighty, I deleted the \"{set_title}\" set.",
+        "confirm_delete": "Are you sure you want to delete <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>? Once it's gone, it's gone forever.",
+        "deleted": "Alrighty, I deleted the {set_title} set.",
         "full_warning": "This is the last sticker I'm saving here, the set is full now. You can delete some unused stickers to make room for new ones. Otherwise, I will create a new one the next time."
     },
     "stickers": {
         "summary_message": "Emoji: {emoji}\nSet: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
-        "new_saved": "Job done.\n\nHere's the info about the sticker:\n\u00B7 Sticket set: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\n\u00B7 Emoji: {emoji}\n\nIf you'd like to change anything, just send me the sticker again.",
+        "new_saved": "Job done.\n\nHere's the info about the sticker:\n\u00B7 Sticket set: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\n\u00B7 Emoji: \" {emoji} \".\n\nIf you'd like to change anything, just send me the sticker again.",
+        "first_ever_sticker_saved": "Congratulations, you've just created your first sticker set! It's called <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>. Save it to your favourites and send it to your friends.",
         "choose_new_emoji": "Choose a new emoji for this sticker (or send /cancel to abort):",
-        "emoji_changed": "I changed the emoji to {new_emoji}.",
+        "emoji_changed": "I changed the emoji to {new_emoji}",
         "choose_set_to_move": "Choose a set to move the sticker to:",
-        "moved": "Sticker was moved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>.",
+        "moved": "Sticker was moved to <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
         "confirm_delete": "Are you sure you want to delete this sticker?",
         "deleted": "Alrighty, I deleted the sticker.",
-        "last_sticker_deleted": "Since it was the last sticker in the set \"{set_title}\", I deleted the set as well."
+        "last_sticker_deleted": "Since it was the last sticker in the set {set_title}, I deleted the set as well."
     },
     "subscription": {
         "invoice_title": "PROscription",
         "invoice_description": "PROscribe to get access to all the features.",
-        "not_active": "You don't have an active PROscription.\n\nPress the button below to get one.",
-        "status": "Your PROscription is active until {date}.\n\nPress the button below to get additional 365 days.",
+        "not_active": "You don't have an active PROscription. Press the button below to get one.",
+        "status": "Your PROscription is active until {date}. Press the button below to get additional 365 days.",
         "payment_success": "Thank you for your purchase! Your PROscription is active until {date}.",
         "deny_precheckout": "I don't know how you got here, but you can't buy this.",
         "renewal_reminder": "Your PROscription ends in {days_left} days. Run /subscription to renew it.",
         "voucher_activated": "Congratulations, your PROscription is prolonged by {days} days. Use /subscription to learn more.",
-        "voucher_already_used": "Good job, you've found an easter egg. But this one was already found by someone else."
+        "voucher_already_used": "Good job, you've found an easter egg. But this one was already found and used by someone else."
     }
 }

@@ -30,21 +30,22 @@ async def convert_video(file_path: str) -> str | None:
     new_height = 512 if width < height else int(height * (512 / width))
 
     try:
-        (ffmpeg
-         .input(file_path)
-         .filter('scale', new_width, new_height)  # Resize the video
-         .filter('loop', '30*3', '0')  # Loop the video for optimal user experience
-         .output(
-            webm_filename,
-            format='webm',
-            vcodec='libvpx-vp9',  # VP9 codec
-            crf=18,  # Set quality to 18
-            r=30,  # Set frame rate to 30 FPS
-            an=None,  # Remove audio
-            t=3,  # Limit the duration to 3 seconds
-         )
-         .run(capture_stdout=True, capture_stderr=True)
-         )
+        (
+            ffmpeg
+            .input(file_path)
+            .filter('scale', new_width, new_height)  # Resize the video
+            .filter('loop', '30*3', '0')  # Loop the video for optimal user experience
+            .output(
+                webm_filename,
+                format='webm',
+                vcodec='libvpx-vp9',  # VP9 codec
+                crf=18,  # Set quality to 18
+                r=30,  # Set frame rate to 30 FPS
+                an=None,  # Remove audio
+                t=3,  # Limit the duration to 3 seconds
+            )
+            .run(capture_stdout=True, capture_stderr=True)
+        )
     except ffmpeg.Error as e:
         logger.error(f'Failed to convert {file_path} with ffmpeg', e.stdout, e.stderr)
         return None

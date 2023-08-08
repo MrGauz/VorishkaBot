@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: vorishka_bot
+    image: vorishka_bot:latest
     container_name: vorishka_bot_app
     restart: always
     environment:

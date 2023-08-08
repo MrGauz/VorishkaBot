@@ -28,10 +28,11 @@ jobs:
         chmod 600 private_key
         scp -o StrictHostKeyChecking=no -i private_key docker-compose.yml vorishka-bot.tar \
           ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }}:$TARGET_PATH
-        ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }} <<EOF
+        ssh -T -o StrictHostKeyChecking=no -i private_key ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }} <<EOF
           cd $TARGET_PATH
-          docker load < vorishka-bot.tar
           docker-compose down
+          docker rmi vorishka-bot:latest -f
+          docker load < vorishka-bot.tar
           docker-compose up -d
         EOF
         rm -f private_key

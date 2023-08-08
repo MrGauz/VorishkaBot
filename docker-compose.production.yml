@@ -29,8 +29,6 @@ services:
       MYSQL_USER: vorishka_bot
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     env_file: .env
-    ports:
-      - "3306:3306"
     volumes:
       - ${DOCKER_PERSISTENCE_PATH}/vorishka_bot_mysql_data:/var/lib/mysql
 

@@ -25,6 +25,7 @@ jobs:
       TARGET_PATH: ${{ secrets.REMOTE_PATH }}
     steps:
       - uses: actions/checkout@v3
+      - run: echo "REPO=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
       - run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
       - run: scp -o StrictHostKeyChecking=no -i private_key docker-compose.production.yml ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }}:$TARGET_PATH
       - run: |

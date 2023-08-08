@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: docker login ghcr.io -u $GITHUB_ACTOR -p ${{ secrets.GITHUB_TOKEN }}
+      - run: docker login ghcr.io -u $GITHUB_ACTOR -p ${{ secrets.TOKEN }}
       - run: docker build -t ghcr.io/$GITHUB_ACTOR/vorishka-bot:latest -t ghcr.io/$GITHUB_ACTOR/vorishka-bot:$GITHUB_SHA .
       - run: docker image push ghcr.io/$GITHUB_ACTOR/vorishka-bot:$GITHUB_SHA
       - run: docker image push ghcr.io/$GITHUB_ACTOR/vorishka-bot:latest
@@ -29,7 +29,7 @@ jobs:
       - run: |
           ssh -T -o StrictHostKeyChecking=no -i private_key ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }} <<EOF
             cd $TARGET_PATH
-            docker login ghcr.io -u $GITHUB_ACTOR -p ${{ secrets.GITHUB_TOKEN }}
+            docker login ghcr.io -u $GITHUB_ACTOR -p ${{ secrets.TOKEN }}
             docker pull ghcr.io/$GITHUB_ACTOR/vorishka-bot:$GITHUB_SHA
             docker-compose -f docker-compose.production.yml up -d
             docker system prune --all --force

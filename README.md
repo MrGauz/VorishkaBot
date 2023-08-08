@@ -17,7 +17,7 @@
    - ``REMOTE_USER``
    - ``REMOTE_PATH``
    - ``SSH_PRIVATE_KEY``
-   - ``GITHUB_TOKEN``
+   - ``TOKEN``
 4. Create a deployment repository on the target server
    - ``mkdir -p /bots/VorishkaBot2.0``
    - ``touch /bots/VorishkaBot2.0/context_data``

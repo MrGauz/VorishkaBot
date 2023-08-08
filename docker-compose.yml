@@ -15,7 +15,6 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       TGS_CONVERTER_PATH: /converter/TgsConverter.dll
       LOG_PATH: /vorishka_bot_logs
-      CONCURRENT_THREADS: 7
     env_file: .env
     volumes:
       - ${DOCKER_PERSISTENCE_PATH}/vorishka_bot_logs:/vorishka_bot_logs

@@ -17,9 +17,10 @@
    - ``REMOTE_USER``
    - ``REMOTE_PATH``
    - ``SSH_PRIVATE_KEY``
+   - ``GITHUB_TOKEN``
 4. Create a deployment repository on the target server
-   - ``mkdir -p /bots/VorishkaBot2.0/persistence``
-   - ``touch /bots/VorishkaBot2.0/persistence/vorishka_bot_context/context_data``
+   - ``mkdir -p /bots/VorishkaBot2.0``
+   - ``touch /bots/VorishkaBot2.0/context_data``
 5. Create an ``.env`` file in ``/bots/VorishkaBot2.0/`` (see [``.env.example``](./.env.example)) and fill in the values
 
 ## License

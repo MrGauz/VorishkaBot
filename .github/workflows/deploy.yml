@@ -23,7 +23,7 @@ jobs:
       env:
         PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         TARGET_PATH: /bots/VorishkaBot2.0
-        DOCKER_PERSISTENCE_PATH: ${{ TARGET_PATH }}/persistence
+        DOCKER_PERSISTENCE_PATH: /bots/VorishkaBot2.0/persistence
       run: |
         echo "$PRIVATE_KEY" > private_key
         chmod 600 private_key

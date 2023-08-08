@@ -23,14 +23,14 @@ jobs:
       env:
         PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         TARGET_PATH: /bots/VorishkaBot2.0
-        DOCKER_PERSISTENCE_PATH: /bots/VorishkaBot2.0/persistence
+        DOCKER_PERSISTENCE_PATH: ${{ format('{0}/persistence', env.TARGET_PATH) }}
       run: |
         echo "$PRIVATE_KEY" > private_key
         chmod 600 private_key
         scp -o StrictHostKeyChecking=no -i private_key docker-compose.yml vorishka-bot.tar \
-          ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }}:${{ TARGET_PATH }}
+          ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }}:$TARGET_PATH
         ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }} <<EOF
-          cd ${{ TARGET_PATH }}
+          cd $TARGET_PATH
           docker load < vorishka-bot.tar
           docker-compose down
           docker-compose up -d

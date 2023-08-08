@@ -11,10 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - run: echo "REPO=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
       - run: docker login ghcr.io -u $GITHUB_ACTOR -p ${{ secrets.TOKEN }}
-      - run: docker build -t ghcr.io/$GITHUB_ACTOR/vorishka-bot:latest -t ghcr.io/$GITHUB_ACTOR/vorishka-bot:$GITHUB_SHA .
-      - run: docker image push ghcr.io/$GITHUB_ACTOR/vorishka-bot:$GITHUB_SHA
-      - run: docker image push ghcr.io/$GITHUB_ACTOR/vorishka-bot:latest
+      - run: docker build -t ghcr.io/$REPO:latest -t ghcr.io/vorishka-bot:$GITHUB_SHA .
+      - run: docker image push ghcr.io/$REPO:$GITHUB_SHA
+      - run: docker image push ghcr.io/$REPO:latest
 
   deploy:
     name: Deploy
@@ -30,7 +31,7 @@ jobs:
           ssh -T -o StrictHostKeyChecking=no -i private_key ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }} <<EOF
             cd $TARGET_PATH
             docker login ghcr.io -u $GITHUB_ACTOR -p ${{ secrets.TOKEN }}
-            docker pull ghcr.io/$GITHUB_ACTOR/vorishka-bot:$GITHUB_SHA
+            docker pull ghcr.io/$REPO:$GITHUB_SHA
             docker-compose -f docker-compose.production.yml up -d
             docker system prune --all --force
           EOF

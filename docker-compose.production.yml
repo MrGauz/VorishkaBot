@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   vorishka_bot:
-    image: vorishka_bot:latest
+    image: ghcr.io/mrgauz/vorishkabot:${GITHUB_SHA:-latest}
     container_name: vorishka_bot_app
     restart: always
     environment:

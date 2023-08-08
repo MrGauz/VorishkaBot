@@ -22,17 +22,18 @@ jobs:
     - name: Deploy to server
       env:
         PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        TARGET_PATH: /bots/VorishkaBot2.0
+        TARGET_PATH: ${{ secrets.REMOTE_PATH }}
       run: |
         echo "$PRIVATE_KEY" > private_key
         chmod 600 private_key
-        scp -o StrictHostKeyChecking=no -i private_key docker-compose.yml vorishka-bot.tar \
+        scp -o StrictHostKeyChecking=no -i private_key docker-compose.production.yml vorishka-bot.tar \
           ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }}:$TARGET_PATH
         ssh -T -o StrictHostKeyChecking=no -i private_key ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }} <<EOF
           cd $TARGET_PATH
-          docker-compose down
-          docker rmi vorishka-bot:latest -f
           docker load < vorishka-bot.tar
-          docker-compose up -d
+          docker-compose down
+          docker-compose -f docker-compose.production.yml up -d
+          rm -f vorishka-bot.tar
+          docker image prune --force
         EOF
         rm -f private_key

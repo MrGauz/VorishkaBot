@@ -15,6 +15,7 @@
 3. Create Repository secrets for deployment in the repository:
    - ``REMOTE_SERVER`` 
    - ``REMOTE_USER``
+   - ``REMOTE_PATH``
    - ``SSH_PRIVATE_KEY``
 4. Create a deployment repository on the target server
    - ``mkdir -p /bots/VorishkaBot2.0/persistence``

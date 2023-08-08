@@ -2,9 +2,6 @@ version: "3.3"
 
 services:
   vorishka_bot:
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: vorishka_bot:latest
     container_name: vorishka_bot_app
     restart: always
@@ -18,6 +15,7 @@ services:
     env_file: .env
     volumes:
       - ${DOCKER_PERSISTENCE_PATH}/vorishka_bot_logs:/vorishka_bot_logs
+      - ${DOCKER_PERSISTENCE_PATH}/vorishka_bot_context/context_data:/context_data
     depends_on:
       - mysql
 

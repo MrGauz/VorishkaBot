@@ -1,0 +1,37 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build Docker image
+      run: docker build -t vorishka-bot:latest .
+
+    - name: Save Docker image
+      run: docker save vorishka-bot:latest > vorishka-bot.tar
+
+    - name: SCP Docker image and Compose file
+      run: scp -o StrictHostKeyChecking=no docker-compose.yml vorishka-bot.tar ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }}:/bots/VorishkaBot2.0/
+
+    - name: Deploy to server
+      env:
+        PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        echo "$PRIVATE_KEY" > private_key
+        chmod 600 private_key
+        ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }} <<EOF
+          cd /bots/VorishkaBot2.0/
+          docker load < myapp.tar
+          docker-compose down
+          docker-compose up -d
+        EOF
+        rm -f private_key

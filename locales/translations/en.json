@@ -29,7 +29,7 @@
         "unsupported_update": "Sorry, I can't process whatever this is.",
         "ffmpeg_failed": "Task failed successfully. Please contact @MrGauz for support.",
         "no_sets": "You haven't got any sets yet.\n\nSend me an image or a sticker and I'll create a sticker set for you.",
-        "no_group_chats": "Sorry, I'd like your conversation remain private. <a href='https://t.me/VorishkaStickersBot'>Send me a dm</a>.",
+        "no_group_chats": "Sorry, I'd like your conversation to remain private. <a href='https://t.me/VorishkaStickersBot'>Send me a dm</a>.",
         "unknown_document_type": "Sorry, I can't process this document type yet.",
         "file_too_big": "Sorry, this file is too big (max 20 MB).",
         "not_subscribed": "Saving an animated media as a sticker requires an active PROscription. Please type /subscription to get one.",
@@ -50,7 +50,7 @@
     "sets": {
         "my_sets_list": "Here are your sets:",
         "first_set_created": "Congratulations, you've just created your first sticker set! It's called <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>. Don't forget to save it.\n\nNow you can rename the set, or delete it altogether, if all of it was a mistake. Just run the /my_sets command to do so.",
-        "new_set_created": "Congratulations on a new sticker set! It's called <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>. Don't forget to save it.\n\nBy running the /new_set command, you can rename the set, or delete it altogether if you created it by mistake.",
+        "new_set_created": "Congratulations on a new sticker set! It's called <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>. Don't forget to save it.\n\nBy running the /my_sets command, you can rename the set, or delete it altogether if you created it by mistake.",
         "summary_message": "Set: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\nStickers saved: {sticker_count}/50",
         "choose_new_name": "Choose a new name for your set (or send /cancel to abort):",
         "renamed": "I renamed the set to <a href='https://t.me/addstickers/{set_name}'>{new_title}</a>.",

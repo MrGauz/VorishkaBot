@@ -1,6 +1,6 @@
 {
     "bot": {
-        "description": "Hey! I will help you manage your favourite stickers. I can create sticket sets, save stickets to them (or delete them), and assign emoji to stickets.\n\nI work with both still and moving stickers. As far as I'm aware, I'm the only Telegram sticker-managing bot which can save both static and animated stickers into one single sticker set.\n\nPlease tap a button below to start, and I will tell you more about what I'm useful for.",
+        "description": "Hey! I will help you manage your favourite stickers. I can create sticker sets, save stickers to them (or delete them), and assign emoji to stickers.\n\nI work with both still and moving stickers. As far as I'm aware, I'm the only Telegram sticker-managing bot which can save both static and animated stickers into one single sticker set.\n\nPlease tap a button below to start, and I will tell you more about what I'm useful for.",
         "about": "I will help you manage your stickers. Please drop @mrGauz or @danielbilyk a line in case I misbehave.\nIf you want to know a bit more, please have a look at the channel: https://t.me/vorishkachannel",
         "my_sets_desc": "Manage your sets",
         "subscription_desc": "Manage your PROscription",
@@ -35,8 +35,8 @@
         "not_subscribed": "Saving an animated media as a sticker requires an active PROscription. Please type /subscription to get one.",
         "tgs_converter_failed": "Task failed successfully. Please contact @MrGauz for support.",
         "sticker_not_moved": "Sorry, I couldn't move the sticker. Please try again later.",
-        "sticker_not_deleted": "Sorry, I coulnd't delete the sticker. Please try again later.",
-        "set_not_deleted": "Sorry, I coulnd't delete the sticker set {set_title}. Please try again later.",
+        "sticker_not_deleted": "Sorry, I couldn't delete the sticker. Please try again later.",
+        "set_not_deleted": "Sorry, I couldn't delete the sticker set {set_title}. Please try again later.",
         "invalid_emoji": "Hm, this seems to be an invalid emoji. Please try again (or send /cancel to abort).",
         "emoji_not_changed": "Sorry, I couldn't change the emoji. Please try again later.",
         "set_not_renamed": "Sorry, I couldn't rename the set to {new_name}.",
@@ -60,7 +60,7 @@
     },
     "stickers": {
         "summary_message": "Emoji: {emoji}\nSet: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>",
-        "new_saved": "Job done.\n\nHere's the info about the sticker:\n\u00B7 Sticket set: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\n\u00B7 Emoji: \" {emoji} \".\n\nIf you'd like to change an emoji behind it, or delete the sticket altogether, just send me the sticker again. Just please make sure you send it from your personal sticket set.",
+        "new_saved": "Job done.\n\nHere's the info about the sticker:\n\u00B7 Sticker set: <a href='https://t.me/addstickers/{set_name}'>{set_title}</a>\n\u00B7 Emoji: \" {emoji} \".\n\nIf you'd like to change an emoji behind it, or move it to a different set, just send me the sticker again. Just please make sure you send it from your personal sticker set.",
         "choose_new_emoji": "Choose a new emoji for this sticker (or send /cancel to abort):",
         "emoji_changed": "I changed the emoji to {new_emoji}.",
         "choose_set_to_move": "Choose a set to move the sticker to:",
@@ -72,7 +72,7 @@
     "subscription": {
         "invoice_title": "PROscription",
         "invoice_description": "PROscribe to get access to all the features. To read terms and conditions of the purchase, look no further than <a href='https://pognali.agency/vorishka/terms.html?lang=en'>right here</a>",
-        "not_active": "You don't have an active PROscription.\n\nPress the button below to get one.",
+        "not_active": "You don't have an active PROscription.\n\nWhat you get with it is:\n\u00B7 the option to save animated media as a sticker; \n\u00B7 keep still and animated media within one sticker set like a \u2728pro\u2728.\n\nPress the button below to get one.",
         "status": "Your PROscription is active until {date}.\n\nWhat you get with it is:\n\u00B7 the option to save animated media as a sticker; \n\u00B7 keep still and animated media within one sticker set like a \u2728pro\u2728.\n\nPress the button below to get additional 365 days.",
         "payment_success": "Thank you for your purchase! Your PROscription is active until {date}.",
         "deny_precheckout": "I don't know how you got here, but you can't buy this.",

@@ -1,6 +1,6 @@
 # VorishkaBot2.0
 
-> 🦺 This project is currently under construction. The stable version is available [here](https://github.com/MrGauz/VorishkaBot/tree/1.0).
+> ⚠️ Telegram has updated in-app sticker management capabilities rendering this bot pretty useless. The project is no longer active.
 
 ## Running the bot locally
 
